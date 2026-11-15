@@ -1,0 +1,45 @@
+
+       _________________________________________
+   .'`                                           `'.
+   |   _________________________________________   |
+   | '\.---------------------------------------./' |
+   | ||                                         || |
+   | || PPPPPPP                                 || |
+   | || P       P                               || |
+   | || PPPPPPP                                 || |
+   | || P                                       || |
+   | || P   aaa  rrrrr.    m   m   eee  ddd     || |
+   | || P  a   a r    r  m   m   m e    d   d   || |
+   | || P  aaaaa r-rr.   m   m   m eee  d    d  || |
+   | || P  a   a r    r  m   m   m e    d   d   || |
+   | || P  a   a r     r m   m   m eee  ddd     || |
+   | ||                                         || |
+   | '/\_______________________________________/\' |
+   '  `-----------------------------------------'  '
+    \                                     .-.     /
+     '.__~~~ ____()__()_()()() __________((_))__.'
+    _________________';========;'__________________
+   /  _/__/_//_//   _/_/    /_//_//   __/__/_//    \
+  /_/__/_/_/   __/ _/.-'''''-.   /_//       _/ _//_/\
+ / _.-..-..-.     .'           `.     .-..-..-./_//_||
+/ /_| || || |-. .'               `. .-| || || | /_/ //
+----\ '  '   ' /                   \ `   '  ' /----((
+ ~~~~\      / /                     \ \      /~~~~~ ))
+      `'--'`-:                       :-`'--'`   __,</
+         \   |                       |   /   .'`  `\)
+          `'-:                       :-'`   | `-../|
+             '                       '      \`-'`|/
+              \                     /mx      `'-'
+               '.                 .'
+                 '.             .'
+                   `'-..___..-'`
+
+ParmEd: a Parameter file Editor
+
+
+['chamber_capped_geg_solv_15a_octahedral_1xsod.in']
+Reading actions from chamber_capped_geg_solv_15a_octahedral_1xsod.in
+
+Creating chamber topology file from PSF capped_geg_solv_15a_octahedral_1xsod.psf, RTF files ['../../../../toppar//prot/top_all22_prot.rtf'], PAR files ['../../../../toppar//prot/par_all22_prot.prm'], and STR files ['../../../../toppar//toppar_water_ions.str', '../../../../toppar//toppar_phmd_c22_foramber.str']. Coords from capped_geg_solv_15a_octahedral_1xsod.crd. Using CMAP. Box info [52.0, 52.0, 52.0, 109.471221, 109.471221, 109.471221]. GB Radius set mbondi.
+Outputting Amber topology file capped_geg_solv_15a_octahedral_1xsod.prmtop and restart capped_geg_solv_15a_octahedral_1xsod.inpcrd
+Done!

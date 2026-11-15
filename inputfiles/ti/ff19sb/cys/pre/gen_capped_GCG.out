@@ -1,0 +1,51 @@
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/prep to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd to search path.
+-f: Source gen_capped_GCG.leap.
+
+Welcome to LEaP!
+(no leaprc in search path)
+Sourcing: ./gen_capped_GCG.leap
+----- Source: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff19SB
+----- Source of /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff19SB done
+Log file: ./leap.log
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/parm19.dat
+Reading title:
+PARM99 + frcmod.ff99SB + frcmod.parmbsc0 + OL3 for RNA + ff19SB
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.ff19SB
+Reading force field modification type file (frcmod)
+Reading title:
+ff19SB AA-specific backbone CMAPs for protein 07/25/2019
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/amino19.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminoct12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminont12.lib
+Loading library: /home/wayyne/cphmd/amber24/ff19/parmfiles/phmd.lib
+Loading parameters: /home/wayyne/cphmd/amber24/ff19/parmfiles/frcmod.phmd_barrier
+Reading force field modification type file (frcmod)
+Reading title:
+!Force field modifications for continuous phmd simulations (Feb 2018)
+Checking 'pep'....
+Checking parameters for unit 'pep'.
+Checking for bond parameters.
+Checking for angle parameters.
+Unit is OK.
+Total unperturbed charge:   0.000000
+Total perturbed charge:     0.000000
+Checking Unit.
+Building topology.
+Building atom parameters.
+Building bond parameters.
+Building angle parameters.
+Building proper torsion parameters.
+Building improper torsion parameters.
+ total 8 improper torsions applied
+Building H-Bond parameters.
+Incorporating Non-Bonded adjustments.
+Not Marking per-residue atom chain types.
+Marking per-residue atom chain types.
+ (no restraints)
+Writing pdb file: capped_GCG.pdb
+	Quit
+
+Exiting LEaP: Errors = 0; Warnings = 0; Notes = 0.

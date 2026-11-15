@@ -1,0 +1,36 @@
+
+.     .       .  .   . .   .   . .    +  .
+  .     .  :     .    .. :. .___---------___.
+       .  .   .    .  :.:. _".^ .^ ^.  '.. :"-_. .
+    .  :       .  .  .:../:            . .^  :.:\.
+        .   . :: +. :.:/: .   .    .        . . .:\
+ .  :    .     . _ :::/:               .  ^ .  . .:\
+  .. . .   . - : :.:./.                        .  .:\
+  .      .     . :..|:                    .  .  ^. .:|
+    .       . : : ..||        .                . . !:|
+  .     . . . ::. ::\(                           . :)/
+ .   .     : . : .:.|. ######              .#######::|
+  :.. .  :-  : .:  ::|.#######           ..########:|
+ .  .  .  ..  .  .. :\ ########          :######## :/
+  .        .+ :: : -.:\ ########       . ########.:/
+    .  .+   . . . . :.:\. #######       #######..:/
+      :: . . . . ::.:..:.\           .   .   ..:/
+   .   .   .  .. :  -::::.\.       | |     . .:/
+      .  :  .  .  .-:.":.::.\             ..:/ .~~~~~~~~~~~.
+ .      -.   . . . .: .:::.:.\.           .:/,: Prepare to  \
+.   .   .  :      : ....::_:..:\   ___.  :/ .       be       |
+   .   .  .   .:. .. .  .: :.:.:\       :/   \  P A R M E D |
+     +   .   .   : . ::. :.:. .:.|\  .:/|      \~~~~~~~~~~~'
+     .         +   .  .  ...:: ..|  --.:|
+.      . . .   .  .  . ... :..:.."(  ..)"
+ .   .       .      :  .   .: ::/  .  .::\
+
+ParmEd: a Parameter file Editor
+
+
+['chamber_capped_gkg_solv_15a_octahedral_1xcla.in']
+Reading actions from chamber_capped_gkg_solv_15a_octahedral_1xcla.in
+
+Creating chamber topology file from PSF capped_gkg_solv_15a_octahedral_1xcla.psf, RTF files ['../../../../toppar//prot/top_all22_prot.rtf'], PAR files ['../../../../toppar//prot/par_all22_prot.prm'], and STR files ['../../../../toppar//toppar_water_ions.str', '../../../../toppar//toppar_phmd_c22_foramber.str']. Coords from capped_gkg_solv_15a_octahedral_1xcla.crd. Using CMAP. Box info [52.0, 52.0, 52.0, 109.471221, 109.471221, 109.471221]. GB Radius set mbondi.
+Outputting Amber topology file capped_gkg_solv_15a_octahedral_1xcla.prmtop and restart capped_gkg_solv_15a_octahedral_1xcla.inpcrd
+Done!

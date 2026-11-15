@@ -1,0 +1,49 @@
+REMARK  GENERATE STRUCTURE FOR CUSTOM PEPTIDE DIRECTLY VIA ARGUMENTS                  
+REMARK   DATE:     6/25/26     12:32:22      CREATED BY USER: wayyne                  
+ATOM      1  CAY GLY     1      -0.002  -0.006   0.001  1.00  0.00      PROA
+ATOM      2  HY1 GLY     1      -0.378  -1.052   0.001  1.00  0.00      PROA
+ATOM      3  HY2 GLY     1      -0.382   0.511  -0.906  1.00  0.00      PROA
+ATOM      4  HY3 GLY     1      -0.381   0.511   0.907  1.00  0.00      PROA
+ATOM      5  CY  GLY     1       1.476  -0.015   0.000  1.00  0.00      PROA
+ATOM      6  OY  GLY     1       2.112  -1.058  -0.001  1.00  0.00      PROA
+ATOM      7  N   GLY     1       2.076   1.173   0.001  1.00  0.00      PROA
+ATOM      8  HN  GLY     1       1.554   2.023   0.015  1.00  0.00      PROA
+ATOM      9  CA  GLY     1       3.518   1.287   0.007  1.00  0.00      PROA
+ATOM     10  HA1 GLY     1       3.908   0.848  -0.900  1.00  0.00      PROA
+ATOM     11  HA2 GLY     1       3.901   0.841   0.914  1.00  0.00      PROA
+ATOM     12  C   GLY     1       3.859   2.734   0.012  1.00  0.00      PROA
+ATOM     13  O   GLY     1       2.973   3.587   0.044  1.00  0.00      PROA
+ATOM     14  N   LYS     2       5.153   3.059  -0.046  1.00  0.00      PROA
+ATOM     15  HN  LYS     2       5.874   2.367  -0.065  1.00  0.00      PROA
+ATOM     16  CA  LYS     2       5.599   4.428  -0.014  1.00  0.00      PROA
+ATOM     17  HA  LYS     2       5.248   4.883   0.902  1.00  0.00      PROA
+ATOM     18  CB  LYS     2       5.122   5.236  -1.262  1.00  0.00      PROA
+ATOM     19  HB1 LYS     2       4.011   5.181  -1.308  1.00  0.00      PROA
+ATOM     20  HB2 LYS     2       5.507   4.740  -2.181  1.00  0.00      PROA
+ATOM     21  CG  LYS     2       5.485   6.728  -1.270  1.00  0.00      PROA
+ATOM     22  HG1 LYS     2       6.584   6.875  -1.339  1.00  0.00      PROA
+ATOM     23  HG2 LYS     2       5.122   7.208  -0.333  1.00  0.00      PROA
+ATOM     24  CD  LYS     2       4.980   7.484  -2.488  1.00  0.00      PROA
+ATOM     25  HD1 LYS     2       3.866   7.441  -2.502  1.00  0.00      PROA
+ATOM     26  HD2 LYS     2       5.351   6.965  -3.403  1.00  0.00      PROA
+ATOM     27  CE  LYS     2       5.475   8.929  -2.456  1.00  0.00      PROA
+ATOM     28  HE1 LYS     2       6.587   8.958  -2.455  1.00  0.00      PROA
+ATOM     29  HE2 LYS     2       5.094   9.456  -1.552  1.00  0.00      PROA
+ATOM     30  NZ  LYS     2       4.981   9.635  -3.653  1.00  0.00      PROA
+ATOM     31  HZ1 LYS     2       3.940   9.604  -3.667  1.00  0.00      PROA
+ATOM     32  HZ2 LYS     2       5.348   9.168  -4.507  1.00  0.00      PROA
+ATOM     33  HZ3 LYS     2       5.295  10.626  -3.639  1.00  0.00      PROA
+ATOM     34  C   LYS     2       7.109   4.388   0.038  1.00  0.00      PROA
+ATOM     35  O   LYS     2       7.721   3.329  -0.012  1.00  0.00      PROA
+ATOM     36  N   GLY     3       7.760   5.547   0.127  1.00  0.00      PROA
+ATOM     37  HN  GLY     3       7.264   6.404   0.230  1.00  0.00      PROA
+ATOM     38  CA  GLY     3       9.188   5.676   0.034  1.00  0.00      PROA
+ATOM     39  HA1 GLY     3       9.538   5.222  -0.884  1.00  0.00      PROA
+ATOM     40  HA2 GLY     3       9.625   5.254   0.926  1.00  0.00      PROA
+ATOM     41  C   GLY     3       9.501   7.176  -0.001  1.00  0.00      PROA
+ATOM     42  O   GLY     3       8.598   8.022  -0.034  1.00  0.00      PROA
+ATOM     43  NT  GLY     3      10.807   7.519  -0.004  1.00  0.00      PROA
+ATOM     44  HT1 GLY     3      11.029   8.489   0.020  1.00  0.00      PROA
+ATOM     45  HT2 GLY     3      11.513   6.815   0.031  1.00  0.00      PROA
+TER      46      GLY      3
+END

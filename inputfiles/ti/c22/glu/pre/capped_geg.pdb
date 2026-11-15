@@ -1,0 +1,44 @@
+REMARK  GENERATE STRUCTURE FOR CUSTOM PEPTIDE DIRECTLY VIA ARGUMENTS                  
+REMARK   DATE:     6/25/26     17:55:31      CREATED BY USER: wayyne                  
+ATOM      1  CAY GLY     1      -0.003  -0.004  -0.000  1.00  0.00      PROA
+ATOM      2  HY1 GLY     1      -0.377  -1.050  -0.000  1.00  0.00      PROA
+ATOM      3  HY2 GLY     1      -0.379   0.514  -0.907  1.00  0.00      PROA
+ATOM      4  HY3 GLY     1      -0.380   0.514   0.906  1.00  0.00      PROA
+ATOM      5  CY  GLY     1       1.477  -0.013   0.000  1.00  0.00      PROA
+ATOM      6  OY  GLY     1       2.111  -1.058   0.002  1.00  0.00      PROA
+ATOM      7  N   GLY     1       2.080   1.173  -0.001  1.00  0.00      PROA
+ATOM      8  HN  GLY     1       1.568   2.031  -0.002  1.00  0.00      PROA
+ATOM      9  CA  GLY     1       3.521   1.283   0.003  1.00  0.00      PROA
+ATOM     10  HA1 GLY     1       3.909   0.853  -0.910  1.00  0.00      PROA
+ATOM     11  HA2 GLY     1       3.905   0.832   0.907  1.00  0.00      PROA
+ATOM     12  C   GLY     1       3.859   2.730   0.018  1.00  0.00      PROA
+ATOM     13  O   GLY     1       2.968   3.574   0.063  1.00  0.00      PROA
+ATOM     14  N   GLU     2       5.155   3.054  -0.032  1.00  0.00      PROA
+ATOM     15  HN  GLU     2       5.879   2.368  -0.069  1.00  0.00      PROA
+ATOM     16  CA  GLU     2       5.600   4.423   0.001  1.00  0.00      PROA
+ATOM     17  HA  GLU     2       5.250   4.883   0.916  1.00  0.00      PROA
+ATOM     18  CB  GLU     2       5.124   5.214  -1.242  1.00  0.00      PROA
+ATOM     19  HB1 GLU     2       4.011   5.152  -1.286  1.00  0.00      PROA
+ATOM     20  HB2 GLU     2       5.502   4.706  -2.157  1.00  0.00      PROA
+ATOM     21  CG  GLU     2       5.481   6.717  -1.277  1.00  0.00      PROA
+ATOM     22  HG1 GLU     2       6.570   6.905  -1.360  1.00  0.00      PROA
+ATOM     23  HG2 GLU     2       5.079   7.253  -0.393  1.00  0.00      PROA
+ATOM     24  CD  GLU     2       4.945   7.366  -2.521  1.00  0.00      PROA
+ATOM     25  OE1 GLU     2       4.272   6.692  -3.334  1.00  0.00      PROA
+ATOM     26  HE1 GLU     2       3.971   7.180  -4.101  1.00  0.00      PROA
+ATOM     27  OE2 GLU     2       5.205   8.570  -2.716  1.00  0.00      PROA
+ATOM     28  HE2 GLU     2       4.787   8.798  -3.543  1.00  0.00      PROA
+ATOM     29  C   GLU     2       7.111   4.387   0.041  1.00  0.00      PROA
+ATOM     30  O   GLU     2       7.722   3.329   0.007  1.00  0.00      PROA
+ATOM     31  N   GLY     3       7.758   5.548   0.109  1.00  0.00      PROA
+ATOM     32  HN  GLY     3       7.254   6.416   0.153  1.00  0.00      PROA
+ATOM     33  CA  GLY     3       9.180   5.678   0.026  1.00  0.00      PROA
+ATOM     34  HA1 GLY     3       9.528   5.234  -0.899  1.00  0.00      PROA
+ATOM     35  HA2 GLY     3       9.615   5.243   0.917  1.00  0.00      PROA
+ATOM     36  C   GLY     3       9.501   7.174   0.004  1.00  0.00      PROA
+ATOM     37  O   GLY     3       8.607   8.023   0.001  1.00  0.00      PROA
+ATOM     38  NT  GLY     3      10.810   7.514  -0.004  1.00  0.00      PROA
+ATOM     39  HT1 GLY     3      11.019   8.485  -0.007  1.00  0.00      PROA
+ATOM     40  HT2 GLY     3      11.511   6.807   0.001  1.00  0.00      PROA
+TER      41      GLY      3
+END

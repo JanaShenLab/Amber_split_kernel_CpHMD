@@ -1,0 +1,110 @@
+=========================================
+Solvation System Variables Confirmed:
+Input System       : capped_GKG
+Output System      : capped_GKG_solv_17p649A_octahedral_1xcla
+Box Type           : octahedral
+Input Cushion      : 17.649 Angstrom
+Final Cushion      : 17.649 Angstrom
+Requested Edge     : none
+Pre-ion Edge       : 53.33087940
+Best Fit Edge      : not-fit
+Salt Conc          : 150 mM
+Water Count        : 3438
+Salt Pairs         : 0
+Titration Flag     : 0
+Ion Mode           : EXACT
+Exact SOD          : 0
+Exact CLA          : 1
+Solute Charge      : 1
+pHMD + co-ions     : 0
+pHMD - co-ions     : 0
+Final Na+ count    : 0
+Final Cl- count    : 1
+Keep Temp Files    : 0
+Log File           : solvate_capped_GKG_solv_17p649A_octahedral_1xcla.out
+=========================================
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/prep to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd to search path.
+-f: Source amber_solv_tmp_capped_GKG_solv_17p649A_octahedral_1xcla/final.leap.
+
+Welcome to LEaP!
+(no leaprc in search path)
+Sourcing: ./amber_solv_tmp_capped_GKG_solv_17p649A_octahedral_1xcla/final.leap
+----- Source: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff19SB
+----- Source of /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff19SB done
+Log file: ./leap.log
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/parm19.dat
+Reading title:
+PARM99 + frcmod.ff99SB + frcmod.parmbsc0 + OL3 for RNA + ff19SB
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.ff19SB
+Reading force field modification type file (frcmod)
+Reading title:
+ff19SB AA-specific backbone CMAPs for protein 07/25/2019
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/amino19.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminoct12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminont12.lib
+----- Source: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.water.opc
+----- Source of /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.water.opc done
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/atomic_ions.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/solvents.lib
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.opc
+Reading force field modification type file (frcmod)
+Reading title:
+Parameters for OPC water (JPCL, 2014, 5 (21), pp 3863-3871)
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.ionslm_126_opc
+Reading force field modification type file (frcmod)
+Reading title:
+Li/Merz ion parameters of atomic ions for the OPC water model (12-6 set)
+Loading library: /home/wayyne/cphmd/amber24/ff19/parmfiles/phmd.lib
+Loading parameters: /home/wayyne/cphmd/amber24/ff19/parmfiles/frcmod.phmd_barrier
+Reading force field modification type file (frcmod)
+Reading title:
+!Force field modifications for continuous phmd simulations (Feb 2018)
+Loading PDB file: ./capped_GKG.pdb
+  total atoms in file: 45
+Scaling up box by a factor of 1.229870 to meet diagonal cut criterion
+  Solute vdw bounding box:              10.601 17.169 5.722
+  Total bounding box for atom centers:  60.581 60.581 60.581
+      (box expansion for 'iso' is  38.3%)
+  Solvent unit box:                     18.865 18.478 19.006
+  Volume: 116765.453 A^3 (oct)
+  Total mass 62241.370 amu,  Density 0.885 g/cc
+  Added 3438 residues.
+Adding 1 counter ions to "pep". 3437 solvent molecules will remain.
+0: Placed Cl- in pep at (-8.50, 13.89, 25.54).
+Checking 'pep'....
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.247 angstroms between nonbonded atoms HG2 and H
+-------  .R<LYS 3>.A<HG2 9> and .R<GLY 4>.A<H 2>
+Checking parameters for unit 'pep'.
+Checking for bond parameters.
+Checking for angle parameters.
+check:  Warnings: 10312
+Unit is OK.
+Total unperturbed charge:   0.000000
+Total perturbed charge:     0.000000
+Checking Unit.
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Note.
+Ignoring the warnings from Unit Checking.
+
+Building topology.
+Building atom parameters.
+Building bond parameters.
+Building angle parameters.
+Building proper torsion parameters.
+Building improper torsion parameters.
+ total 8 improper torsions applied
+Building H-Bond parameters.
+Incorporating Non-Bonded adjustments.
+Not Marking per-residue atom chain types.
+Marking per-residue atom chain types.
+ (no restraints)
+Writing pdb file: capped_GKG_solv_17p649A_octahedral_1xcla.pdb
+   printing CRYST1 record to PDB file with box info
+	Quit
+
+Exiting LEaP: Errors = 0; Warnings = 1; Notes = 1.

@@ -1,0 +1,14 @@
+source leaprc.protein.ff14SB
+loadoff /home/wayyne/cphmd/amber24/ff14/parmfiles/phmd.lib
+loadamberparams /home/wayyne/cphmd/amber24/ff14/parmfiles/frcmod.phmd_barrier
+loadamberparams /home/wayyne/cphmd/amber24/ff14/parmfiles/ff14sb_pme_dayhoff_dev.parm
+
+pep = sequence { ACE GLY LYS GLY NHE }
+
+check pep
+charge pep
+
+saveamberparm pep capped_GKG.parm7 capped_GKG.rst7
+savepdb pep capped_GKG.pdb
+
+quit

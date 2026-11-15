@@ -1,0 +1,30 @@
+
+ _~__________________
+ |_|_______________|_|
+ |  ,-------------.  |
+ | |  .---------.  | |
+ | |  |P        |  | |
+ | |  | a       |  | |
+ | |  |  r      |  | |
+ | |  |   m  ED |  | |
+ | |  `---------'  | |
+ | `---------------' |
+ |   _ ParmedBoy     |
+ | _| |_         ,-. |
+ ||_ O _|   ,-. "._,"|
+ |  |_|    "._,"   A |
+ |    _  _    B      |
+ |   // //           |
+ |  // //    \\\\\\  |
+ |  `  `      \\\\\\ ,
+ |________...______,"
+ 
+ParmEd: a Parameter file Editor
+
+
+['chamber_capped_gcg_solv_15a_octahedral_0ions.in']
+Reading actions from chamber_capped_gcg_solv_15a_octahedral_0ions.in
+
+Creating chamber topology file from PSF capped_gcg_solv_15a_octahedral_0ions.psf, RTF files ['../../../../toppar//prot/top_all22_prot.rtf'], PAR files ['../../../../toppar//prot/par_all22_prot.prm'], and STR files ['../../../../toppar//toppar_water_ions.str', '../../../../toppar//toppar_phmd_c22_foramber.str']. Coords from capped_gcg_solv_15a_octahedral_0ions.crd. Using CMAP. Box info [52.0, 52.0, 52.0, 109.471221, 109.471221, 109.471221]. GB Radius set mbondi.
+Outputting Amber topology file capped_gcg_solv_15a_octahedral_0ions.prmtop and restart capped_gcg_solv_15a_octahedral_0ions.inpcrd
+Done!

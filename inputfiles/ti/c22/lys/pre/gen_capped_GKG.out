@@ -1,0 +1,870 @@
+ Parameter: PEPLEN <- "3"
+ Parameter: PEPRSQ <- "GLY LYS GLY"
+ Parameter: NCAP <- "ACE"
+ Parameter: CCAP <- "CT2"
+ Parameter: OUTNAME <- "CAPPED_GKG"
+1
+                 Chemistry at HARvard Macromolecular Mechanics
+               (CHARMM) - Stable Version 50b1     August 15, 2025               
+                            Git commit ID 9396baa45                             
+       Copyright(c) 1984-2025  President and Fellows of Harvard College
+                              All Rights Reserved
+         Current operating system: Linux-5.10.0-36-amd64(x86_64)@spirit         
+                 Created on  6/25/26 at 12:32:22 by user: wayyne      
+
+            Maximum number of ATOMS:    360720, and RESidues:      120240
+ RDTITL> * GENERATE STRUCTURE FOR CUSTOM PEPTIDE DIRECTLY VIA ARGUMENTS
+ RDTITL> *
+  
+ CHARMM>     
+  
+ CHARMM>    set segid PROA
+ Parameter: SEGID <- "PROA"
+  
+ CHARMM>     
+  
+ CHARMM>    ! read in modified top and par files
+ CHARMM>    set TOPPAR = /home/wayyne/arex_dev/tripep/c22/toppar
+ Parameter: TOPPAR <- "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR"
+  
+ CHARMM>    set top = @TOPPAR/prot/top_all22_prot.rtf
+ Parameter: TOPPAR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR"
+ Parameter: TOP <- "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/PROT/TOP_ALL22_PROT.RTF"
+  
+ CHARMM>    set par = @TOPPAR/prot/par_all22_prot.prm
+ Parameter: TOPPAR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR"
+ Parameter: PAR <- "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/PROT/PAR_ALL22_PROT.PRM"
+  
+ CHARMM>    set watstr = @TOPPAR/toppar_water_ions.str
+ Parameter: TOPPAR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR"
+ Parameter: WATSTR <- "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/TOPPAR_WATER_IONS.STR"
+  
+ CHARMM>    set phstr = @TOPPAR/toppar_phmd_c22_foramber.str
+ Parameter: TOPPAR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR"
+ Parameter: PHSTR <- "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/TOPPAR_PHMD_C22_FORAMBER.STR"
+  
+ CHARMM>     
+  
+ CHARMM>    open unit 1 read form name @top
+ Parameter: TOP -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/PROT/TOP_ALL22_PROT.RTF"
+ VOPEN> Attempting to open::/home/wayyne/arex_dev/tripep/c22/toppar/prot/top_all22_prot.rtf::
+ OPNLGU> Unit  1 opened for READONLY access to /home/wayyne/arex_dev/tripep/c22/toppar/prot/top_all22_prot.rtf
+  
+ CHARMM>    read rtf card unit 1
+ MAINIO> Residue topology file being read from unit   1.
+ TITLE> *>>>>>>>>CHARMM22 ALL-HYDROGEN TOPOLOGY FILE FOR PROTEINS <<<<<<
+ TITLE> *>>>>> INCLUDES PHI, PSI CROSS TERM MAP (CMAP) CORRECTION <<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>>>> DECEMBER, 2003 <<<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> * ALL COMMENTS TO ADM JR. VIA THE CHARMM WEB SITE: WWW.CHARMM.ORG
+ TITLE> *               PARAMETER SET DISCUSSION FORUM
+ TITLE> *
+  
+ CHARMM>    close unit 1
+ VCLOSE: Closing unit    1 with status "KEEP"
+  
+ CHARMM>     
+  
+ CHARMM>    open unit 1 read form name @par
+ Parameter: PAR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/PROT/PAR_ALL22_PROT.PRM"
+ VOPEN> Attempting to open::/home/wayyne/arex_dev/tripep/c22/toppar/prot/par_all22_prot.prm::
+ OPNLGU> Unit  1 opened for READONLY access to /home/wayyne/arex_dev/tripep/c22/toppar/prot/par_all22_prot.prm
+  
+ CHARMM>    read param card unit 1 flex
+
+          PARAMETER FILE BEING READ FROM UNIT  1
+ TITLE> *>>>>> CHARMM22 ALL-HYDROGEN PARAMETER FILE FOR PROTEINS <<<<<<<<
+ TITLE> *>>>>> INCLUDES PHI, PSI CROSS TERM MAP (CMAP) CORRECTION <<<<<<<
+ TITLE> *>>>>>>>>>>>>>>>>>>>>>> DECEMBER, 2003 <<<<<<<<<<<<<<<<<<<<<<<<<<
+ TITLE> * ALL COMMENTS TO ADM JR. VIA THE CHARMM WEB SITE: WWW.CHARMM.ORG
+ TITLE> *               PARAMETER SET DISCUSSION FORUM
+ TITLE> *
+ PARMIO> NONBOND, HBOND lists and IMAGE atoms cleared.
+  
+ CHARMM>    close unit 1
+ VCLOSE: Closing unit    1 with status "KEEP"
+  
+ CHARMM>     
+  
+ CHARMM>    stream @phstr
+ Parameter: PHSTR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/TOPPAR_PHMD_C22_FORAMBER.STR"
+ VOPEN> Attempting to open::/home/wayyne/arex_dev/tripep/c22/toppar/toppar_phmd_c22_foramber.str::
+ OPNLGU> Unit 99 opened for READONLY access to /home/wayyne/arex_dev/tripep/c22/toppar/toppar_phmd_c22_foramber.str
+
+                    INPUT STREAM SWITCHING TO UNIT    99
+ RDTITL> * TOPOLOGY AND PARAMETER INFORMATION FOR PHMD USED WITH C22 FF
+ RDTITL> * FOR BUILDING CHARMM FILES FOR AMBER
+ RDTITL> *
+ Parameter: IN1 <- "" <empty>
+  
+ CHARMM>     
+  
+ CHARMM>    !Robert Harris, 4/13/2020
+ CHARMM>    !
+ CHARMM>    !Removed bonds between hydrogens in TIPP and TIPU so that Amber treats them as not water
+ CHARMM>     
+  
+ CHARMM>    !Wei Chen, 3/30/2015
+ CHARMM>    !
+ CHARMM>    !Topology and parameters were copied from top_all22_prot_cmap_ephmd.inp & par_all22_prot_cmap_ephmd.inp
+ CHARMM>    !
+ CHARMM>    !Hydronium
+ CHARMM>    ! added by Jason Wallace
+ CHARMM>    ! Sagnella and Voth Biophys. J. (1996) 70:2043-2051
+ CHARMM>    !
+ CHARMM>    !Hydroxide
+ CHARMM>    ! added by Wei Chen
+ CHARMM>    ! copy from TIP3
+ CHARMM>    !
+ CHARMM>     
+  
+ CHARMM>    !test "append" to determine if previous toppar files have been read and
+ CHARMM>    !add append to "read rtf card" if true
+ CHARMM>    set nat ?NATC
+ RDCMND substituted energy or value "?NATC" to "87"
+ Parameter: NAT <- "87"
+  
+ CHARMM>    set app append
+ Parameter: APP <- "APPEND"
+  
+ CHARMM>    !We're exploiting what is arguably a bug in the parser. On the left hand side,
+ CHARMM>    !the quotes have priority, so NAT is correctly substituted. On the right hand
+ CHARMM>    !side, the ? has priority and NATC" (sic) is not a valid substitution...
+ CHARMM>    if "@NAT" eq "?NATC" stop
+ Parameter: NAT -> "87"
+ RDCMND: can not substitute energy "?NATC""
+ Comparing ""87"" and ""?NATC"".
+ IF test evaluated as false.  Skipping command
+  
+ CHARMM>     
+  
+ CHARMM>    read rtf card @app
+ Parameter: APP -> "APPEND"
+ MAINIO> Residue topology file being read from unit  99.
+ RDTITL> * TOPOLOGY FOR PHMD
+ RDTITL> *
+  
+ CHARMM>     
+  
+ CHARMM>    read para card flex @app
+ Parameter: APP -> "APPEND"
+
+          PARAMETER FILE BEING READ FROM UNIT 99
+ RDTITL> * PARAMETERS FOR PHMD
+ RDTITL> *
+ PARMIO> NONBOND, HBOND lists and IMAGE atoms cleared.
+  
+ VCLOSE: Closing unit   99 with status "KEEP"
+
+                    RETURNING TO INPUT STREAM     5
+  
+ CHARMM>    stream @watstr
+ Parameter: WATSTR -> "/HOME/WAYYNE/AREX_DEV/TRIPEP/C22/TOPPAR/TOPPAR_WATER_IONS.STR"
+ VOPEN> Attempting to open::/home/wayyne/arex_dev/tripep/c22/toppar/toppar_water_ions.str::
+ OPNLGU> Unit 99 opened for READONLY access to /home/wayyne/arex_dev/tripep/c22/toppar/toppar_water_ions.str
+
+                    INPUT STREAM SWITCHING TO UNIT    99
+ RDTITL> * TOPLOGY AND PARAMETER INFORMATION FOR WATER AND IONS.
+ RDTITL> *
+ Parameter: IN1 <- "" <empty>
+  
+ CHARMM>     
+  
+ CHARMM>    !Testcase
+ CHARMM>    !test_water_ions.inp
+ CHARMM>     
+  
+ CHARMM>    ! IMPORTANT NOTE: this file contains NBFixes between carboxylates and sodium,
+ CHARMM>    ! which will only apply if the main files containing carboxylate atom types
+ CHARMM>    ! have been read in first!
+ CHARMM>     
+  
+ CHARMM>    !references
+ CHARMM>    !
+ CHARMM>    !TIP3P water model
+ CHARMM>    !
+ CHARMM>    !W.L. Jorgensen; J.Chandrasekhar; J.D. Madura; R.W. Impey;
+ CHARMM>    !M.L. Klein; "Comparison of simple potential functions for
+ CHARMM>    !simulating liquid water", J. Chem. Phys. 79 926-935 (1983).
+ CHARMM>    !
+ CHARMM>    !IONS
+ CHARMM>    !
+ CHARMM>    !Ions from Roux and coworkers
+ CHARMM>    !
+ CHARMM>    !Beglov, D. and Roux, B., Finite Representation of an Infinite
+ CHARMM>    !Bulk System: Solvent Boundary Potential for Computer Simulations,
+ CHARMM>    !Journal of Chemical Physics, 1994, 100: 9050-9063
+ CHARMM>    !
+ CHARMM>    !ZINC
+ CHARMM>    !
+ CHARMM>    !Stote, R.H. and Karplus, M. Zinc Binding in Proteins and
+ CHARMM>    !Solution: A Simple but Accurate Nonbonded Representation, PROTEINS:
+ CHARMM>    !Structure, Function, and Genetics 23:12-31 (1995)
+ CHARMM>    !
+ CHARMM>    !NBFIX for sodium-carbonyl oxygen (SOD-O) - added by Wei Chen, Feb. 2013.
+ CHARMM>    !Noskov,J. Mol. Biol. (2008). 377: 804-818.
+ CHARMM>    !
+ CHARMM>     
+  
+ CHARMM>    !test "append" to determine if previous toppar files have been read and
+ CHARMM>    !add append to "read rtf card" if true
+ CHARMM>    set nat ?NATC
+ RDCMND substituted energy or value "?NATC" to "87"
+ Parameter: NAT <- "87"
+  
+ CHARMM>    set app
+ Parameter: APP <- "" <empty>
+  
+ CHARMM>    !We're exploiting what is arguably a bug in the parser. On the left hand side,
+ CHARMM>    !the quotes have priority, so NAT is correctly substituted. On the right hand
+ CHARMM>    !side, the ? has priority and NATC" (sic) is not a valid substitution...
+ CHARMM>    if "@NAT" ne "?NATC" if @nat ne 0 set app append
+ Parameter: NAT -> "87"
+ Parameter: NAT -> "87"
+ RDCMND: can not substitute energy "?NATC""
+ Comparing ""87"" and ""?NATC"".
+ IF test evaluated as true.  Performing command
+ Comparing "87" and "0".
+ IF test evaluated as true.  Performing command
+ Parameter: APP <- "APPEND"
+  
+ CHARMM>     
+  
+ CHARMM>    read rtf card @app
+ Parameter: APP -> "APPEND"
+ MAINIO> Residue topology file being read from unit  99.
+ RDTITL> * TOPOLOGY FOR WATER AND IONS
+ RDTITL> *
+
+      ***** LEVEL  1 WARNING FROM <rtfrdr> *****
+      ***** No AUTOgen options specified in RTF before first RESI or PRES. Potential conflict with old or incomplete RTF files. Order is important. Check.
+      ******************************************
+      BOMLEV (  0) IS NOT REACHED. WRNLEV IS  5
+
+  
+ CHARMM>     
+  
+ CHARMM>    read para card flex @app
+ Parameter: APP -> "APPEND"
+
+          PARAMETER FILE BEING READ FROM UNIT 99
+ RDTITL> * PARAMETERS FOR WATER AND IONS
+ RDTITL> *
+ PARMIO> NONBOND, HBOND lists and IMAGE atoms cleared.
+  
+ CHARMM>     
+  
+ CHARMM>    ! The following section contains NBFixes for sodium interacting with
+ CHARMM>    ! carboxylate oxygens of various CHARMM force fields. It will generate
+ CHARMM>    ! level -1 warnings whenever any of these force fields have not been
+ CHARMM>    ! read prior to the current stream file. Since we don't want to force
+ CHARMM>    ! the user to always read all the force fields, we're suppressing the
+ CHARMM>    ! warnings. The only side effect is that you will have "most severe
+ CHARMM>    ! warning was at level 0" at the end of your output. Also note that
+ CHARMM>    ! the user is responsible for reading the current file last if they
+ CHARMM>    ! want the NBFixes to apply. A more elegant solution would require new
+ CHARMM>    ! features to be added to CHARMM.
+ CHARMM>    ! parallel fix, to avoid duplicated messages in the log
+ CHARMM>    set para
+ Parameter: PARA <- "" <empty>
+  
+ CHARMM>    if ?NUMNODE gt 1 set para node 0
+ RDCMND substituted energy or value "?NUMNODE" to "1"
+ Comparing "1" and "1".
+ IF test evaluated as false.  Skipping command
+  
+ CHARMM>     
+  
+ CHARMM>    set wrn ?WRNLEV
+ RDCMND substituted energy or value "?WRNLEV" to "5"
+ Parameter: WRN <- "5"
+  
+ CHARMM>    ! Some versions of CHARMM don't seem to initialize wrnlev...
+ CHARMM>    if "@WRN" eq "?WRNLEV" set wrn 5
+ Parameter: WRN -> "5"
+ RDCMND: can not substitute energy "?WRNLEV""
+ Comparing ""5"" and ""?WRNLEV"".
+ IF test evaluated as false.  Skipping command
+  
+ CHARMM>    set bom ?bomlev
+ RDCMND substituted energy or value "?BOMLEV" to "0"
+ Parameter: BOM <- "0"
+  
+ CHARMM>    WRNLEV -1 @PARA
+ Parameter: PARA -> "" <empty>
+  
+ CHARMM>    BOMLEV -1 @PARA
+ Parameter: PARA -> "" <empty>
+  
+ CHARMM>    read para card flex append
+
+          PARAMETER FILE BEING READ FROM UNIT 99
+ RDTITL> * NBFIX BETWEEN CARBOXYLATE AND SODIUM
+ RDTITL> *
+ PARMIO> NONBOND, HBOND lists and IMAGE atoms cleared.
+  
+ CHARMM>    BOMLEV @bom @PARA
+ Parameter: BOM -> "0"
+ Parameter: PARA -> "" <empty>
+  
+ CHARMM>    WRNLEV @wrn @PARA
+ Parameter: WRN -> "5"
+ Parameter: PARA -> "" <empty>
+  
+ CHARMM>     
+  
+ CHARMM>    return
+ VCLOSE: Closing unit   99 with status "KEEP"
+
+                    RETURNING TO INPUT STREAM     5
+  
+ CHARMM>     
+  
+ CHARMM>    ! === DYNAMIC SEQUENCE DEFINITION ===
+ CHARMM>    read sequence card
+ MAINIO> Sequence information being read from unit   5.
+ RDTITL> * INPUT SEQUENCE FOR CUSTOM PEPTIDE
+ RDTITL> *
+  
+ SEQRDR>    @PEPLEN
+ Parameter: PEPLEN -> "3"
+  
+ SEQRDR>    @PEPRSQ
+ Parameter: PEPRSQ -> "GLY LYS GLY"
+
+          RESIDUE SEQUENCE --     3 RESIDUES
+          GLY LYS GLY 
+ ***** Message from SEQRDR ***** THE SYSTEM CONTAINS  1 TITRATABLE GROUPS
+ THE USER MUST PREDETERMINE THE PROTONATION STATE THROUGH THE SEQUENCE AND RTF
+ HIS -  0  HSD -  0  HSE -  0  HSP -  0  ASP -  0  GLU -  0  LYS -  1  TYR -  0
+  
+ CHARMM>     
+  
+ CHARMM>    ! Generate psf with your dynamic choice of caps
+ CHARMM>    generate @segid first @NCAP last @CCAP setup
+ Parameter: SEGID -> "PROA"
+ Parameter: NCAP -> "ACE"
+ Parameter: CCAP -> "CT2"
+ THE PATCH 'ACE' WILL BE USED FOR THE FIRST RESIDUE
+ THE PATCH 'CT2' WILL BE USED FOR THE LAST  RESIDUE
+ AUTGEN: Autogenerating specified angles and dihedrals.
+ GENPSF> Segment   1 has been generated. Its identifier is PROA.
+ PSFSUM> PSF modified: NONBOND lists and IMAGE atoms cleared.
+ PSFSUM> Summary of the structure file counters :
+         Number of segments      =        1   Number of residues   =        3
+         Number of atoms         =       45   Number of groups     =       13
+         Number of bonds         =       44   Number of angles     =       78
+         Number of dihedrals     =      103   Number of impropers  =       10
+         Number of cross-terms   =        2   Number of autogens   =        0
+         Number of HB acceptors  =        4   Number of HB donors  =        8
+         Number of NB exclusions =        0   Total charge =    1.00000
+  
+ CHARMM>     
+  
+ CHARMM>    ! === BUILD INITIAL 3D COORDINATES FROM INTERNAL COORDINATES ===
+ CHARMM>    ic generate
+
+               Generation complete. New IC table entries:
+
+   N     I       J       K       L   R(I(J/K)) T(I(JK/KJ)) PHI   T(JKL)   R(KL)
+
+   48   1 HY1   1 CY    1 *CAY  1 HY2    0.0000    0.00  120.00    0.00   0.0000
+   49   1 HY1   1 CY    1 *CAY  1 HY3    0.0000    0.00 -120.00    0.00   0.0000
+   50   1 HY1   1 CAY   1 CY    1 N      0.0000    0.00  180.00    0.00   0.0000
+   51   1 N     1 CAY   1 *CY   1 OY     0.0000    0.00  180.00    0.00   0.0000
+   52   1 CAY   1 CY    1 N     1 CA     0.0000    0.00  180.00    0.00   0.0000
+   53   1 CA    1 CY    1 *N    1 HN     0.0000    0.00  180.00    0.00   0.0000
+   54   1 CY    1 N     1 CA    1 C      0.0000    0.00  180.00    0.00   0.0000
+   55   1 C     1 N     1 *CA   1 HA1    0.0000    0.00  120.00    0.00   0.0000
+   56   1 C     1 N     1 *CA   1 HA2    0.0000    0.00 -120.00    0.00   0.0000
+   57   1 N     1 CA    1 C     2 N      0.0000    0.00  180.00    0.00   0.0000
+   58   2 N     1 CA    1 *C    1 O      0.0000    0.00  180.00    0.00   0.0000
+   59   1 CA    1 C     2 N     2 CA     0.0000    0.00  180.00    0.00   0.0000
+   60   2 CA    1 C     2 *N    2 HN     0.0000    0.00  180.00    0.00   0.0000
+   61   1 C     2 N     2 CA    2 C      0.0000    0.00  180.00    0.00   0.0000
+   62   2 C     2 N     2 *CA   2 CB     0.0000    0.00  120.00    0.00   0.0000
+   63   2 CB    2 N     2 *CA   2 HA     0.0000    0.00 -120.00    0.00   0.0000
+   64   2 N     2 CA    2 CB    2 CG     0.0000    0.00  180.00    0.00   0.0000
+   65   2 CG    2 CA    2 *CB   2 HB1    0.0000    0.00  120.00    0.00   0.0000
+   66   2 CG    2 CA    2 *CB   2 HB2    0.0000    0.00 -120.00    0.00   0.0000
+   67   2 CA    2 CB    2 CG    2 CD     0.0000    0.00  180.00    0.00   0.0000
+   68   2 CD    2 CB    2 *CG   2 HG1    0.0000    0.00  120.00    0.00   0.0000
+   69   2 CD    2 CB    2 *CG   2 HG2    0.0000    0.00 -120.00    0.00   0.0000
+   70   2 CB    2 CG    2 CD    2 CE     0.0000    0.00  180.00    0.00   0.0000
+   71   2 CE    2 CG    2 *CD   2 HD1    0.0000    0.00  120.00    0.00   0.0000
+   72   2 CE    2 CG    2 *CD   2 HD2    0.0000    0.00 -120.00    0.00   0.0000
+   73   2 CG    2 CD    2 CE    2 NZ     0.0000    0.00  180.00    0.00   0.0000
+   74   2 NZ    2 CD    2 *CE   2 HE1    0.0000    0.00  120.00    0.00   0.0000
+   75   2 NZ    2 CD    2 *CE   2 HE2    0.0000    0.00 -120.00    0.00   0.0000
+   76   2 CD    2 CE    2 NZ    2 HZ1    0.0000    0.00  180.00    0.00   0.0000
+   77   2 HZ1   2 CE    2 *NZ   2 HZ2    0.0000    0.00  120.00    0.00   0.0000
+   78   2 HZ1   2 CE    2 *NZ   2 HZ3    0.0000    0.00 -120.00    0.00   0.0000
+   79   2 N     2 CA    2 C     3 N      0.0000    0.00  180.00    0.00   0.0000
+   80   3 N     2 CA    2 *C    2 O      0.0000    0.00  180.00    0.00   0.0000
+   81   2 CA    2 C     3 N     3 CA     0.0000    0.00  180.00    0.00   0.0000
+   82   3 CA    2 C     3 *N    3 HN     0.0000    0.00  180.00    0.00   0.0000
+   83   2 C     3 N     3 CA    3 C      0.0000    0.00  180.00    0.00   0.0000
+   84   3 C     3 N     3 *CA   3 HA1    0.0000    0.00  120.00    0.00   0.0000
+   85   3 C     3 N     3 *CA   3 HA2    0.0000    0.00 -120.00    0.00   0.0000
+   86   3 N     3 CA    3 C     3 NT     0.0000    0.00  180.00    0.00   0.0000
+   87   3 NT    3 CA    3 *C    3 O      0.0000    0.00  180.00    0.00   0.0000
+   88   3 CA    3 C     3 NT    3 HT1    0.0000    0.00  180.00    0.00   0.0000
+   89   3 HT1   3 C     3 *NT   3 HT2    0.0000    0.00  180.00    0.00   0.0000
+  
+ CHARMM>    ic parameter
+  
+ CHARMM>     
+  
+ CHARMM>    ! Dynamic Seeding: ACE requires CAY, standard NTER requires standard backbone atoms
+ CHARMM>    if @NCAP .eq. ACE then
+ Parameter: NCAP -> "ACE"
+ Comparing "ACE" and "ACE".
+ IF test evaluated as true.  Performing command
+  
+ CHARMM>       ic seed 1 CAY 1 CY 1 N
+  
+ CHARMM>    else
+ Skip commands until next ENDIF
+  
+ CHARMM>     
+  
+ CHARMM>    ic build
+  
+ CHARMM>     
+  
+ CHARMM>    hbuild sele hydrogen end
+ SELRPN>     24 atoms have been selected out of     45
+ PRNHBD: CUToff Hydrogen Bond  distance =    0.5000   Angle =   90.0000
+         CuT switching ON HB dist. =     3.5000  OFf HB dist. =    4.0000
+         CuT switching ON Hb Angle =    50.0000  OFf Hb Angle =   70.0000
+         ACCEptor antecedents included
+         All hydrogen bonds for each hydrogen will be found
+         Hydrogen bonds between excluded atoms will be kept
+
+
+ NONBOND OPTION FLAGS: 
+     ELEC     VDW      ATOMs    CDIElec  SHIFt    VATOm    VSWItch 
+     BYGRoup  NOEXtnd  NOEWald 
+ CUTNB  = 14.000 CTEXNB =999.000 CTONNB = 10.000 CTOFNB = 12.000
+ CGONNB =  0.000 CGOFNB = 10.000
+ WMIN   =  1.500 WRNMXD =  0.500 E14FAC =  1.000 EPS    =  1.000
+ NBXMOD =      5
+ There are        0 atom  pairs and        0 atom  exclusions.
+ There are        0 group pairs and        0 group exclusions.
+ <MAKINB> with mode   5 found    122 exclusions and    103 interactions(1-4)
+ <MAKGRP> found     28 group exclusions.
+
+ CUToff Hydrogen Bond  distance =    0.5000           Angle =   90.0000
+ CuT switching ON HB dist. =     3.5000 OFf HB dist. =    4.0000
+ CuT switching ON Hb Angle =    50.0000 OFf Hb Angle =   70.0000
+ ACCEptor antecedents included
+ dihedral PHI STePs for spin =   10.0000
+ cutoff for water acceptor search CUTWat=    7.5000
+
+ Place: HN  ,    ,    , constructed for donor PROA 1    GLY  N   .
+ Place: HA1 ,HA2 ,    , constructed for donor PROA 1    GLY  CA  .
+ Place: HN  ,    ,    , constructed for donor PROA 2    LYS  N   .
+ Place: HA  ,    ,    , constructed for donor PROA 2    LYS  CA  .
+ Place: HB1 ,HB2 ,    , constructed for donor PROA 2    LYS  CB  .
+ Place: HG1 ,HG2 ,    , constructed for donor PROA 2    LYS  CG  .
+ Place: HD1 ,HD2 ,    , constructed for donor PROA 2    LYS  CD  .
+ Place: HE1 ,HE2 ,    , constructed for donor PROA 2    LYS  CE  .
+ Place: HN  ,    ,    , constructed for donor PROA 3    GLY  N   .
+ Place: HA1 ,HA2 ,    , constructed for donor PROA 3    GLY  CA  .
+
+ NBONDX:       120 atom and      0 group interactions within 14.00 A.
+ Spin: HY1 ,HY2 ,HY3 , constructed for donor PROA 1    GLY  CAY .
+
+ NBONDX:       120 atom and      0 group interactions within 14.00 A.
+ Spin: HZ1 ,HZ2 ,HZ3 , constructed for donor PROA 2    LYS  NZ  .
+
+ NBONDX:        80 atom and      0 group interactions within 14.00 A.
+ Spin: HT1 ,HT2 ,    , constructed for donor PROA 3    GLY  NT  .
+  
+ CHARMM>     
+  
+ CHARMM>    ! patch dummy atoms for ASP and GLU
+ CHARMM>    ! ---------------------------------
+ CHARMM>    define ANY sele bynu 1 end
+ SELRPN>      1 atoms have been selected out of     45
+  
+ CHARMM>    set res1 = ?selresi         ! get the starting value of resid
+ RDCMND substituted energy or value "?SELRESI" to "1"
+ Parameter: RES1 <- "1"
+  
+ CHARMM>    calc reslast = ?selresi + ?nres -1
+ RDCMND substituted energy or value "?SELRESI" to "1"
+ RDCMND substituted energy or value "?NRES" to "3"
+Evaluating: 1+3-1
+ Parameter: RESLAST <- "3"
+  
+ CHARMM>     
+  
+ CHARMM>    set ires @res1
+ Parameter: RES1 -> "1"
+ Parameter: IRES <- "1"
+  
+ CHARMM>     
+  
+ CHARMM>    prnlev -1 !turn off printing
+  
+ CHARMM>     
+  
+ CHARMM>    hbuild sele segi @segid .and. resn asp .and. type hd* end
+ Parameter: SEGID -> "PROA"
+ SELRPN>      0 atoms have been selected out of     45
+
+      ***** LEVEL  4 WARNING FROM <GTHBUI> *****
+      ***** Zero selection specified
+      ******************************************
+      BOMLEV (  0) IS NOT REACHED. WRNLEV IS  5
+
+  
+ CHARMM>    hbuild sele segi @segid .and. resn glu .and. type he* end
+ Parameter: SEGID -> "PROA"
+ SELRPN>      0 atoms have been selected out of     45
+
+      ***** LEVEL  4 WARNING FROM <GTHBUI> *****
+      ***** Zero selection specified
+      ******************************************
+      BOMLEV (  0) IS NOT REACHED. WRNLEV IS  5
+
+  
+ CHARMM>     
+  
+ CHARMM>    ! Edit Dihedrals for Glupp2 and Aspp2
+ CHARMM>    !------------------------------------
+ CHARMM>    define ANY sele bynu 1 end
+ SELRPN>      1 atoms have been selected out of     45
+  
+ CHARMM>    set res1 = ?selresi         ! get the starting value of resid
+ RDCMND substituted energy or value "?SELRESI" to "1"
+ Parameter: RES1 <- "1"
+  
+ CHARMM>    calc reslast = ?selresi + ?nres -1
+ RDCMND substituted energy or value "?SELRESI" to "1"
+ RDCMND substituted energy or value "?NRES" to "3"
+Evaluating: 1+3-1
+ Parameter: RESLAST <- "3"
+  
+ CHARMM>     
+  
+ CHARMM>    ic gene
+
+               Generation complete. New IC table entries:
+
+   N     I       J       K       L   R(I(J/K)) T(I(JK/KJ)) PHI   T(JKL)   R(KL)
+
+   90   1 HY1   1 CY    1 *CAY  1 HY2    0.0000    0.00  120.00    0.00   0.0000
+   91   1 HY1   1 CY    1 *CAY  1 HY3    0.0000    0.00 -120.00    0.00   0.0000
+   92   1 HY1   1 CAY   1 CY    1 N      0.0000    0.00  180.00    0.00   0.0000
+   93   1 N     1 CAY   1 *CY   1 OY     0.0000    0.00  180.00    0.00   0.0000
+   94   1 CAY   1 CY    1 N     1 CA     0.0000    0.00  180.00    0.00   0.0000
+   95   1 CA    1 CY    1 *N    1 HN     0.0000    0.00  180.00    0.00   0.0000
+   96   1 CY    1 N     1 CA    1 C      0.0000    0.00  180.00    0.00   0.0000
+   97   1 C     1 N     1 *CA   1 HA1    0.0000    0.00  120.00    0.00   0.0000
+   98   1 C     1 N     1 *CA   1 HA2    0.0000    0.00 -120.00    0.00   0.0000
+   99   1 N     1 CA    1 C     2 N      0.0000    0.00  180.00    0.00   0.0000
+  100   2 N     1 CA    1 *C    1 O      0.0000    0.00  180.00    0.00   0.0000
+  101   1 CA    1 C     2 N     2 CA     0.0000    0.00  180.00    0.00   0.0000
+  102   2 CA    1 C     2 *N    2 HN     0.0000    0.00  180.00    0.00   0.0000
+  103   1 C     2 N     2 CA    2 C      0.0000    0.00  180.00    0.00   0.0000
+  104   2 C     2 N     2 *CA   2 CB     0.0000    0.00  120.00    0.00   0.0000
+  105   2 CB    2 N     2 *CA   2 HA     0.0000    0.00 -120.00    0.00   0.0000
+  106   2 N     2 CA    2 CB    2 CG     0.0000    0.00  180.00    0.00   0.0000
+  107   2 CG    2 CA    2 *CB   2 HB1    0.0000    0.00  120.00    0.00   0.0000
+  108   2 CG    2 CA    2 *CB   2 HB2    0.0000    0.00 -120.00    0.00   0.0000
+  109   2 CA    2 CB    2 CG    2 CD     0.0000    0.00  180.00    0.00   0.0000
+  110   2 CD    2 CB    2 *CG   2 HG1    0.0000    0.00  120.00    0.00   0.0000
+  111   2 CD    2 CB    2 *CG   2 HG2    0.0000    0.00 -120.00    0.00   0.0000
+  112   2 CB    2 CG    2 CD    2 CE     0.0000    0.00  180.00    0.00   0.0000
+  113   2 CE    2 CG    2 *CD   2 HD1    0.0000    0.00  120.00    0.00   0.0000
+  114   2 CE    2 CG    2 *CD   2 HD2    0.0000    0.00 -120.00    0.00   0.0000
+  115   2 CG    2 CD    2 CE    2 NZ     0.0000    0.00  180.00    0.00   0.0000
+  116   2 NZ    2 CD    2 *CE   2 HE1    0.0000    0.00  120.00    0.00   0.0000
+  117   2 NZ    2 CD    2 *CE   2 HE2    0.0000    0.00 -120.00    0.00   0.0000
+  118   2 CD    2 CE    2 NZ    2 HZ1    0.0000    0.00  180.00    0.00   0.0000
+  119   2 HZ1   2 CE    2 *NZ   2 HZ2    0.0000    0.00  120.00    0.00   0.0000
+  120   2 HZ1   2 CE    2 *NZ   2 HZ3    0.0000    0.00 -120.00    0.00   0.0000
+  121   2 N     2 CA    2 C     3 N      0.0000    0.00  180.00    0.00   0.0000
+  122   3 N     2 CA    2 *C    2 O      0.0000    0.00  180.00    0.00   0.0000
+  123   2 CA    2 C     3 N     3 CA     0.0000    0.00  180.00    0.00   0.0000
+  124   3 CA    2 C     3 *N    3 HN     0.0000    0.00  180.00    0.00   0.0000
+  125   2 C     3 N     3 CA    3 C      0.0000    0.00  180.00    0.00   0.0000
+  126   3 C     3 N     3 *CA   3 HA1    0.0000    0.00  120.00    0.00   0.0000
+  127   3 C     3 N     3 *CA   3 HA2    0.0000    0.00 -120.00    0.00   0.0000
+  128   3 N     3 CA    3 C     3 NT     0.0000    0.00  180.00    0.00   0.0000
+  129   3 NT    3 CA    3 *C    3 O      0.0000    0.00  180.00    0.00   0.0000
+  130   3 CA    3 C     3 NT    3 HT1    0.0000    0.00  180.00    0.00   0.0000
+  131   3 HT1   3 C     3 *NT   3 HT2    0.0000    0.00  180.00    0.00   0.0000
+  
+ CHARMM>    ic fill
+  
+ CHARMM>     
+  
+ CHARMM>    set ires @res1
+ Parameter: RES1 -> "1"
+ Parameter: IRES <- "1"
+  
+ CHARMM>     
+  
+ CHARMM>    prnlev -1
+  
+ CHARMM>     
+  
+ CHARMM>    ! Safely initialize ASP dummy hydrogens only if they exist
+ CHARMM>    define check_asp sele segi @segid .and. resn asp .and. type hd* end
+ Parameter: SEGID -> "PROA"
+ SELRPN>      0 atoms have been selected out of     45
+  
+ CHARMM>    if ?nsel .gt. 0 then
+ RDCMND substituted energy or value "?NSEL" to "0"
+ Comparing "0" and "0".
+ IF test evaluated as false.  Skip to ELSE or ENDIF
+  
+ CHARMM>     
+  
+ CHARMM>    ! Safely initialize GLU dummy hydrogens only if they exist
+ CHARMM>    define check_glu sele segi @segid .and. resn glu .and. type he* end
+ Parameter: SEGID -> "PROA"
+ SELRPN>      0 atoms have been selected out of     45
+  
+ CHARMM>    if ?nsel .gt. 0 then
+ RDCMND substituted energy or value "?NSEL" to "0"
+ Comparing "0" and "0".
+ IF test evaluated as false.  Skip to ELSE or ENDIF
+  
+ CHARMM>     
+  
+ CHARMM>    ic build
+  
+ CHARMM>     
+  
+ CHARMM>    ! Fast minimization
+ CHARMM>    ! ------------------------
+ CHARMM>    define heavy sele .not. type H* end
+ SELRPN>     21 atoms have been selected out of     45
+  
+ CHARMM>     
+  
+ CHARMM>    cons harm clear
+  
+ CHARMM>    cons harm force 50.0 sele heavy end
+ SELRPN>     21 atoms have been selected out of     45
+ CSTRAN: Harmonic Restraints
+          ABSOlute type as set number  1.  Number of selected atoms:     21
+          Reference coordinates set to main coordinates.
+          Mass weighting will NOT be used for new restraints.
+          The force constant of      50.00000 will be used.
+          An exponent of  2 will be used.
+          The XYZ scale factors are:       1.00000       1.00000       1.00000
+          A total of     21 atoms are restrained.
+  
+ CHARMM>     
+  
+ CHARMM>    mini   sd nstep  10 nprint 10 step 0.005
+
+ NONBOND OPTION FLAGS: 
+     ELEC     VDW      ATOMs    CDIElec  SHIFt    VATOm    VSWItch 
+     BYGRoup  NOEXtnd  NOEWald 
+ CUTNB  = 14.000 CTEXNB =999.000 CTONNB = 10.000 CTOFNB = 12.000
+ CGONNB =  0.000 CGOFNB = 10.000
+ WMIN   =  1.500 WRNMXD =  0.500 E14FAC =  1.000 EPS    =  1.000
+ NBXMOD =      5
+ There are        0 atom  pairs and        0 atom  exclusions.
+ There are        0 group pairs and        0 group exclusions.
+ <MAKINB> with mode   5 found    122 exclusions and    103 interactions(1-4)
+ <MAKGRP> found     28 group exclusions.
+ Generating nonbond list with Exclusion mode = 5
+ == PRIMARY == SPACE FOR      991 ATOM PAIRS AND        0 GROUP PAIRS
+
+ General atom nonbond list generation found:
+      865 ATOM PAIRS WERE FOUND FOR ATOM LIST
+        2 GROUP PAIRS REQUIRED ATOM SEARCHES
+
+
+
+ STEEPD> An energy minimization has been requested.
+
+ NSTEP  =           10   NPRINT =           10
+ STEP   =    0.0050000   TOLFUN =    0.0000000
+ TOLGRD =    0.0000000   TOLSTP =    0.0000000
+
+MINI MIN: Cycle      ENERgy      Delta-E         GRMS    Step-size
+MINI INTERN:          BONDs       ANGLes       UREY-b    DIHEdrals    IMPRopers
+MINI CROSS:           CMAPs        PMF1D        PMF2D        PRIMO
+MINI EXTERN:        VDWaals         ELEC       HBONds          ASP         USER
+ ----------       ---------    ---------    ---------    ---------    ---------
+MINI>        0     11.60743      0.00000     24.55522      0.00500
+MINI INTERN>        0.00065      1.01486      0.74600      4.54852      0.00000
+MINI CROSS>        -0.42237      0.00000      0.00000      0.00000
+MINI EXTERN>       36.25640    -30.53664      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+MINI>       10    -16.84634     28.45377      2.46719      0.00224
+MINI INTERN>        1.04006      2.38376      1.33560      4.78905      0.17742
+MINI CROSS>        -0.44456      0.00000      0.00000      0.00000
+MINI EXTERN>        4.59897    -32.83022      0.00000      0.00000      0.00000
+MINI CONSTR>        2.10358      0.00000      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+
+ STEEPD> Minimization exiting with number of steps limit (        10) exceeded.
+
+STPD MIN: Cycle      ENERgy      Delta-E         GRMS    Step-size
+STPD INTERN:          BONDs       ANGLes       UREY-b    DIHEdrals    IMPRopers
+STPD CROSS:           CMAPs        PMF1D        PMF2D        PRIMO
+STPD EXTERN:        VDWaals         ELEC       HBONds          ASP         USER
+STPD CONSTR:       HARMonic    CDIHedral          CIC     RESDistance       NOE
+ ----------       ---------    ---------    ---------    ---------    ---------
+STPD>       10    -16.84634     28.45377      2.46719      0.00269
+STPD INTERN>        1.04006      2.38376      1.33560      4.78905      0.17742
+STPD CROSS>        -0.44456      0.00000      0.00000      0.00000
+STPD EXTERN>        4.59897    -32.83022      0.00000      0.00000      0.00000
+STPD CONSTR>        2.10358      0.00000      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+  
+ CHARMM>    mini abnr nstep  10 nprint 10 step 0.005
+
+ NONBOND OPTION FLAGS: 
+     ELEC     VDW      ATOMs    CDIElec  SHIFt    VATOm    VSWItch 
+     BYGRoup  NOEXtnd  NOEWald 
+ CUTNB  = 14.000 CTEXNB =999.000 CTONNB = 10.000 CTOFNB = 12.000
+ CGONNB =  0.000 CGOFNB = 10.000
+ WMIN   =  1.500 WRNMXD =  0.500 E14FAC =  1.000 EPS    =  1.000
+ NBXMOD =      5
+ There are      865 atom  pairs and      225 atom  exclusions.
+ There are        0 group pairs and       28 group exclusions.
+ Generating nonbond list with Exclusion mode = 5
+ == PRIMARY == SPACE FOR      991 ATOM PAIRS AND        0 GROUP PAIRS
+
+ General atom nonbond list generation found:
+      865 ATOM PAIRS WERE FOUND FOR ATOM LIST
+        2 GROUP PAIRS REQUIRED ATOM SEARCHES
+
+
+
+ ABNER> An energy minimization has been requested.
+
+ EIGRNG =    0.0005000   MINDIM =            5
+ NPRINT =           10   NSTEP  =           10
+ PSTRCT =    0.0000000   SDSTP  =    0.0050000
+ STPLIM =    1.0000000   STRICT =    0.1000000
+ TOLFUN =    0.0000000   TOLGRD =    0.0000000
+ TOLITR =          100   TOLSTP =    0.0000000
+ FMEM   =    0.0000000
+MINI MIN: Cycle      ENERgy      Delta-E         GRMS    Step-size
+MINI INTERN:          BONDs       ANGLes       UREY-b    DIHEdrals    IMPRopers
+MINI CROSS:           CMAPs        PMF1D        PMF2D        PRIMO
+MINI EXTERN:        VDWaals         ELEC       HBONds          ASP         USER
+MINI CONSTR:       HARMonic    CDIHedral          CIC     RESDistance       NOE
+ ----------       ---------    ---------    ---------    ---------    ---------
+MINI>        0    -16.84634     28.45377      2.46719      0.00000
+MINI INTERN>        1.04006      2.38376      1.33560      4.78905      0.17742
+MINI CROSS>        -0.44456      0.00000      0.00000      0.00000
+MINI EXTERN>        4.59897    -32.83022      0.00000      0.00000      0.00000
+MINI CONSTR>        2.10358      0.00000      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+MINI>       10    -18.58608      1.73974      0.71730      0.00717
+MINI INTERN>        0.79709      2.25795      1.14507      4.88981      0.06316
+MINI CROSS>        -0.47414      0.00000      0.00000      0.00000
+MINI EXTERN>        2.60734    -33.57158      0.00000      0.00000      0.00000
+MINI CONSTR>        3.69923      0.00000      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+
+ ABNER> Minimization exiting with number of steps limit (   10) exceeded.
+
+ABNR MIN: Cycle      ENERgy      Delta-E         GRMS    Step-size
+ABNR INTERN:          BONDs       ANGLes       UREY-b    DIHEdrals    IMPRopers
+ABNR CROSS:           CMAPs        PMF1D        PMF2D        PRIMO
+ABNR EXTERN:        VDWaals         ELEC       HBONds          ASP         USER
+ABNR CONSTR:       HARMonic    CDIHedral          CIC     RESDistance       NOE
+ ----------       ---------    ---------    ---------    ---------    ---------
+ABNR>       10    -18.58608      1.73974      0.71730      0.00646
+ABNR INTERN>        0.79709      2.25795      1.14507      4.88981      0.06316
+ABNR CROSS>        -0.47414      0.00000      0.00000      0.00000
+ABNR EXTERN>        2.60734    -33.57158      0.00000      0.00000      0.00000
+ABNR CONSTR>        3.69923      0.00000      0.00000      0.00000      0.00000
+ ----------       ---------    ---------    ---------    ---------    ---------
+  
+ CHARMM>     
+  
+ CHARMM>    ! === WRITE DYNAMIC SYSTEM FILES ===
+ CHARMM>    open unit 1 write card name @{OUTNAME}.psf
+ Parameter: OUTNAME -> "CAPPED_GKG"
+ VOPEN> Attempting to open::capped_gkg.psf::
+ OPNLGU> Unit  1 opened for WRITE access to capped_gkg.psf
+  
+ CHARMM>    write psf card unit 1
+ RDTITL> CLOSE UNIT 1
+ RDTITL> No title read.
+ VCLOSE: Closing unit    1 with status "KEEP"
+  
+ CHARMM>    close unit 1
+ CLOLGU>  *****  WARNING  ***** Attempt to close unit that was not open.
+  
+ CHARMM>     
+  
+ CHARMM>    open unit 1 write card name @{OUTNAME}.crd
+ Parameter: OUTNAME -> "CAPPED_GKG"
+ VOPEN> Attempting to open::capped_gkg.crd::
+ OPNLGU> Unit  1 opened for WRITE access to capped_gkg.crd
+  
+ CHARMM>    write coor card unit 1
+ RDTITL> CLOSE UNIT 1
+ RDTITL> No title read.
+ VCLOSE: Closing unit    1 with status "KEEP"
+  
+ CHARMM>    close unit 1
+ CLOLGU>  *****  WARNING  ***** Attempt to close unit that was not open.
+  
+ CHARMM>     
+  
+ CHARMM>    open unit 1 write form name @{OUTNAME}.pdb
+ Parameter: OUTNAME -> "CAPPED_GKG"
+ VOPEN> Attempting to open::capped_gkg.pdb::
+ OPNLGU> Unit  1 opened for WRITE access to capped_gkg.pdb
+  
+ CHARMM>    write coor pdb unit 1
+ RDTITL> CLOSE UNIT 1
+ RDTITL> No title read.
+  Write CHARMM-pdb format
+  
+ CHARMM>    close unit 1
+ VCLOSE: Closing unit    1 with status "KEEP"
+  
+ CHARMM>     
+  
+ CHARMM>    stop
+      $$$$$$  New timer profile Local node$$$$$
+      Heuristic check                 0.00 Other:            0.00
+   List time                       0.00 Other:            0.00
+         Electrostatic & VDW             0.00 Other:            0.00
+      Nonbond force                   0.00 Other:            0.00
+         Bond energy                     0.00 Other:            0.00
+         Angle energy                    0.00 Other:            0.00
+         Dihedral energy                 0.00 Other:            0.00
+         Restraints energy               0.00 Other:            0.00
+      INTRNL energy                   0.00 Other:            0.00
+      Comm energy                     0.00 Other:            0.00
+      Comm force                      0.00 Other:            0.00
+   Energy time                     0.00 Other:            0.00
+ Total time                      0.06 Other:            0.06
+         $$$$$$  Average   profile $$$$$
+      Heuristic check                 0.00 Other:            0.00
+   List time                       0.00 Other:            0.00
+         Electrostatic & VDW             0.00 Other:            0.00
+      Nonbond force                   0.00 Other:            0.00
+         Bond energy                     0.00 Other:            0.00
+         Angle energy                    0.00 Other:            0.00
+         Dihedral energy                 0.00 Other:            0.00
+         Restraints energy               0.00 Other:            0.00
+      INTRNL energy                   0.00 Other:            0.00
+      Comm energy                     0.00 Other:            0.00
+      Comm force                      0.00 Other:            0.00
+   Energy time                     0.00 Other:            0.00
+ Total time                      0.06 Other:            0.06
+
+                    NORMAL TERMINATION BY NORMAL STOP
+                    MOST SEVERE WARNING WAS AT LEVEL  0
+
+                    $$$$$ JOB ACCOUNTING INFORMATION $$$$$
+                     ELAPSED TIME:     0.10  SECONDS 
+                         CPU TIME:     0.06  SECONDS 

@@ -1,0 +1,234 @@
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/prep to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd to search path.
+-f: Source gen_capped_GCG.leap.
+
+Welcome to LEaP!
+(no leaprc in search path)
+Sourcing: ./gen_capped_GCG.leap
+----- Source: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff14SB
+----- Source of /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff14SB done
+Log file: ./leap.log
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/parm10.dat
+Reading title:
+PARM99 + frcmod.ff99SB + frcmod.parmbsc0 + OL3 for RNA
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.ff14SB
+Reading force field modification type file (frcmod)
+Reading title:
+ff14SB protein backbone and sidechain parameters
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/amino12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminoct12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminont12.lib
+Loading library: /home/wayyne/cphmd/amber24/ff14/parmfiles/phmd.lib
+Loading parameters: /home/wayyne/cphmd/amber24/ff14/parmfiles/frcmod.phmd_barrier
+Reading force field modification type file (frcmod)
+Reading title:
+!Force field modifications for continuous phmd simulations (Feb 2018)
+Loading parameters: /home/wayyne/cphmd/amber24/ff14/parmfiles/ff14sb_pme_dayhoff_dev.parm
+Reading title:
+ &phmdparm
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+NGT: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+NUMCH(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RES_NAME(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RES_TYPE(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+/: mass not read - omitting
+Checking 'pep'....
+Checking parameters for unit 'pep'.
+Checking for bond parameters.
+Checking for angle parameters.
+Unit is OK.
+Total unperturbed charge:   0.000000
+Total perturbed charge:     0.000000
+Checking Unit.
+Building topology.
+Building atom parameters.
+Building bond parameters.
+Building angle parameters.
+Building proper torsion parameters.
+Building improper torsion parameters.
+ total 8 improper torsions applied
+Building H-Bond parameters.
+Incorporating Non-Bonded adjustments.
+Not Marking per-residue atom chain types.
+Marking per-residue atom chain types.
+ (no restraints)
+Writing pdb file: capped_GCG.pdb
+	Quit
+
+Exiting LEaP: Errors = 0; Warnings = 60; Notes = 0.

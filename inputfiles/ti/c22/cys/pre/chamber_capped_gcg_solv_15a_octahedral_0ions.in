@@ -1,0 +1,11 @@
+chamber \
+  -top ../../../../toppar//prot/top_all22_prot.rtf \
+  -param ../../../../toppar//prot/par_all22_prot.prm \
+  -str ../../../../toppar//toppar_water_ions.str \
+  -str ../../../../toppar//toppar_phmd_c22_foramber.str \
+  -psf capped_gcg_solv_15a_octahedral_0ions.psf \
+  -crd capped_gcg_solv_15a_octahedral_0ions.crd \
+  -box 52,52,52,109.471221,109.471221,109.471221
+
+outparm capped_gcg_solv_15a_octahedral_0ions.prmtop capped_gcg_solv_15a_octahedral_0ions.inpcrd
+quit

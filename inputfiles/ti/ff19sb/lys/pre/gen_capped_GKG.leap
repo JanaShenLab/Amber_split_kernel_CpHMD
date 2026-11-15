@@ -1,0 +1,13 @@
+source leaprc.protein.ff19SB
+loadoff /home/wayyne/cphmd/amber24/ff19/parmfiles/phmd.lib
+loadamberparams /home/wayyne/cphmd/amber24/ff19/parmfiles/frcmod.phmd_barrier
+
+pep = sequence { ACE GLY LYS GLY NHE }
+
+check pep
+charge pep
+
+saveamberparm pep capped_GKG.parm7 capped_GKG.rst7
+savepdb pep capped_GKG.pdb
+
+quit
