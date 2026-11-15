@@ -1,0 +1,21 @@
+job name: hewl_1x_2ns
+Assigned SGE GPUs: 0
+Assigned HGR GPUs: 
+hostname: spirit6
+Using spirit6 CUDA/Amber setup
+scratch: /tmp/2036523.1.all.q/wayyne_hewl_1x_2ns_kYcBew
+
+ Running AREX-native worker topology with dedicated scheduler rank in pmemd Amber24
+    Total processors =     2
+    Scheduler ranks =     1
+    Number of AREX workers =     1
+    Ranks per worker =     1
+
+
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+
+real	360m1.900s
+user	715m43.101s
+sys	4m12.509s
+copying from scratch back to basecamp
+fin

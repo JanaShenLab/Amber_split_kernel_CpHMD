@@ -1,0 +1,14 @@
+job name: tacf_1x_2ns
+Assigned SGE GPUs: 1
+Assigned HGR GPUs: 
+hostname: spirit6
+Using spirit6 CUDA/Amber setup
+scratch: /tmp/2036661.1.all.q/wayyne_tacf_1x_2ns_eHEtAR
+
+ Running AREX-native worker topology with dedicated scheduler rank in pmemd Amber24
+    Total processors =     2
+    Scheduler ranks =     1
+    Number of AREX workers =     1
+    Ranks per worker =     1
+
+

@@ -1,0 +1,104 @@
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035385.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+1 2 0 3
+1 2 0 3
+scratch created/found
+pmemd.cuda: error while loading shared libraries: libcurl-gnutls.so.4: cannot open shared object file: No such file or directory
+copying from scratch back to basecamp
+cp: cannot stat '/tmp/wayyne/bbl_redo_c22/min/*': No such file or directory
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035385.1.all.q on spirit1
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035386.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+2 3 0 1
+2 3 0 1
+scratch created/found
+pmemd.cuda: /opt/shen/shared/libs/curl/8.20.0-gnutls/lib/libcurl-gnutls.so.4: no version information available (required by /opt/shen/shared/libs/netcdf/c-4.9.2-hdf5-1.14.3/lib/libnetcdf.so.19)
+STOP PMEMD Terminated Abnormally!
+copying from scratch back to basecamp
+cp: cannot stat '/tmp/wayyne/bbl_redo_c22/min/*': No such file or directory
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035386.1.all.q on spirit1
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035387.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+0 1 3 2
+0 1 3 2
+scratch created/found
+pmemd.cuda: /opt/shen/shared/libs/curl/8.20.0-gnutls/lib/libcurl-gnutls.so.4: no version information available (required by /opt/shen/shared/libs/netcdf/c-4.9.2-hdf5-1.14.3/lib/libnetcdf.so.19)
+
+
+  Unit   10 Error on OPEN: refc                                                                                                                                                                                                                                                            
+STOP PMEMD Terminated Abnormally!
+/var/spool/gridengine/execd/spirit1/job_scripts/2035387: line 39: -r: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035387: line 40: -x: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035387: line 41: -ref: command not found
+copying from scratch back to basecamp
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035387.1.all.q on spirit1
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035388.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+1 2 3 0
+1 2 3 0
+scratch created/found
+pmemd.cuda: /opt/shen/shared/libs/curl/8.20.0-gnutls/lib/libcurl-gnutls.so.4: no version information available (required by /opt/shen/shared/libs/netcdf/c-4.9.2-hdf5-1.14.3/lib/libnetcdf.so.19)
+
+
+  Unit   10 Error on OPEN: refc                                                                                                                                                                                                                                                            
+STOP PMEMD Terminated Abnormally!
+/var/spool/gridengine/execd/spirit1/job_scripts/2035388: line 39: -r: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035388: line 40: -x: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035388: line 41: -ref: command not found
+copying from scratch back to basecamp
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035388.1.all.q on spirit1
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035389.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+2 3 1 0
+2 3 1 0
+scratch created/found
+pmemd.cuda: /opt/shen/shared/libs/curl/8.20.0-gnutls/lib/libcurl-gnutls.so.4: no version information available (required by /opt/shen/shared/libs/netcdf/c-4.9.2-hdf5-1.14.3/lib/libnetcdf.so.19)
+
+
+  Unit   10 Error on OPEN: refc                                                                                                                                                                                                                                                            
+STOP PMEMD Terminated Abnormally!
+/var/spool/gridengine/execd/spirit1/job_scripts/2035389: line 39: -r: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035389: line 40: -x: command not found
+/var/spool/gridengine/execd/spirit1/job_scripts/2035389: line 41: -ref: command not found
+copying from scratch back to basecamp
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035389.1.all.q on spirit1
+4
+/var/spool/gridengine/execd/spirit1/active_jobs/2035390.1/environment
+GPU 0: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-c639f83a-bfbc-439f-69f6-808f4fbfd342)
+GPU 1: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3af80f21-e9bb-bc39-ad28-f4d13ca55c08)
+GPU 2: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-3763ceab-3ce5-440b-1a80-3cf84bf98a62)
+GPU 3: NVIDIA GeForce RTX 2080 Ti (UUID: GPU-f39399ce-fcaf-34b3-8900-85d27d64f933)
+1 0 2 3
+1 0 2 3
+scratch created/found
+pmemd.cuda: /opt/shen/shared/libs/curl/8.20.0-gnutls/lib/libcurl-gnutls.so.4: no version information available (required by /opt/shen/shared/libs/netcdf/c-4.9.2-hdf5-1.14.3/lib/libnetcdf.so.19)
+
+Note: The following floating-point exceptions are signalling: IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+copying from scratch back to basecamp
+fin
+if you need to see env, cat logfile in /tmp/lock-log.2035390.1.all.q on spirit1

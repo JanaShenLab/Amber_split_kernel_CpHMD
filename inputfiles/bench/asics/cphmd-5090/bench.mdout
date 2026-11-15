@@ -1,0 +1,1580 @@
+
+          -------------------------------------------------------
+          Amber 24 PMEMD                              2024
+          -------------------------------------------------------
+
+| PMEMD implementation of SANDER, Release 24
+
+|  Compiled date/time: Fri May 15 00:15:46 2026
+| Run on 08/02/2026 at 13:57:19
+
+|   Executable path: pmemd.cuda
+| Working directory: /mnt/wrk/lab/cphmd/amber24/c22/bench/asics/cphmd-5090
+|          Hostname: Unknown
+  [-O]verwriting output
+
+File Assignments:
+|   MDIN: /home/wayyne/lab/cphmd/amber24/c22/bench/asics/cphmd-5090/bench.mdin  
+|  MDOUT: bench.mdout                                                           
+| INPCRD: e1_5.rst7                                                             
+|   PARM: /home/wayyne/lab/cphmd/amber24/c22/bench/asics/cphmd-5090/6vtl_noh.par
+| RESTRT: bench.mdrst                                                           
+|   REFC: e1_5.rst7                                                             
+|  MDVEL: mdvel                                                                 
+|   MDEN: mden                                                                  
+|  MDCRD: bench.nc                                                              
+| MDINFO: mdinfo                                                                
+|  MDFRC: mdfrc                                                                 
+
+
+ Here is the input file:
+
+Production run                                                                 
+ &cntrl                                                                        
+  imin=0,                                                                      
+  nstlim=1000000,                                                              
+  dt=0.002,                                                                    
+  irest=1,                                                                     
+  ntx=5,                                                                       
+  ig=-1,                                                                       
+  tempi=310,                                                                   
+  temp0=310,                                                                   
+  ntc=2,                                                                       
+  ntf=2,                                                                       
+  tol = 0.00001,                                                               
+  taup = 1.0,                                                                  
+  ntwx=50000,                                                                  
+  ntwe=50000,                                                                  
+  ntwr=50000,                                                                  
+  ntpr=50000,                                                                  
+  cut=12.0,                                                                    
+  fswitch=10,                                                                  
+  iwrap=0,                                                                     
+  ntt=3,                                                                       
+  gamma_ln=1.0,                                                                
+  ntb=2,                                                                       
+  ntp=3,                                                                       
+  barostat = 2,                                                                
+  pres0 = 1.0,                                                                 
+  csurften = 3,                                                                
+  gamma_ten = 0.0,                                                             
+  ninterface = 2,                                                              
+  iphmd=3,                                                                     
+  solvph=7.5,                                                                  
+  nscm=500,                                                                    
+/                                                                              
+
+
+Note: ig = -1. Setting random seed to   242341 based on wallclock time in 
+      microseconds.
+| irandom = 1, using AMBER's internal random number generator (default).
+ 
+|--------------------- INFORMATION ----------------------
+| GPU (CUDA) Version of PMEMD in use: NVIDIA GPU IN USE.
+|                    Version 18.0.0
+| 
+|                      03/25/2018
+| 
+| Implementation by:
+|                    Ross C. Walker     (SDSC)
+|                    Scott Le Grand     (nVIDIA)
+| 
+| Version 18 performance extensions by:
+|                    David Cerutti     (Rutgers)
+| 
+| Precision model in use:
+|      [SPFP] - Single Precision Forces, 64-bit Fixed Point
+|               Accumulation. (Default)
+| 
+|--------------------------------------------------------
+ 
+|----------------- CITATION INFORMATION -----------------
+|
+|    When publishing work that utilized the CUDA version
+|    of AMBER, please cite the following in addition to
+|    the regular AMBER citations:
+|
+|  - Romelia Salomon-Ferrer; Andreas W. Goetz; Duncan
+|    Poole; Scott Le Grand; Ross C. Walker "Routine
+|    microsecond molecular dynamics simulations with
+|    AMBER - Part II: Particle Mesh Ewald", J. Chem.
+|    Theory Comput., 2013, 9 (9), pp3878-3888,
+|    DOI: 10.1021/ct400314y.
+|
+|  - Andreas W. Goetz; Mark J. Williamson; Dong Xu;
+|    Duncan Poole; Scott Le Grand; Ross C. Walker
+|    "Routine microsecond molecular dynamics simulations
+|    with AMBER - Part I: Generalized Born", J. Chem.
+|    Theory Comput., 2012, 8 (5), pp1542-1555.
+|
+|  - Scott Le Grand; Andreas W. Goetz; Ross C. Walker
+|    "SPFP: Speed without compromise - a mixed precision
+|    model for GPU accelerated molecular dynamics
+|    simulations.", Comp. Phys. Comm., 2013, 184
+|    pp374-380, DOI: 10.1016/j.cpc.2012.09.022
+|
+|--------------------------------------------------------
+ 
+|------------------- GPU DEVICE INFO --------------------
+|
+|            CUDA_VISIBLE_DEVICES: not set
+|   CUDA Capable Devices Detected:      1
+|           CUDA Device ID in use:      0
+|                CUDA Device Name: NVIDIA GeForce RTX 5090
+|     CUDA Device Global Mem Size:  32102 MB
+| CUDA Device Num Multiprocessors:    170
+|           CUDA Device Core Freq:   2.44 GHz
+|
+|--------------------------------------------------------
+ 
+ 
+| Conditional Compilation Defines Used:
+| PUBFFT
+| BINTRAJ
+| CUDA
+| EMIL
+
+| Largest sphere to fit in unit cell has radius =    56.699
+
+| New format PARM file being parsed.
+| Version =    1.000 Date = 02/01/23 Time = 15:59:31
+| Force field information read from topology file: 
+|               >>>>> CHARMM22 All-Hydrogen Parameter File for Proteins <<<<<<<<  
+|
+|CHARMM: CHARMM force field in use. 
+
+| Note: 1-4 EEL scale factors are being read from the topology file.
+
+| Note: 1-4 VDW scale factors are being read from the topology file.
+| INFO: Off Diagonal (NBFIX) LJ terms found in prmtop file.
+|       The prmtop file has been modified to support atom
+|       type based pairwise Lennard-Jones terms.
+| Duplicated    0 dihedrals
+
+| Duplicated    0 dihedrals
+
+--------------------------------------------------------------------------------
+   1.  RESOURCE   USE: 
+--------------------------------------------------------------------------------
+
+ getting box info from netcdf restart file
+ NATOM  =  281354 NTYPES =      54 NBONH =  250389 MBONA  =   30438
+ NTHETH =  168569 MTHETA =   37398 NPHIH =  155727 MPHIA  =   81159
+ NHPARM =       0 NPARM  =       0 NNB   =  681499 NRES   =   71641
+ NBONA  =   30438 NTHETA =   37398 NPHIA =   81159 NUMBND =      90
+ NUMANG =     191 NPTRA  =     276 NATYP =       1 NPHB   =       0
+ IFBOX  =       1 NMXRS  =     134 IFCAP =       0 NEXTRA =       0
+ NCOPY  =       0
+
+ PHMD> WARNING: masktitrrestypes is deprecated and will be ignored.
+ PHMD>          User-specified masktitrrestypes was:        3
+ PHMD>          Active titratable residue names are inferred from nonblank masktitrres entries.
+ PHMD> Resolved titratable residue selection:
+ PHMD>   ASP mode: ALL
+ PHMD>     selected residue count:         75
+ PHMD>     selected residue         63 ASP
+ PHMD>     selected residue         92 ASP
+ PHMD>     selected residue        111 ASP
+ PHMD>     selected residue        116 ASP
+ PHMD>     selected residue        125 ASP
+ PHMD>     selected residue        144 ASP
+ PHMD>     selected residue        149 ASP
+ PHMD>     selected residue        168 ASP
+ PHMD>     selected residue        187 ASP
+ PHMD>     selected residue        208 ASP
+ PHMD>     selected residue        212 ASP
+ PHMD>     selected residue        222 ASP
+ PHMD>     selected residue        238 ASP
+ PHMD>     selected residue        244 ASP
+ PHMD>     selected residue        274 ASP
+ PHMD>     selected residue        281 ASP
+ PHMD>     selected residue        286 ASP
+ PHMD>     selected residue        296 ASP
+ PHMD>     selected residue        316 ASP
+ PHMD>     selected residue        330 ASP
+ PHMD>     selected residue        334 ASP
+ PHMD>     selected residue        340 ASP
+ PHMD>     selected residue        392 ASP
+ PHMD>     selected residue        417 ASP
+ PHMD>     selected residue        438 ASP
+ PHMD>     selected residue        509 ASP
+ PHMD>     selected residue        538 ASP
+ PHMD>     selected residue        557 ASP
+ PHMD>     selected residue        562 ASP
+ PHMD>     selected residue        571 ASP
+ PHMD>     selected residue        590 ASP
+ PHMD>     selected residue        595 ASP
+ PHMD>     selected residue        614 ASP
+ PHMD>     selected residue        633 ASP
+ PHMD>     selected residue        654 ASP
+ PHMD>     selected residue        658 ASP
+ PHMD>     selected residue        668 ASP
+ PHMD>     selected residue        684 ASP
+ PHMD>     selected residue        690 ASP
+ PHMD>     selected residue        720 ASP
+ PHMD>     selected residue        727 ASP
+ PHMD>     selected residue        732 ASP
+ PHMD>     selected residue        742 ASP
+ PHMD>     selected residue        762 ASP
+ PHMD>     selected residue        776 ASP
+ PHMD>     selected residue        780 ASP
+ PHMD>     selected residue        786 ASP
+ PHMD>     selected residue        838 ASP
+ PHMD>     selected residue        863 ASP
+ PHMD>     selected residue        884 ASP
+ PHMD>     selected residue        955 ASP
+ PHMD>     selected residue        984 ASP
+ PHMD>     selected residue       1003 ASP
+ PHMD>     selected residue       1008 ASP
+ PHMD>     selected residue       1017 ASP
+ PHMD>     selected residue       1036 ASP
+ PHMD>     selected residue       1041 ASP
+ PHMD>     selected residue       1060 ASP
+ PHMD>     selected residue       1079 ASP
+ PHMD>     selected residue       1100 ASP
+ PHMD>     selected residue       1104 ASP
+ PHMD>     selected residue       1114 ASP
+ PHMD>     selected residue       1130 ASP
+ PHMD>     selected residue       1136 ASP
+ PHMD>     selected residue       1166 ASP
+ PHMD>     selected residue       1173 ASP
+ PHMD>     selected residue       1178 ASP
+ PHMD>     selected residue       1188 ASP
+ PHMD>     selected residue       1208 ASP
+ PHMD>     selected residue       1222 ASP
+ PHMD>     selected residue       1226 ASP
+ PHMD>     selected residue       1232 ASP
+ PHMD>     selected residue       1284 ASP
+ PHMD>     selected residue       1309 ASP
+ PHMD>     selected residue       1330 ASP
+ PHMD>   GLU mode: ALL
+ PHMD>     selected residue count:        105
+ PHMD>     selected residue         22 GLU
+ PHMD>     selected residue         64 GLU
+ PHMD>     selected residue         82 GLU
+ PHMD>     selected residue         98 GLU
+ PHMD>     selected residue        108 GLU
+ PHMD>     selected residue        117 GLU
+ PHMD>     selected residue        121 GLU
+ PHMD>     selected residue        141 GLU
+ PHMD>     selected residue        152 GLU
+ PHMD>     selected residue        162 GLU
+ PHMD>     selected residue        167 GLU
+ PHMD>     selected residue        204 GLU
+ PHMD>     selected residue        213 GLU
+ PHMD>     selected residue        220 GLU
+ PHMD>     selected residue        223 GLU
+ PHMD>     selected residue        227 GLU
+ PHMD>     selected residue        239 GLU
+ PHMD>     selected residue        262 GLU
+ PHMD>     selected residue        283 GLU
+ PHMD>     selected residue        298 GLU
+ PHMD>     selected residue        304 GLU
+ PHMD>     selected residue        323 GLU
+ PHMD>     selected residue        327 GLU
+ PHMD>     selected residue        338 GLU
+ PHMD>     selected residue        342 GLU
+ PHMD>     selected residue        347 GLU
+ PHMD>     selected residue        358 GLU
+ PHMD>     selected residue        381 GLU
+ PHMD>     selected residue        386 GLU
+ PHMD>     selected residue        396 GLU
+ PHMD>     selected residue        401 GLU
+ PHMD>     selected residue        404 GLU
+ PHMD>     selected residue        410 GLU
+ PHMD>     selected residue        435 GLU
+ PHMD>     selected residue        442 GLU
+ PHMD>     selected residue        468 GLU
+ PHMD>     selected residue        510 GLU
+ PHMD>     selected residue        528 GLU
+ PHMD>     selected residue        544 GLU
+ PHMD>     selected residue        554 GLU
+ PHMD>     selected residue        563 GLU
+ PHMD>     selected residue        567 GLU
+ PHMD>     selected residue        587 GLU
+ PHMD>     selected residue        598 GLU
+ PHMD>     selected residue        608 GLU
+ PHMD>     selected residue        613 GLU
+ PHMD>     selected residue        650 GLU
+ PHMD>     selected residue        659 GLU
+ PHMD>     selected residue        666 GLU
+ PHMD>     selected residue        669 GLU
+ PHMD>     selected residue        673 GLU
+ PHMD>     selected residue        685 GLU
+ PHMD>     selected residue        708 GLU
+ PHMD>     selected residue        729 GLU
+ PHMD>     selected residue        744 GLU
+ PHMD>     selected residue        750 GLU
+ PHMD>     selected residue        769 GLU
+ PHMD>     selected residue        773 GLU
+ PHMD>     selected residue        784 GLU
+ PHMD>     selected residue        788 GLU
+ PHMD>     selected residue        793 GLU
+ PHMD>     selected residue        804 GLU
+ PHMD>     selected residue        827 GLU
+ PHMD>     selected residue        832 GLU
+ PHMD>     selected residue        842 GLU
+ PHMD>     selected residue        847 GLU
+ PHMD>     selected residue        850 GLU
+ PHMD>     selected residue        856 GLU
+ PHMD>     selected residue        881 GLU
+ PHMD>     selected residue        888 GLU
+ PHMD>     selected residue        914 GLU
+ PHMD>     selected residue        956 GLU
+ PHMD>     selected residue        974 GLU
+ PHMD>     selected residue        990 GLU
+ PHMD>     selected residue       1000 GLU
+ PHMD>     selected residue       1009 GLU
+ PHMD>     selected residue       1013 GLU
+ PHMD>     selected residue       1033 GLU
+ PHMD>     selected residue       1044 GLU
+ PHMD>     selected residue       1054 GLU
+ PHMD>     selected residue       1059 GLU
+ PHMD>     selected residue       1096 GLU
+ PHMD>     selected residue       1105 GLU
+ PHMD>     selected residue       1112 GLU
+ PHMD>     selected residue       1115 GLU
+ PHMD>     selected residue       1119 GLU
+ PHMD>     selected residue       1131 GLU
+ PHMD>     selected residue       1154 GLU
+ PHMD>     selected residue       1175 GLU
+ PHMD>     selected residue       1190 GLU
+ PHMD>     selected residue       1196 GLU
+ PHMD>     selected residue       1215 GLU
+ PHMD>     selected residue       1219 GLU
+ PHMD>     selected residue       1230 GLU
+ PHMD>     selected residue       1234 GLU
+ PHMD>     selected residue       1239 GLU
+ PHMD>     selected residue       1250 GLU
+ PHMD>     selected residue       1273 GLU
+ PHMD>     selected residue       1278 GLU
+ PHMD>     selected residue       1288 GLU
+ PHMD>     selected residue       1293 GLU
+ PHMD>     selected residue       1296 GLU
+ PHMD>     selected residue       1302 GLU
+ PHMD>     selected residue       1327 GLU
+ PHMD>     selected residue       1334 GLU
+ PHMD>   HSP mode: ALL
+ PHMD>     selected residue count:         24
+ PHMD>     selected residue         13 HSP
+ PHMD>     selected residue         17 HSP
+ PHMD>     selected residue         58 HSP
+ PHMD>     selected residue         95 HSP
+ PHMD>     selected residue        148 HSP
+ PHMD>     selected residue        235 HSP
+ PHMD>     selected residue        312 HSP
+ PHMD>     selected residue        446 HSP
+ PHMD>     selected residue        459 HSP
+ PHMD>     selected residue        463 HSP
+ PHMD>     selected residue        504 HSP
+ PHMD>     selected residue        541 HSP
+ PHMD>     selected residue        594 HSP
+ PHMD>     selected residue        681 HSP
+ PHMD>     selected residue        758 HSP
+ PHMD>     selected residue        892 HSP
+ PHMD>     selected residue        905 HSP
+ PHMD>     selected residue        909 HSP
+ PHMD>     selected residue        950 HSP
+ PHMD>     selected residue        987 HSP
+ PHMD>     selected residue       1040 HSP
+ PHMD>     selected residue       1127 HSP
+ PHMD>     selected residue       1204 HSP
+ PHMD>     selected residue       1338 HSP
+ PHMD>   LYS mode: ALL
+ PHMD>     selected residue count:         75
+ PHMD>     selected residue         27 LYS
+ PHMD>     selected residue         61 LYS
+ PHMD>     selected residue         90 LYS
+ PHMD>     selected residue        118 LYS
+ PHMD>     selected residue        126 LYS
+ PHMD>     selected residue        133 LYS
+ PHMD>     selected residue        135 LYS
+ PHMD>     selected residue        170 LYS
+ PHMD>     selected residue        178 LYS
+ PHMD>     selected residue        189 LYS
+ PHMD>     selected residue        196 LYS
+ PHMD>     selected residue        231 LYS
+ PHMD>     selected residue        276 LYS
+ PHMD>     selected residue        326 LYS
+ PHMD>     selected residue        339 LYS
+ PHMD>     selected residue        357 LYS
+ PHMD>     selected residue        363 LYS
+ PHMD>     selected residue        367 LYS
+ PHMD>     selected residue        371 LYS
+ PHMD>     selected residue        375 LYS
+ PHMD>     selected residue        376 LYS
+ PHMD>     selected residue        379 LYS
+ PHMD>     selected residue        406 LYS
+ PHMD>     selected residue        407 LYS
+ PHMD>     selected residue        445 LYS
+ PHMD>     selected residue        473 LYS
+ PHMD>     selected residue        507 LYS
+ PHMD>     selected residue        536 LYS
+ PHMD>     selected residue        564 LYS
+ PHMD>     selected residue        572 LYS
+ PHMD>     selected residue        579 LYS
+ PHMD>     selected residue        581 LYS
+ PHMD>     selected residue        616 LYS
+ PHMD>     selected residue        624 LYS
+ PHMD>     selected residue        635 LYS
+ PHMD>     selected residue        642 LYS
+ PHMD>     selected residue        677 LYS
+ PHMD>     selected residue        722 LYS
+ PHMD>     selected residue        772 LYS
+ PHMD>     selected residue        785 LYS
+ PHMD>     selected residue        803 LYS
+ PHMD>     selected residue        809 LYS
+ PHMD>     selected residue        813 LYS
+ PHMD>     selected residue        817 LYS
+ PHMD>     selected residue        821 LYS
+ PHMD>     selected residue        822 LYS
+ PHMD>     selected residue        825 LYS
+ PHMD>     selected residue        852 LYS
+ PHMD>     selected residue        853 LYS
+ PHMD>     selected residue        891 LYS
+ PHMD>     selected residue        919 LYS
+ PHMD>     selected residue        953 LYS
+ PHMD>     selected residue        982 LYS
+ PHMD>     selected residue       1010 LYS
+ PHMD>     selected residue       1018 LYS
+ PHMD>     selected residue       1025 LYS
+ PHMD>     selected residue       1027 LYS
+ PHMD>     selected residue       1062 LYS
+ PHMD>     selected residue       1070 LYS
+ PHMD>     selected residue       1081 LYS
+ PHMD>     selected residue       1088 LYS
+ PHMD>     selected residue       1123 LYS
+ PHMD>     selected residue       1168 LYS
+ PHMD>     selected residue       1218 LYS
+ PHMD>     selected residue       1231 LYS
+ PHMD>     selected residue       1249 LYS
+ PHMD>     selected residue       1255 LYS
+ PHMD>     selected residue       1259 LYS
+ PHMD>     selected residue       1263 LYS
+ PHMD>     selected residue       1267 LYS
+ PHMD>     selected residue       1268 LYS
+ PHMD>     selected residue       1271 LYS
+ PHMD>     selected residue       1298 LYS
+ PHMD>     selected residue       1299 LYS
+ PHMD>     selected residue       1337 LYS
+ PHMD>   CYS mode: ALL
+ PHMD>     selected residue count:         51
+ PHMD>     selected residue         34 CYS
+ PHMD>     selected residue         46 CYS
+ PHMD>     selected residue         78 CYS
+ PHMD>     selected residue        157 CYS
+ PHMD>     selected residue        164 CYS
+ PHMD>     selected residue        179 CYS
+ PHMD>     selected residue        260 CYS
+ PHMD>     selected residue        275 CYS
+ PHMD>     selected residue        293 CYS
+ PHMD>     selected residue        297 CYS
+ PHMD>     selected residue        306 CYS
+ PHMD>     selected residue        308 CYS
+ PHMD>     selected residue        320 CYS
+ PHMD>     selected residue        328 CYS
+ PHMD>     selected residue        344 CYS
+ PHMD>     selected residue        346 CYS
+ PHMD>     selected residue        350 CYS
+ PHMD>     selected residue        480 CYS
+ PHMD>     selected residue        492 CYS
+ PHMD>     selected residue        524 CYS
+ PHMD>     selected residue        603 CYS
+ PHMD>     selected residue        610 CYS
+ PHMD>     selected residue        625 CYS
+ PHMD>     selected residue        706 CYS
+ PHMD>     selected residue        721 CYS
+ PHMD>     selected residue        739 CYS
+ PHMD>     selected residue        743 CYS
+ PHMD>     selected residue        752 CYS
+ PHMD>     selected residue        754 CYS
+ PHMD>     selected residue        766 CYS
+ PHMD>     selected residue        774 CYS
+ PHMD>     selected residue        790 CYS
+ PHMD>     selected residue        792 CYS
+ PHMD>     selected residue        796 CYS
+ PHMD>     selected residue        926 CYS
+ PHMD>     selected residue        938 CYS
+ PHMD>     selected residue        970 CYS
+ PHMD>     selected residue       1049 CYS
+ PHMD>     selected residue       1056 CYS
+ PHMD>     selected residue       1071 CYS
+ PHMD>     selected residue       1152 CYS
+ PHMD>     selected residue       1167 CYS
+ PHMD>     selected residue       1185 CYS
+ PHMD>     selected residue       1189 CYS
+ PHMD>     selected residue       1198 CYS
+ PHMD>     selected residue       1200 CYS
+ PHMD>     selected residue       1212 CYS
+ PHMD>     selected residue       1220 CYS
+ PHMD>     selected residue       1236 CYS
+ PHMD>     selected residue       1238 CYS
+ PHMD>     selected residue       1242 CYS
+ PHMD>   TYR mode: ALL
+ PHMD>     selected residue count:         75
+ PHMD>     selected residue         21 TYR
+ PHMD>     selected residue         52 TYR
+ PHMD>     selected residue         53 TYR
+ PHMD>     selected residue         56 TYR
+ PHMD>     selected residue         94 TYR
+ PHMD>     selected residue        107 TYR
+ PHMD>     selected residue        143 TYR
+ PHMD>     selected residue        176 TYR
+ PHMD>     selected residue        180 TYR
+ PHMD>     selected residue        214 TYR
+ PHMD>     selected residue        267 TYR
+ PHMD>     selected residue        285 TYR
+ PHMD>     selected residue        288 TYR
+ PHMD>     selected residue        301 TYR
+ PHMD>     selected residue        319 TYR
+ PHMD>     selected residue        325 TYR
+ PHMD>     selected residue        343 TYR
+ PHMD>     selected residue        355 TYR
+ PHMD>     selected residue        372 TYR
+ PHMD>     selected residue        377 TYR
+ PHMD>     selected residue        383 TYR
+ PHMD>     selected residue        400 TYR
+ PHMD>     selected residue        409 TYR
+ PHMD>     selected residue        439 TYR
+ PHMD>     selected residue        441 TYR
+ PHMD>     selected residue        467 TYR
+ PHMD>     selected residue        498 TYR
+ PHMD>     selected residue        499 TYR
+ PHMD>     selected residue        502 TYR
+ PHMD>     selected residue        540 TYR
+ PHMD>     selected residue        553 TYR
+ PHMD>     selected residue        589 TYR
+ PHMD>     selected residue        622 TYR
+ PHMD>     selected residue        626 TYR
+ PHMD>     selected residue        660 TYR
+ PHMD>     selected residue        713 TYR
+ PHMD>     selected residue        731 TYR
+ PHMD>     selected residue        734 TYR
+ PHMD>     selected residue        747 TYR
+ PHMD>     selected residue        765 TYR
+ PHMD>     selected residue        771 TYR
+ PHMD>     selected residue        789 TYR
+ PHMD>     selected residue        801 TYR
+ PHMD>     selected residue        818 TYR
+ PHMD>     selected residue        823 TYR
+ PHMD>     selected residue        829 TYR
+ PHMD>     selected residue        846 TYR
+ PHMD>     selected residue        855 TYR
+ PHMD>     selected residue        885 TYR
+ PHMD>     selected residue        887 TYR
+ PHMD>     selected residue        913 TYR
+ PHMD>     selected residue        944 TYR
+ PHMD>     selected residue        945 TYR
+ PHMD>     selected residue        948 TYR
+ PHMD>     selected residue        986 TYR
+ PHMD>     selected residue        999 TYR
+ PHMD>     selected residue       1035 TYR
+ PHMD>     selected residue       1068 TYR
+ PHMD>     selected residue       1072 TYR
+ PHMD>     selected residue       1106 TYR
+ PHMD>     selected residue       1159 TYR
+ PHMD>     selected residue       1177 TYR
+ PHMD>     selected residue       1180 TYR
+ PHMD>     selected residue       1193 TYR
+ PHMD>     selected residue       1211 TYR
+ PHMD>     selected residue       1217 TYR
+ PHMD>     selected residue       1235 TYR
+ PHMD>     selected residue       1247 TYR
+ PHMD>     selected residue       1264 TYR
+ PHMD>     selected residue       1269 TYR
+ PHMD>     selected residue       1275 TYR
+ PHMD>     selected residue       1292 TYR
+ PHMD>     selected residue       1301 TYR
+ PHMD>     selected residue       1331 TYR
+ PHMD>     selected residue       1333 TYR
+ PHMD> Total selected topology residues:        405
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match ASP  ASP      12   14
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match CYS  CYS      10   11
+insufficient atom match GLU  GLU      15   17
+insufficient atom match GLU  GLU      15   17
+ PHMD> simulation pH =    7.50
+ PHMD> titr grps     =  405
+Doing PME CpHMD. Titration charges set equal to MD charges.
+ PHMD> lambda,barrier=    1  1.00  2.50
+ PHMD> lambda,barrier=    2  1.00  2.50
+ PHMD> lambda,barrier=    3  1.00  2.50
+ PHMD> lambda,barrier=    4  1.00  2.50
+ PHMD> lambda,barrier=    5  0.00  2.50
+ PHMD> lambda,barrier=    6  1.00  2.50
+ PHMD> lambda,barrier=    7  1.00  2.50
+ PHMD> lambda,barrier=    8  0.00  2.50
+ PHMD> lambda,barrier=    9  0.00  2.50
+ PHMD> lambda,barrier=   10  0.00  2.50
+ PHMD> lambda,barrier=   11  0.00  2.50
+ PHMD> lambda,barrier=   12  0.00  2.50
+ PHMD> lambda,barrier=   13  0.00  2.50
+ PHMD> lambda,barrier=   14  1.00  2.50
+ PHMD> lambda,barrier=   15  1.00  2.50
+ PHMD> lambda,barrier=   16  0.00  2.50
+ PHMD> lambda,barrier=   17  1.00  2.50
+ PHMD> lambda,barrier=   18  1.00  2.50
+ PHMD> lambda,barrier=   19  1.00  2.50
+ PHMD> lambda,barrier=   20  1.00  2.50
+ PHMD> lambda,barrier=   21  1.00  2.50
+ PHMD> lambda,barrier=   22  1.00  2.50
+ PHMD> lambda,barrier=   23  0.00  2.50
+ PHMD> lambda,barrier=   24  1.00  2.50
+ PHMD> lambda,barrier=   25  1.00  2.50
+ PHMD> lambda,barrier=   26  0.00  2.50
+ PHMD> lambda,barrier=   27  1.00  2.50
+ PHMD> lambda,barrier=   28  1.00  2.50
+ PHMD> lambda,barrier=   29  1.00  2.50
+ PHMD> lambda,barrier=   30  1.00  2.50
+ PHMD> lambda,barrier=   31  0.00  2.50
+ PHMD> lambda,barrier=   32  0.00  2.50
+ PHMD> lambda,barrier=   33  0.00  2.50
+ PHMD> lambda,barrier=   34  0.00  2.50
+ PHMD> lambda,barrier=   35  0.00  2.50
+ PHMD> lambda,barrier=   36  0.00  2.50
+ PHMD> lambda,barrier=   37  1.00  2.50
+ PHMD> lambda,barrier=   38  1.00  2.50
+ PHMD> lambda,barrier=   39  1.00  2.50
+ PHMD> lambda,barrier=   40  1.00  2.50
+ PHMD> lambda,barrier=   41  1.00  2.50
+ PHMD> lambda,barrier=   42  1.00  2.50
+ PHMD> lambda,barrier=   43  0.00  2.50
+ PHMD> lambda,barrier=   44  0.00  2.50
+ PHMD> lambda,barrier=   45  0.00  2.50
+ PHMD> lambda,barrier=   46  0.00  2.50
+ PHMD> lambda,barrier=   47  0.00  2.50
+ PHMD> lambda,barrier=   48  0.00  2.50
+ PHMD> lambda,barrier=   49  1.00  2.50
+ PHMD> lambda,barrier=   50  1.00  2.50
+ PHMD> lambda,barrier=   51  1.00  2.50
+ PHMD> lambda,barrier=   52  1.00  2.50
+ PHMD> lambda,barrier=   53  1.00  2.50
+ PHMD> lambda,barrier=   54  1.00  2.50
+ PHMD> lambda,barrier=   55  0.00  2.50
+ PHMD> lambda,barrier=   56  1.00  2.50
+ PHMD> lambda,barrier=   57  1.00  2.50
+ PHMD> lambda,barrier=   58  1.00  2.50
+ PHMD> lambda,barrier=   59  1.00  2.50
+ PHMD> lambda,barrier=   60  1.00  2.50
+ PHMD> lambda,barrier=   61  1.00  2.50
+ PHMD> lambda,barrier=   62  1.00  2.50
+ PHMD> lambda,barrier=   63  1.00  2.50
+ PHMD> lambda,barrier=   64  0.00  2.50
+ PHMD> lambda,barrier=   65  1.00  2.50
+ PHMD> lambda,barrier=   66  1.00  2.50
+ PHMD> lambda,barrier=   67  1.00  2.50
+ PHMD> lambda,barrier=   68  1.00  2.50
+ PHMD> lambda,barrier=   69  1.00  2.50
+ PHMD> lambda,barrier=   70  1.00  2.50
+ PHMD> lambda,barrier=   71  0.00  2.50
+ PHMD> lambda,barrier=   72  1.00  2.50
+ PHMD> lambda,barrier=   73  1.00  2.50
+ PHMD> lambda,barrier=   74  0.00  2.50
+ PHMD> lambda,barrier=   75  0.00  2.50
+ PHMD> lambda,barrier=   76  0.00  2.50
+ PHMD> lambda,barrier=   77  0.00  2.50
+ PHMD> lambda,barrier=   78  1.00  2.50
+ PHMD> lambda,barrier=   79  1.00  2.50
+ PHMD> lambda,barrier=   80  0.00  2.50
+ PHMD> lambda,barrier=   81  1.00  2.50
+ PHMD> lambda,barrier=   82  1.00  2.50
+ PHMD> lambda,barrier=   83  0.00  2.50
+ PHMD> lambda,barrier=   84  1.00  2.50
+ PHMD> lambda,barrier=   85  1.00  2.50
+ PHMD> lambda,barrier=   86  0.00  2.50
+ PHMD> lambda,barrier=   87  0.00  2.50
+ PHMD> lambda,barrier=   88  1.00  2.50
+ PHMD> lambda,barrier=   89  1.00  2.50
+ PHMD> lambda,barrier=   90  1.00  2.50
+ PHMD> lambda,barrier=   91  1.00  2.50
+ PHMD> lambda,barrier=   92  1.00  2.50
+ PHMD> lambda,barrier=   93  1.00  2.50
+ PHMD> lambda,barrier=   94  0.00  2.50
+ PHMD> lambda,barrier=   95  0.00  2.50
+ PHMD> lambda,barrier=   96  0.00  2.50
+ PHMD> lambda,barrier=   97  0.00  2.50
+ PHMD> lambda,barrier=   98  1.00  2.50
+ PHMD> lambda,barrier=   99  1.00  2.50
+ PHMD> lambda,barrier=  100  0.00  2.50
+ PHMD> lambda,barrier=  101  0.00  2.50
+ PHMD> lambda,barrier=  102  0.00  2.50
+ PHMD> lambda,barrier=  103  0.00  2.50
+ PHMD> lambda,barrier=  104  0.00  2.50
+ PHMD> lambda,barrier=  105  0.00  2.50
+ PHMD> lambda,barrier=  106  0.00  2.50
+ PHMD> lambda,barrier=  107  0.00  2.50
+ PHMD> lambda,barrier=  108  0.00  2.50
+ PHMD> lambda,barrier=  109  1.00  2.50
+ PHMD> lambda,barrier=  110  1.00  2.50
+ PHMD> lambda,barrier=  111  1.00  2.50
+ PHMD> lambda,barrier=  112  1.00  2.50
+ PHMD> lambda,barrier=  113  0.00  2.50
+ PHMD> lambda,barrier=  114  1.00  2.50
+ PHMD> lambda,barrier=  115  1.00  2.50
+ PHMD> lambda,barrier=  116  1.00  2.50
+ PHMD> lambda,barrier=  117  1.00  2.50
+ PHMD> lambda,barrier=  118  0.00  2.50
+ PHMD> lambda,barrier=  119  0.00  2.50
+ PHMD> lambda,barrier=  120  0.00  2.50
+ PHMD> lambda,barrier=  121  1.00  2.50
+ PHMD> lambda,barrier=  122  1.00  2.50
+ PHMD> lambda,barrier=  123  1.00  2.50
+ PHMD> lambda,barrier=  124  1.00  2.50
+ PHMD> lambda,barrier=  125  1.00  2.50
+ PHMD> lambda,barrier=  126  1.00  2.50
+ PHMD> lambda,barrier=  127  1.00  2.50
+ PHMD> lambda,barrier=  128  1.00  2.50
+ PHMD> lambda,barrier=  129  0.00  2.50
+ PHMD> lambda,barrier=  130  0.00  2.50
+ PHMD> lambda,barrier=  131  1.00  2.50
+ PHMD> lambda,barrier=  132  1.00  2.50
+ PHMD> lambda,barrier=  133  0.00  2.50
+ PHMD> lambda,barrier=  134  1.00  2.50
+ PHMD> lambda,barrier=  135  1.00  2.50
+ PHMD> lambda,barrier=  136  1.00  2.50
+ PHMD> lambda,barrier=  137  1.00  2.50
+ PHMD> lambda,barrier=  138  1.00  2.50
+ PHMD> lambda,barrier=  139  1.00  2.50
+ PHMD> lambda,barrier=  140  0.00  2.50
+ PHMD> lambda,barrier=  141  1.00  2.50
+ PHMD> lambda,barrier=  142  1.00  2.50
+ PHMD> lambda,barrier=  143  0.00  2.50
+ PHMD> lambda,barrier=  144  0.00  2.50
+ PHMD> lambda,barrier=  145  0.00  2.50
+ PHMD> lambda,barrier=  146  0.00  2.50
+ PHMD> lambda,barrier=  147  0.00  2.50
+ PHMD> lambda,barrier=  148  0.00  2.50
+ PHMD> lambda,barrier=  149  1.00  2.50
+ PHMD> lambda,barrier=  150  1.00  2.50
+ PHMD> lambda,barrier=  151  0.00  2.50
+ PHMD> lambda,barrier=  152  1.00  2.50
+ PHMD> lambda,barrier=  153  1.00  2.50
+ PHMD> lambda,barrier=  154  1.00  2.50
+ PHMD> lambda,barrier=  155  1.00  2.50
+ PHMD> lambda,barrier=  156  1.00  2.50
+ PHMD> lambda,barrier=  157  1.00  2.50
+ PHMD> lambda,barrier=  158  0.00  2.50
+ PHMD> lambda,barrier=  159  1.00  2.50
+ PHMD> lambda,barrier=  160  1.00  2.50
+ PHMD> lambda,barrier=  161  0.00  2.50
+ PHMD> lambda,barrier=  162  1.00  2.50
+ PHMD> lambda,barrier=  163  1.00  2.50
+ PHMD> lambda,barrier=  164  1.00  2.50
+ PHMD> lambda,barrier=  165  1.00  2.50
+ PHMD> lambda,barrier=  166  0.00  2.50
+ PHMD> lambda,barrier=  167  0.00  2.50
+ PHMD> lambda,barrier=  168  0.00  2.50
+ PHMD> lambda,barrier=  169  0.00  2.50
+ PHMD> lambda,barrier=  170  0.00  2.50
+ PHMD> lambda,barrier=  171  0.00  2.50
+ PHMD> lambda,barrier=  172  1.00  2.50
+ PHMD> lambda,barrier=  173  1.00  2.50
+ PHMD> lambda,barrier=  174  1.00  2.50
+ PHMD> lambda,barrier=  175  1.00  2.50
+ PHMD> lambda,barrier=  176  1.00  2.50
+ PHMD> lambda,barrier=  177  1.00  2.50
+ PHMD> lambda,barrier=  178  0.00  2.50
+ PHMD> lambda,barrier=  179  0.00  2.50
+ PHMD> lambda,barrier=  180  0.00  2.50
+ PHMD> lambda,barrier=  181  0.00  2.50
+ PHMD> lambda,barrier=  182  0.00  2.50
+ PHMD> lambda,barrier=  183  0.00  2.50
+ PHMD> lambda,barrier=  184  1.00  2.50
+ PHMD> lambda,barrier=  185  1.00  2.50
+ PHMD> lambda,barrier=  186  1.00  2.50
+ PHMD> lambda,barrier=  187  1.00  2.50
+ PHMD> lambda,barrier=  188  1.00  2.50
+ PHMD> lambda,barrier=  189  1.00  2.50
+ PHMD> lambda,barrier=  190  0.00  2.50
+ PHMD> lambda,barrier=  191  1.00  2.50
+ PHMD> lambda,barrier=  192  1.00  2.50
+ PHMD> lambda,barrier=  193  1.00  2.50
+ PHMD> lambda,barrier=  194  1.00  2.50
+ PHMD> lambda,barrier=  195  1.00  2.50
+ PHMD> lambda,barrier=  196  1.00  2.50
+ PHMD> lambda,barrier=  197  1.00  2.50
+ PHMD> lambda,barrier=  198  1.00  2.50
+ PHMD> lambda,barrier=  199  0.00  2.50
+ PHMD> lambda,barrier=  200  1.00  2.50
+ PHMD> lambda,barrier=  201  1.00  2.50
+ PHMD> lambda,barrier=  202  1.00  2.50
+ PHMD> lambda,barrier=  203  1.00  2.50
+ PHMD> lambda,barrier=  204  1.00  2.50
+ PHMD> lambda,barrier=  205  1.00  2.50
+ PHMD> lambda,barrier=  206  0.00  2.50
+ PHMD> lambda,barrier=  207  1.00  2.50
+ PHMD> lambda,barrier=  208  1.00  2.50
+ PHMD> lambda,barrier=  209  0.00  2.50
+ PHMD> lambda,barrier=  210  0.00  2.50
+ PHMD> lambda,barrier=  211  0.00  2.50
+ PHMD> lambda,barrier=  212  0.00  2.50
+ PHMD> lambda,barrier=  213  1.00  2.50
+ PHMD> lambda,barrier=  214  1.00  2.50
+ PHMD> lambda,barrier=  215  0.00  2.50
+ PHMD> lambda,barrier=  216  1.00  2.50
+ PHMD> lambda,barrier=  217  1.00  2.50
+ PHMD> lambda,barrier=  218  0.00  2.50
+ PHMD> lambda,barrier=  219  1.00  2.50
+ PHMD> lambda,barrier=  220  1.00  2.50
+ PHMD> lambda,barrier=  221  0.00  2.50
+ PHMD> lambda,barrier=  222  0.00  2.50
+ PHMD> lambda,barrier=  223  1.00  2.50
+ PHMD> lambda,barrier=  224  1.00  2.50
+ PHMD> lambda,barrier=  225  1.00  2.50
+ PHMD> lambda,barrier=  226  1.00  2.50
+ PHMD> lambda,barrier=  227  1.00  2.50
+ PHMD> lambda,barrier=  228  1.00  2.50
+ PHMD> lambda,barrier=  229  0.00  2.50
+ PHMD> lambda,barrier=  230  0.00  2.50
+ PHMD> lambda,barrier=  231  0.00  2.50
+ PHMD> lambda,barrier=  232  0.00  2.50
+ PHMD> lambda,barrier=  233  1.00  2.50
+ PHMD> lambda,barrier=  234  1.00  2.50
+ PHMD> lambda,barrier=  235  0.00  2.50
+ PHMD> lambda,barrier=  236  0.00  2.50
+ PHMD> lambda,barrier=  237  0.00  2.50
+ PHMD> lambda,barrier=  238  0.00  2.50
+ PHMD> lambda,barrier=  239  0.00  2.50
+ PHMD> lambda,barrier=  240  0.00  2.50
+ PHMD> lambda,barrier=  241  0.00  2.50
+ PHMD> lambda,barrier=  242  0.00  2.50
+ PHMD> lambda,barrier=  243  0.00  2.50
+ PHMD> lambda,barrier=  244  1.00  2.50
+ PHMD> lambda,barrier=  245  1.00  2.50
+ PHMD> lambda,barrier=  246  1.00  2.50
+ PHMD> lambda,barrier=  247  1.00  2.50
+ PHMD> lambda,barrier=  248  0.00  2.50
+ PHMD> lambda,barrier=  249  1.00  2.50
+ PHMD> lambda,barrier=  250  1.00  2.50
+ PHMD> lambda,barrier=  251  1.00  2.50
+ PHMD> lambda,barrier=  252  1.00  2.50
+ PHMD> lambda,barrier=  253  0.00  2.50
+ PHMD> lambda,barrier=  254  0.00  2.50
+ PHMD> lambda,barrier=  255  0.00  2.50
+ PHMD> lambda,barrier=  256  1.00  2.50
+ PHMD> lambda,barrier=  257  1.00  2.50
+ PHMD> lambda,barrier=  258  1.00  2.50
+ PHMD> lambda,barrier=  259  1.00  2.50
+ PHMD> lambda,barrier=  260  1.00  2.50
+ PHMD> lambda,barrier=  261  1.00  2.50
+ PHMD> lambda,barrier=  262  1.00  2.50
+ PHMD> lambda,barrier=  263  1.00  2.50
+ PHMD> lambda,barrier=  264  0.00  2.50
+ PHMD> lambda,barrier=  265  0.00  2.50
+ PHMD> lambda,barrier=  266  1.00  2.50
+ PHMD> lambda,barrier=  267  1.00  2.50
+ PHMD> lambda,barrier=  268  0.00  2.50
+ PHMD> lambda,barrier=  269  1.00  2.50
+ PHMD> lambda,barrier=  270  1.00  2.50
+ PHMD> lambda,barrier=  271  1.00  2.50
+ PHMD> lambda,barrier=  272  1.00  2.50
+ PHMD> lambda,barrier=  273  1.00  2.50
+ PHMD> lambda,barrier=  274  1.00  2.50
+ PHMD> lambda,barrier=  275  0.00  2.50
+ PHMD> lambda,barrier=  276  1.00  2.50
+ PHMD> lambda,barrier=  277  1.00  2.50
+ PHMD> lambda,barrier=  278  0.00  2.50
+ PHMD> lambda,barrier=  279  0.00  2.50
+ PHMD> lambda,barrier=  280  0.00  2.50
+ PHMD> lambda,barrier=  281  0.00  2.50
+ PHMD> lambda,barrier=  282  0.00  2.50
+ PHMD> lambda,barrier=  283  0.00  2.50
+ PHMD> lambda,barrier=  284  1.00  2.50
+ PHMD> lambda,barrier=  285  1.00  2.50
+ PHMD> lambda,barrier=  286  0.00  2.50
+ PHMD> lambda,barrier=  287  1.00  2.50
+ PHMD> lambda,barrier=  288  1.00  2.50
+ PHMD> lambda,barrier=  289  1.00  2.50
+ PHMD> lambda,barrier=  290  1.00  2.50
+ PHMD> lambda,barrier=  291  1.00  2.50
+ PHMD> lambda,barrier=  292  1.00  2.50
+ PHMD> lambda,barrier=  293  0.00  2.50
+ PHMD> lambda,barrier=  294  1.00  2.50
+ PHMD> lambda,barrier=  295  1.00  2.50
+ PHMD> lambda,barrier=  296  0.00  2.50
+ PHMD> lambda,barrier=  297  1.00  2.50
+ PHMD> lambda,barrier=  298  1.00  2.50
+ PHMD> lambda,barrier=  299  1.00  2.50
+ PHMD> lambda,barrier=  300  1.00  2.50
+ PHMD> lambda,barrier=  301  0.00  2.50
+ PHMD> lambda,barrier=  302  0.00  2.50
+ PHMD> lambda,barrier=  303  0.00  2.50
+ PHMD> lambda,barrier=  304  0.00  2.50
+ PHMD> lambda,barrier=  305  0.00  2.50
+ PHMD> lambda,barrier=  306  0.00  2.50
+ PHMD> lambda,barrier=  307  1.00  2.50
+ PHMD> lambda,barrier=  308  1.00  2.50
+ PHMD> lambda,barrier=  309  1.00  2.50
+ PHMD> lambda,barrier=  310  1.00  2.50
+ PHMD> lambda,barrier=  311  1.00  2.50
+ PHMD> lambda,barrier=  312  1.00  2.50
+ PHMD> lambda,barrier=  313  0.00  2.50
+ PHMD> lambda,barrier=  314  0.00  2.50
+ PHMD> lambda,barrier=  315  0.00  2.50
+ PHMD> lambda,barrier=  316  0.00  2.50
+ PHMD> lambda,barrier=  317  0.00  2.50
+ PHMD> lambda,barrier=  318  0.00  2.50
+ PHMD> lambda,barrier=  319  1.00  2.50
+ PHMD> lambda,barrier=  320  1.00  2.50
+ PHMD> lambda,barrier=  321  1.00  2.50
+ PHMD> lambda,barrier=  322  1.00  2.50
+ PHMD> lambda,barrier=  323  1.00  2.50
+ PHMD> lambda,barrier=  324  1.00  2.50
+ PHMD> lambda,barrier=  325  0.00  2.50
+ PHMD> lambda,barrier=  326  1.00  2.50
+ PHMD> lambda,barrier=  327  1.00  2.50
+ PHMD> lambda,barrier=  328  1.00  2.50
+ PHMD> lambda,barrier=  329  1.00  2.50
+ PHMD> lambda,barrier=  330  1.00  2.50
+ PHMD> lambda,barrier=  331  1.00  2.50
+ PHMD> lambda,barrier=  332  1.00  2.50
+ PHMD> lambda,barrier=  333  1.00  2.50
+ PHMD> lambda,barrier=  334  0.00  2.50
+ PHMD> lambda,barrier=  335  1.00  2.50
+ PHMD> lambda,barrier=  336  1.00  2.50
+ PHMD> lambda,barrier=  337  1.00  2.50
+ PHMD> lambda,barrier=  338  1.00  2.50
+ PHMD> lambda,barrier=  339  1.00  2.50
+ PHMD> lambda,barrier=  340  1.00  2.50
+ PHMD> lambda,barrier=  341  0.00  2.50
+ PHMD> lambda,barrier=  342  1.00  2.50
+ PHMD> lambda,barrier=  343  1.00  2.50
+ PHMD> lambda,barrier=  344  0.00  2.50
+ PHMD> lambda,barrier=  345  0.00  2.50
+ PHMD> lambda,barrier=  346  0.00  2.50
+ PHMD> lambda,barrier=  347  0.00  2.50
+ PHMD> lambda,barrier=  348  1.00  2.50
+ PHMD> lambda,barrier=  349  1.00  2.50
+ PHMD> lambda,barrier=  350  0.00  2.50
+ PHMD> lambda,barrier=  351  1.00  2.50
+ PHMD> lambda,barrier=  352  1.00  2.50
+ PHMD> lambda,barrier=  353  0.00  2.50
+ PHMD> lambda,barrier=  354  1.00  2.50
+ PHMD> lambda,barrier=  355  1.00  2.50
+ PHMD> lambda,barrier=  356  0.00  2.50
+ PHMD> lambda,barrier=  357  0.00  2.50
+ PHMD> lambda,barrier=  358  1.00  2.50
+ PHMD> lambda,barrier=  359  1.00  2.50
+ PHMD> lambda,barrier=  360  1.00  2.50
+ PHMD> lambda,barrier=  361  1.00  2.50
+ PHMD> lambda,barrier=  362  1.00  2.50
+ PHMD> lambda,barrier=  363  1.00  2.50
+ PHMD> lambda,barrier=  364  0.00  2.50
+ PHMD> lambda,barrier=  365  0.00  2.50
+ PHMD> lambda,barrier=  366  0.00  2.50
+ PHMD> lambda,barrier=  367  0.00  2.50
+ PHMD> lambda,barrier=  368  1.00  2.50
+ PHMD> lambda,barrier=  369  1.00  2.50
+ PHMD> lambda,barrier=  370  0.00  2.50
+ PHMD> lambda,barrier=  371  0.00  2.50
+ PHMD> lambda,barrier=  372  0.00  2.50
+ PHMD> lambda,barrier=  373  0.00  2.50
+ PHMD> lambda,barrier=  374  0.00  2.50
+ PHMD> lambda,barrier=  375  0.00  2.50
+ PHMD> lambda,barrier=  376  0.00  2.50
+ PHMD> lambda,barrier=  377  0.00  2.50
+ PHMD> lambda,barrier=  378  0.00  2.50
+ PHMD> lambda,barrier=  379  1.00  2.50
+ PHMD> lambda,barrier=  380  1.00  2.50
+ PHMD> lambda,barrier=  381  1.00  2.50
+ PHMD> lambda,barrier=  382  1.00  2.50
+ PHMD> lambda,barrier=  383  0.00  2.50
+ PHMD> lambda,barrier=  384  1.00  2.50
+ PHMD> lambda,barrier=  385  1.00  2.50
+ PHMD> lambda,barrier=  386  1.00  2.50
+ PHMD> lambda,barrier=  387  1.00  2.50
+ PHMD> lambda,barrier=  388  0.00  2.50
+ PHMD> lambda,barrier=  389  0.00  2.50
+ PHMD> lambda,barrier=  390  0.00  2.50
+ PHMD> lambda,barrier=  391  1.00  2.50
+ PHMD> lambda,barrier=  392  1.00  2.50
+ PHMD> lambda,barrier=  393  1.00  2.50
+ PHMD> lambda,barrier=  394  1.00  2.50
+ PHMD> lambda,barrier=  395  1.00  2.50
+ PHMD> lambda,barrier=  396  1.00  2.50
+ PHMD> lambda,barrier=  397  1.00  2.50
+ PHMD> lambda,barrier=  398  1.00  2.50
+ PHMD> lambda,barrier=  399  0.00  2.50
+ PHMD> lambda,barrier=  400  0.00  2.50
+ PHMD> lambda,barrier=  401  1.00  2.50
+ PHMD> lambda,barrier=  402  1.00  2.50
+ PHMD> lambda,barrier=  403  0.00  2.50
+ PHMD> lambda,barrier=  404  1.00  2.50
+ PHMD> lambda,barrier=  405  1.00  2.50
+| Coordinate Index Table dimensions:    17   17   33
+| Direct force subcell size =     6.6704    6.6704    6.5018
+
+     BOX TYPE: RECTILINEAR
+
+--------------------------------------------------------------------------------
+   2.  CONTROL  DATA  FOR  THE  RUN
+--------------------------------------------------------------------------------
+
+                                                                                
+
+General flags:
+     imin    =       0, nmropt  =       0
+
+Nature and format of input:
+     ntx     =       5, irest   =       1, ntrx    =       1
+
+Nature and format of output:
+     ntxo    =       2, ntpr    =   50000, ntrx    =       1, ntwr    =   50000
+     iwrap   =       0, ntwx    =   50000, ntwv    =       0, ntwe    =   50000
+     ioutfm  =       1, ntwprt  =       0, idecomp =       0, rbornstat=      0
+
+Potential function:
+     ntf     =       2, ntb     =       2, igb     =       0, nsnb    =      25
+     ipol    =       0, gbsa    =       0, iesp    =       0
+     dielc   =   1.00000, cut     =  12.00000, intdiel =   1.00000
+
+Frozen or restrained atoms:
+     ibelly  =       0, ntr     =       0
+
+Molecular dynamics:
+     nstlim  =   1000000, nscm    =       500, nrespa  =         1
+     t       =   0.00000, dt      =   0.00200, vlimit  =  -1.00000
+
+Langevin dynamics temperature regulation:
+     ig      =  242341
+     temp0   = 310.00000, tempi   = 310.00000, gamma_ln=   1.00000
+
+Pressure regulation:
+     ntp     =       3
+     pres0   =   1.00000, comp    =  44.60000, taup    =   1.00000
+     Monte-Carlo Barostat:
+     mcbarint  =     100
+
+Constant surface tension:
+     csurften  =       3
+     gamma_ten =   0.00000 ninterface =       2
+
+SHAKE:
+     ntc     =       2, jfastw  =       0
+     tol     =   0.00001
+
+| Intermolecular bonds treatment:
+|     no_intermolecular_bonds =       1
+
+| Energy averages sample interval:
+|     ene_avg_sampling =   50000
+
+Ewald parameters:
+     verbose =       0, ew_type =       0, nbflag  =       1, use_pme =       1
+     vdwmeth =       0, eedmeth =       1, netfrc  =       1
+     Box X =  113.397   Box Y =  113.397   Box Z =  214.560
+     Alpha =   90.000   Beta  =   90.000   Gamma =   90.000
+     NFFT1 =  120       NFFT2 =  120       NFFT3 =  216
+     Cutoff=   12.000   Tol   =0.100E-04
+     Ewald Coefficient =  0.22664
+     Interpolation order =    4
+| MONTE CARLO BAROSTAT IMPORTANT NOTE:
+|   The Monte-Carlo barostat does not require the virial to adjust the system volume.
+|   Since it is an expensive calculation, it is skipped for efficiency. A side-effect
+|   is that the reported pressure is always 0 because it is not calculated.
+
+--------------------------------------------------------------------------------
+   3.  ATOMIC COORDINATES AND VELOCITIES
+--------------------------------------------------------------------------------
+
+                                                                                
+ begin time read from input coords = 20200.000 ps
+
+ 
+ Number of triangulated 3-point waters found:    69500
+
+     Sum of charges from parm topology file =  -4.99944547
+     Assuming uniform neutralizing plasma
+
+| Dynamic Memory, Types Used:
+| Reals            11979342
+| Integers         16303046
+
+| Nonbonded Pairs Initial Allocation:   139924378
+
+| GPU memory information (estimate):
+| KB of GPU memory in use:   2648668
+| KB of CPU memory in use:    695812
+
+--------------------------------------------------------------------------------
+   4.  RESULTS
+--------------------------------------------------------------------------------
+
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+| MC Barostat: Decreasing size of volume moves
+
+ NSTEP =    50000   TIME(PS) =   20300.000  TEMP(K) =   309.58  PRESS =     0.0
+ Etot   =   -640425.2209  EKtot   =    182614.1875  EPtot      =   -823039.4084
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43271.6762
+ EELEC  =   -866311.0847  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2754401.9652
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0288
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   100000   TIME(PS) =   20400.000  TEMP(K) =   310.77  PRESS =     0.0
+ Etot   =   -640180.5470  EKtot   =    183316.0312  EPtot      =   -823496.5783
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43700.8446
+ EELEC  =   -867197.4229  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2759070.6292
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0271
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   150000   TIME(PS) =   20500.000  TEMP(K) =   309.25  PRESS =     0.0
+ Etot   =   -641394.2982  EKtot   =    182416.5625  EPtot      =   -823810.8607
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43492.1049
+ EELEC  =   -867302.9657  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756762.2652
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0279
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   200000   TIME(PS) =   20600.000  TEMP(K) =   310.14  PRESS =     0.0
+ Etot   =   -640256.9914  EKtot   =    182939.7500  EPtot      =   -823196.7414
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43628.8002
+ EELEC  =   -866825.5416  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2759832.4667
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0268
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   250000   TIME(PS) =   20700.000  TEMP(K) =   309.11  PRESS =     0.0
+ Etot   =   -641011.2425  EKtot   =    182335.7656  EPtot      =   -823347.0082
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43221.6386
+ EELEC  =   -866568.6468  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756741.2860
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0279
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   300000   TIME(PS) =   20800.000  TEMP(K) =   310.82  PRESS =     0.0
+ Etot   =   -640144.7160  EKtot   =    183341.5938  EPtot      =   -823486.3098
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43386.0776
+ EELEC  =   -866872.3874  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2758637.9604
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0272
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   350000   TIME(PS) =   20900.000  TEMP(K) =   310.59  PRESS =     0.0
+ Etot   =   -640784.0869  EKtot   =    183208.9062  EPtot      =   -823992.9931
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43531.9573
+ EELEC  =   -867524.9504  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2759239.7461
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0270
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   400000   TIME(PS) =   21000.000  TEMP(K) =   310.42  PRESS =     0.0
+ Etot   =   -639101.2546  EKtot   =    183106.0938  EPtot      =   -822207.3484
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     44422.8591
+ EELEC  =   -866630.2075  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2762620.6492
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0258
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   450000   TIME(PS) =   21100.000  TEMP(K) =   310.39  PRESS =     0.0
+ Etot   =   -640413.1327  EKtot   =    183087.8125  EPtot      =   -823500.9452
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43443.8790
+ EELEC  =   -866944.8242  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2759796.9889
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0268
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   500000   TIME(PS) =   21200.000  TEMP(K) =   310.19  PRESS =     0.0
+ Etot   =   -640779.6710  EKtot   =    182973.7188  EPtot      =   -823753.3897
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43280.7295
+ EELEC  =   -867034.1192  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756167.9758
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0282
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   550000   TIME(PS) =   21300.000  TEMP(K) =   309.41  PRESS =     0.0
+ Etot   =   -640564.5067  EKtot   =    182510.1406  EPtot      =   -823074.6473
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43556.3971
+ EELEC  =   -866631.0444  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756928.8807
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0279
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   600000   TIME(PS) =   21400.000  TEMP(K) =   309.90  PRESS =     0.0
+ Etot   =   -640767.3022  EKtot   =    182798.8281  EPtot      =   -823566.1303
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43917.8542
+ EELEC  =   -867483.9845  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2758687.1585
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0272
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   650000   TIME(PS) =   21500.000  TEMP(K) =   310.33  PRESS =     0.0
+ Etot   =   -639664.4212  EKtot   =    183055.6562  EPtot      =   -822720.0775
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43586.3483
+ EELEC  =   -866306.4258  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2764151.3634
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0252
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   700000   TIME(PS) =   21600.000  TEMP(K) =   309.18  PRESS =     0.0
+ Etot   =   -640615.0786  EKtot   =    182374.5312  EPtot      =   -822989.6099
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43766.6648
+ EELEC  =   -866756.2747  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2758972.7377
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0271
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   750000   TIME(PS) =   21700.000  TEMP(K) =   309.69  PRESS =     0.0
+ Etot   =   -640860.4711  EKtot   =    182679.0312  EPtot      =   -823539.5024
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     44019.5848
+ EELEC  =   -867559.0871  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2752400.3570
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0296
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   800000   TIME(PS) =   21800.000  TEMP(K) =   310.91  PRESS =     0.0
+ Etot   =   -640937.7121  EKtot   =    183395.6719  EPtot      =   -824333.3840
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     44141.1287
+ EELEC  =   -868474.5126  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756205.3498
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0281
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   850000   TIME(PS) =   21900.000  TEMP(K) =   309.81  PRESS =     0.0
+ Etot   =   -640548.4323  EKtot   =    182750.0000  EPtot      =   -823298.4323
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43634.2244
+ EELEC  =   -866932.6567  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2753035.7381
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0293
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   900000   TIME(PS) =   22000.000  TEMP(K) =   308.98  PRESS =     0.0
+ Etot   =   -641523.6670  EKtot   =    182256.2812  EPtot      =   -823779.9482
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43282.7292
+ EELEC  =   -867062.6774  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2756405.9490
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0281
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =   950000   TIME(PS) =   22100.000  TEMP(K) =   309.42  PRESS =     0.0
+ Etot   =   -641209.4802  EKtot   =    182517.1250  EPtot      =   -823726.6052
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43423.6077
+ EELEC  =   -867150.2129  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2759819.4182
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0268
+ ------------------------------------------------------------------------------
+
+
+ NSTEP =  1000000   TIME(PS) =   22200.000  TEMP(K) =   310.52  PRESS =     0.0
+ Etot   =   -640392.7064  EKtot   =    183164.5469  EPtot      =   -823557.2533
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43370.8241
+ EELEC  =   -866928.0773  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2755302.0657
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0285
+ ------------------------------------------------------------------------------
+
+
+      A V E R A G E S   O V E R      20 S T E P S
+
+
+ NSTEP =  1000000   TIME(PS) =   22200.000  TEMP(K) =   309.97  PRESS =     0.0
+ Etot   =   -640578.7470  EKtot   =    182842.1117  EPtot      =   -823420.8587
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =     43603.9965
+ EELEC  =   -867024.8552  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =   2757759.0475
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         1.0276
+ ------------------------------------------------------------------------------
+
+
+      R M S  F L U C T U A T I O N S
+
+
+ NSTEP =  1000000   TIME(PS) =   22200.000  TEMP(K) =     0.60  PRESS =     0.0
+ Etot   =       548.9393  EKtot   =       355.3558  EPtot      =       458.3162
+ BOND   =         0.0000  ANGLE   =         0.0000  DIHED      =         0.0000
+ UB     =         0.0000  IMP     =         0.0000  CMAP       =         0.0000
+ 1-4 NB =         0.0000  1-4 EEL =         0.0000  VDWAALS    =       309.2174
+ EELEC  =       483.5344  EHBOND  =         0.0000  RESTRAINT  =         0.0000
+ EKCMT  =         0.0000  VIRIAL  =         0.0000  VOLUME     =      2846.4086
+                                                    SURFTEN    =         0.0000
+                                                    Density    =         0.0011
+ ------------------------------------------------------------------------------
+
+| MC Barostat:      10000 volume changes attempted.
+| MC Barostat:       2928 changes successful ( 29.28%)
+ ------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+   5.  TIMINGS
+--------------------------------------------------------------------------------
+
+|  NonSetup CPU Time in Major Routines:
+|
+|     Routine           Sec        %
+|     ------------------------------
+|     Nonbond        1434.17   79.58
+|     Bond              0.00    0.00
+|     Angle             0.00    0.00
+|     Dihedral          0.00    0.00
+|     Shake             3.06    0.17
+|     RunMD           331.39   18.39
+|     Other            33.59    1.86
+|     ------------------------------
+|     Total          1802.22
+
+|  PME Nonbond Pairlist CPU Time:
+|
+|     Routine              Sec        %
+|     ---------------------------------
+|     Set Up Cit           0.00    0.00
+|     Build List           0.00    0.00
+|     ---------------------------------
+|     Total                0.00    0.00
+
+|  PME Direct Force CPU Time:
+|
+|     Routine              Sec        %
+|     ---------------------------------
+|     NonBonded Calc       0.00    0.00
+|     Exclude Masked       0.00    0.00
+|     Other                0.70    0.04
+|     ---------------------------------
+|     Total                0.70    0.04
+
+|  PME Reciprocal Force CPU Time:
+|
+|     Routine              Sec        %
+|     ---------------------------------
+|     1D bspline           0.00    0.00
+|     Grid Charges         0.00    0.00
+|     Scalar Sum           0.00    0.00
+|     Gradient Sum         0.00    0.00
+|     FFT                  0.00    0.00
+|     ---------------------------------
+|     Total                0.00    0.00
+
+|  Final Performance Info:
+|     -----------------------------------------------------
+|     Average timings for last       1 steps:
+|     Elapsed(s) =       0.00 Per Step(ms) =       0.08
+|         ns/day =    2106.51   seconds/ns =      41.02
+|
+|     Average timings for all steps:
+|     Elapsed(s) =    1801.60 Per Step(ms) =       1.80
+|         ns/day =      95.91   seconds/ns =     900.80
+|     -----------------------------------------------------
+
+|  Setup CPU time:            1.94 seconds
+|  NonSetup CPU time:      1802.22 seconds
+|  Total CPU time:         1804.16 seconds     0.50 hours
+
+|  Setup wall time:           2    seconds
+|  NonSetup wall time:     1802    seconds
+|  Total wall time:        1804    seconds     0.50 hours

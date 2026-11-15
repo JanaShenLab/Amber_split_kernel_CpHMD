@@ -1,0 +1,24 @@
+job name: tacf_2x_2ns
+Assigned SGE GPUs: 1,0
+Assigned HGR GPUs: 
+CUDA visible GPUs: 1,0
+hostname: spirit6
+Using spirit6 CUDA/Amber setup
+scratch: /tmp/2036696.1.all.q/wayyne_tacf_2x_2ns_ZJWF88
+
+ Running AREX-native worker topology with dedicated scheduler rank in pmemd Amber24
+    Total processors =     3
+    Scheduler ranks =     1
+    Number of AREX workers =     2
+    Ranks per worker =     1
+
+
+
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+Note: The following floating-point exceptions are signalling: IEEE_INVALID_FLAG IEEE_UNDERFLOW_FLAG IEEE_DENORMAL
+
+real	333m57.733s
+user	993m23.137s
+sys	8m43.980s
+copying from scratch back to basecamp
+fin
