@@ -1,0 +1,440 @@
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/prep to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm to search path.
+-I: Adding /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd to search path.
+-f: Source ./gen_capped_2lzt_a.leap.
+
+Welcome to LEaP!
+(no leaprc in search path)
+Sourcing: ./gen_capped_2lzt_a.leap
+----- Source: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff14SB
+----- Source of /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/cmd/leaprc.protein.ff14SB done
+Log file: ./leap.log
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/parm10.dat
+Reading title:
+PARM99 + frcmod.ff99SB + frcmod.parmbsc0 + OL3 for RNA
+Loading parameters: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/parm/frcmod.ff14SB
+Reading force field modification type file (frcmod)
+Reading title:
+ff14SB protein backbone and sidechain parameters
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/amino12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminoct12.lib
+Loading library: /opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/dat/leap/lib/aminont12.lib
+Loading library: /home/wayyne/cphmd/amber24/ff14/parmfiles/phmd.lib
+Loading parameters: /home/wayyne/cphmd/amber24/ff14/parmfiles/frcmod.phmd_barrier
+Reading force field modification type file (frcmod)
+Reading title:
+!Force field modifications for continuous phmd simulations (Feb 2018)
+Loading parameters: /home/wayyne/cphmd/amber24/ff14/parmfiles/ff14sb_pme_dayhoff_dev.parm
+Reading title:
+ &phmdparm
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+NGT: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+NUMCH(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RES_NAME(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RES_TYPE(:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+ATOM_NAME(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+CH_MD(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+RAD(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+MODEL_PKA(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+BAR(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+!: mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(1,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(2,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(3,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(4,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+PARAMETERS(5,:): mass not read - omitting
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+/: mass not read - omitting
+Loading PDB file: /state/partition1/home/wayyne/cphmd/amber24/ff14/ti/harris_2022/prot/hewl/pre/2lzt_a_amber_clean.pdb using sequence coreseq
+  matching pdb residues -> sequence template
+	res	pdb	template
+	1	LYS	LYS
+	2	VAL	VAL
+	3	PHE	PHE
+	4	GLY	GLY
+	5	ARG	ARG
+	6	CYX	CYX
+	7	GL2	GL2
+	8	LEU	LEU
+	9	ALA	ALA
+	10	ALA	ALA
+	11	ALA	ALA
+	12	MET	MET
+	13	LYS	LYS
+	14	ARG	ARG
+	15	HIP	HIP
+	16	GLY	GLY
+	17	LEU	LEU
+	18	AS2	AS2
+	19	ASN	ASN
+	20	TYR	TYR
+	21	ARG	ARG
+	22	GLY	GLY
+	23	TYR	TYR
+	24	SER	SER
+	25	LEU	LEU
+	26	GLY	GLY
+	27	ASN	ASN
+	28	TRP	TRP
+	29	VAL	VAL
+	30	CYX	CYX
+	31	ALA	ALA
+	32	ALA	ALA
+	33	LYS	LYS
+	34	PHE	PHE
+	35	GL2	GL2
+	36	SER	SER
+	37	ASN	ASN
+	38	PHE	PHE
+	39	ASN	ASN
+	40	THR	THR
+	41	GLN	GLN
+	42	ALA	ALA
+	43	THR	THR
+	44	ASN	ASN
+	45	ARG	ARG
+	46	ASN	ASN
+	47	THR	THR
+	48	AS2	AS2
+	49	GLY	GLY
+	50	SER	SER
+	51	THR	THR
+	52	AS2	AS2
+	53	TYR	TYR
+	54	GLY	GLY
+	55	ILE	ILE
+	56	LEU	LEU
+	57	GLN	GLN
+	58	ILE	ILE
+	59	ASN	ASN
+	60	SER	SER
+	61	ARG	ARG
+	62	TRP	TRP
+	63	TRP	TRP
+	64	CYX	CYX
+	65	ASN	ASN
+	66	AS2	AS2
+	67	GLY	GLY
+	68	ARG	ARG
+	69	THR	THR
+	70	PRO	PRO
+	71	GLY	GLY
+	72	SER	SER
+	73	ARG	ARG
+	74	ASN	ASN
+	75	LEU	LEU
+	76	CYX	CYX
+	77	ASN	ASN
+	78	ILE	ILE
+	79	PRO	PRO
+	80	CYX	CYX
+	81	SER	SER
+	82	ALA	ALA
+	83	LEU	LEU
+	84	LEU	LEU
+	85	SER	SER
+	86	SER	SER
+	87	AS2	AS2
+	88	ILE	ILE
+	89	THR	THR
+	90	ALA	ALA
+	91	SER	SER
+	92	VAL	VAL
+	93	ASN	ASN
+	94	CYX	CYX
+	95	ALA	ALA
+	96	LYS	LYS
+	97	LYS	LYS
+	98	ILE	ILE
+	99	VAL	VAL
+	100	SER	SER
+	101	AS2	AS2
+	102	GLY	GLY
+	103	ASN	ASN
+	104	GLY	GLY
+	105	MET	MET
+	106	ASN	ASN
+	107	ALA	ALA
+	108	TRP	TRP
+	109	VAL	VAL
+	110	ALA	ALA
+	111	TRP	TRP
+	112	ARG	ARG
+	113	ASN	ASN
+	114	ARG	ARG
+	115	CYX	CYX
+	116	LYS	LYS
+	117	GLY	GLY
+	118	THR	THR
+	119	AS2	AS2
+	120	VAL	VAL
+	121	GLN	GLN
+	122	ALA	ALA
+	123	TRP	TRP
+	124	ILE	ILE
+	125	ARG	ARG
+	126	GLY	GLY
+	127	CYX	CYX
+	128	ARG	ARG
+	129	LEU	LEU
+  total atoms in file: 1000
+  Leap added 976 missing atoms according to residue templates:
+       976 H / lone pairs
+Checking 'system'....
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+There is a bond of 14.164 angstroms between C and N atoms:
+-------  .R<ACE 1>.A<C 5> and .R<LYS 2>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+There is a bond of 26.635 angstroms between C and N atoms:
+-------  .R<LEU 130>.A<C 18> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+The unperturbed charge of the unit (18.000000) is not zero.
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 0.628 angstroms between nonbonded atoms H1 and N
+-------  .R<ACE 1>.A<H1 1> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.036 angstroms between nonbonded atoms H1 and HN1
+-------  .R<ACE 1>.A<H1 1> and .R<NHE 131>.A<HN1 2>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 0.529 angstroms between nonbonded atoms CH3 and N
+-------  .R<ACE 1>.A<CH3 2> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.475 angstroms between nonbonded atoms CH3 and HN1
+-------  .R<ACE 1>.A<CH3 2> and .R<NHE 131>.A<HN1 2>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 0.574 angstroms between nonbonded atoms CH3 and HN2
+-------  .R<ACE 1>.A<CH3 2> and .R<NHE 131>.A<HN2 3>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.423 angstroms between nonbonded atoms H2 and N
+-------  .R<ACE 1>.A<H2 3> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.183 angstroms between nonbonded atoms H2 and HN2
+-------  .R<ACE 1>.A<H2 3> and .R<NHE 131>.A<HN2 3>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.423 angstroms between nonbonded atoms H3 and N
+-------  .R<ACE 1>.A<H3 4> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.183 angstroms between nonbonded atoms H3 and HN2
+-------  .R<ACE 1>.A<H3 4> and .R<NHE 131>.A<HN2 3>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.178 angstroms between nonbonded atoms C and HN2
+-------  .R<ACE 1>.A<C 5> and .R<NHE 131>.A<HN2 3>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+Close contact of 1.498 angstroms between nonbonded atoms HG and HD21
+-------  .R<SER 51>.A<HG 9> and .R<ASN 60>.A<HD21 11>
+Checking parameters for unit 'system'.
+Checking for bond parameters.
+Checking for angle parameters.
+check:  Warnings: 14
+Unit is OK.
+Total unperturbed charge:  18.000000
+Total perturbed charge:    18.000000
+Checking Unit.
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+There is a bond of 14.164 angstroms between C and N atoms:
+-------  .R<ACE 1>.A<C 5> and .R<LYS 2>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+There is a bond of 26.635 angstroms between C and N atoms:
+-------  .R<LEU 130>.A<C 18> and .R<NHE 131>.A<N 1>
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Warning!
+The unperturbed charge of the unit (18.000000) is not zero.
+
+/opt/shen/shared/apps/amber/ambertools25_gcc12_avx2_sm75_86/bin/teLeap: Note.
+Ignoring the warnings from Unit Checking.
+
+Building topology.
+Building atom parameters.
+Building bond parameters.
+Building angle parameters.
+Building proper torsion parameters.
+Building improper torsion parameters.
+ total 442 improper torsions applied
+Building H-Bond parameters.
+Incorporating Non-Bonded adjustments.
+Not Marking per-residue atom chain types.
+Marking per-residue atom chain types.
+ (no restraints)
+Writing pdb file: /tmp/gen_pdb_amber.prgcBj/capped_2lzt_a_premin.pdb
+	Quit
+
+Exiting LEaP: Errors = 0; Warnings = 77; Notes = 1.

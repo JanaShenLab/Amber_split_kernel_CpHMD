@@ -1,0 +1,29 @@
+
+                 ./       |      |        \.
+               .:(        |i __ j|        ):`.
+             .'   `._     |`::::'|     _.'    `.
+           .'        "---.j `::' f.---"         `.
+     _____/     ___    ____      __    __  ____   ___    
+    |      \   |   |  |     `__'|  \  /  ||    | |   \    
+    |  .-.  | .'   `| | .-.  |-/|   \/   || ___| |  . \   
+    |  |_|  | |  i  | | |_| /"":|        || |    | | \ \  
+    |       / | .^. | |    /::::|        || |__. | |  \ \ 
+    |  ----'  | | | | |    \ :: |        ||  __| | |  |  )
+    |  |     .' ''' `.|  |\ \   |  i  i  j| |    . | /  /  
+    |  |     |   _   ||  | \ \  |  |\/|  || |__. | |.  / .
+   [|  |     |  | |  ||  |  \ \ |  |  |  ||    | |    /   ].
+  ] `--'     :--' `--::--'   \_|`--' ::--"|____|-"-- /    :[
+  |      __  ::-'''`.:' "--.    .----::.----:: ,.---._    :|
+  [  .-""  "`'              \  /      "      `'       `-. :].
+ ]:.'                        \/                          `.:[
+ |/                                                        \|
+
+ParmEd: a Parameter file Editor
+
+
+['chamber_capped_2lzt_a_solv_15a_octahedral_150mm.in']
+Reading actions from chamber_capped_2lzt_a_solv_15a_octahedral_150mm.in
+
+Creating chamber topology file from PSF capped_2lzt_a_solv_15a_octahedral_150mm.psf, RTF files ['../../../../toppar//prot/top_all22_prot.rtf'], PAR files ['../../../../toppar//prot/par_all22_prot.prm'], and STR files ['../../../../toppar//toppar_water_ions.str', '../../../../toppar//toppar_phmd_c22_foramber.str']. Coords from capped_2lzt_a_solv_15a_octahedral_150mm.crd. Using CMAP. Box info [91.0, 91.0, 91.0, 109.471221, 109.471221, 109.471221]. GB Radius set mbondi.
+Outputting Amber topology file capped_2lzt_a_solv_15a_octahedral_150mm.prmtop and restart capped_2lzt_a_solv_15a_octahedral_150mm.inpcrd
+Done!
