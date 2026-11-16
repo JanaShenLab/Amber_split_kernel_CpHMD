@@ -16,4 +16,4 @@ Production runs/validation runs were performed in the validation (val) directori
 
 Validation consists of NVT equilibration (val/nvt) and a production run using AREX (val/rex)
 
-More complete datai/additional information is available on Zenodo: https://doi.org/10.5281/zenodo.22003476
+More complete data/additional information is available on Zenodo: https://doi.org/10.5281/zenodo.22003476
