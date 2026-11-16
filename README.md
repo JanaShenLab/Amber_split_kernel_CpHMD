@@ -4,7 +4,7 @@ Accompaniment for Guy W. Dayhoff II and Jana Shen "High-Performance All-Atom Con
 
 The patch is in patch.
 
-The parmfiles are in parmfiles.
+The parmfiles and phmdin files are in parmfiles.
 
 The input files for for tripeptide TI/validation, performance benchmarking and and HEWL validation are in inputfiles.
 
