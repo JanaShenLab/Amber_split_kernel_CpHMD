@@ -1,0 +1,34 @@
+* put ASP GLU with dummy atoms to syn positions
+* 
+define ANY sele bynu 1 end
+set res1 = ?selresi         ! get the starting value of resid
+calc reslast = ?selresi + ?nres -1
+
+IC GENE
+IC FILL
+
+set ires @res1
+label edit
+ define residue sele segid @segid .and. resid @ires show end
+ if ?selresn eq asp then
+    IC EDIT
+       DIHE @segid @ires CB @segid @ires CG @segid @ires OD1 @segid @ires HD1 180.0
+       DIHE @segid @ires CB @segid @ires CG @segid @ires OD2 @segid @ires HD2 180.0
+    END
+    coor init sele segi @segid .and. resn asp .and. type hd* end
+ endif
+
+ if ?selresn eq glu then
+    IC EDIT
+       DIHE @segid @ires CG @segid @ires CD @segid @ires OE1 @segid @ires HE1 180.0
+       DIHE @segid @ires CG @segid @ires CD @segid @ires OE2 @segid @ires HE2 180.0
+    END
+   coor init sele segi @segid .and. resn glu .and. type he* end
+ endif
+ incr ires 
+if ires le @reslast goto edit
+
+coor init sele segi @segid .and. resn asp .and. type hd* end
+coor init sele segi @segid .and. resn glu .and. type he* end
+
+IC build

@@ -1,0 +1,38 @@
+This directory contains additional toppar files specific for PHMD
+
+1. phmd_gbsw_g5.in
+ - model compound PMF parameters for GBSW phmd
+
+2. phmd_hybrid_g2.in
+ - model compound PMF parameters for hybrid solvent pHMD (GBSW + TIP3P[pme])
+
+3. ephmd_rxnfield.in
+ - model compound PMF parameters for explicit solvent pHMD with generalized 
+   reaction field electrostatics (cutoff = 14 angstroms)
+ - Commented out Jason's Asp parameters (OD1 and OD2 in ASP1 switched)
+   Shane redid the work
+ - Commented out Jason's Glu parameters (optimized based on HpHMD results)
+   Wei redid from scratch 
+
+4. top_all22_prot_cmap_phmd.inp & par_all22_prot_cmap_phmd.inp
+ - top_all22_prot_cmap.inp & par_all22_prot_cmap.inp with added/modified parameters for carboxyl groups
+   for CpHMD simulations
+
+5. top_all22_prot_cmap_ephmd.inp & par_all22_prot_cmap_ephmd.inp 
+ - all22 toppar with : 
+   a. modified SOD vdW and SOD-CLA/SOD-O interaction distance
+   b. TIP3P hydronium ion topology and parameters
+   c. TIP3P hydroxide ion topology and parameters
+
+6. toppar_water_ions.str
+ - added a nbfix term for sodium-carbonyl oxygen (SOD-O) to the original toppar_water_ions.str in toppar_c36_aug12
+
+7. toppar_phmd.str
+ - combination of topology and parameters for PHMD
+ - must be read in after main toppar files
+
+8. phmd_hybrid_g2_shane.in
+ - lastest version (also the one used with distributed C27 FF)
+
+9. top_all22_prot_cmap_ephmd_shane.inp & par_all22_prot_cmap_ephmd_shane.inp
+ - heme top&par updated according to C36 FF

@@ -1,0 +1,427 @@
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ions.itp:22:1   SOD     1   NA      NA   1  1        
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/merged.rtp:34861:[ SOD ]
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/merged.rtp:34863:	  SOD   SOD    1.000  0
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:393:  SOD    11    22.989770    0.000  A  0.251367073323  0.19623
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:481:  CP1   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:854:  CP2   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:1227:  CP3   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:1600:   CT   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:1973:  CT1   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:2346:  CT2   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:2719: CT2A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:3092:  CT3   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:3465:   HP   SOD  1  0.246685400559  0.156941834423
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:3838:    N   SOD  1  0.290499799518  0.009061041035
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:4211:  NH1   SOD  1  0.263772837973  0.405222074029
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:4584:    O   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:4957:   OB   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:5330:CG301   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:5703:CG311   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:6076:CG314   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:6449:CG321   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:6822:CG324   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:7195:CG331   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:7568:CG334   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:7941:CG3C50   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:8314:CG3C51   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:8687:CG3C52   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:9060:CG3C53   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:9433:CG3C54   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:9806:CG3C31   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:10179:CG3C41   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:10552:CG3RC1   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:10925:NG2S0   SOD  1  0.290499799518  0.009061041035
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:11298:NG2S1   SOD  1  0.263772837973  0.405222074029
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:11671:OG2D1   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:12044:OG2D3   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:12417:CC301   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:12790:CC3062   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:13163:CC311   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:13536:CC3161   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:13909:CC3162   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:14282:CC3163   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:14655:CC321   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:15028:CC3261   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:15401:CC3263   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:15774:CC331   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:16147:OC2D1   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:16520:OC2D3   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:16893:OC2D4   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:17266:NC2D1   SOD  1  0.263772837973  0.405222074029
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:17639:CC312   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:18012:CC322   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:18385:CC321C   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:18758:CC321D   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:19131:CC311C   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:19504:CC311D   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:19877:CC322C   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:20250:CC312C   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:20623:CC3152   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:20996:CC3051   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:21369:CC3251   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:21742:CC3151   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:22115:CC3153   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:22488:CC312D   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:22861:  CN7   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:23234: CN7B   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:23607:  CN8   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:23980: CN8B   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:24353:  CN9   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:24726: CTL1   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:25099: CTL2   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:25472: CTL3   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:25845: CTL5   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:26218: CRL1   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:26591: CRL2   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:26964:  OBL   SOD  1  0.250409357201  0.313883668846
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:27337:CC30A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:27710:CC31A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:28083:CC32A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:28456:CC33A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:28829:CC326A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:29202:CC325A   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/ffnonbonded.itp:29575:CC325B   SOD  1  0.294954293108  0.090610410351
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:4:  SOD   CLA  1  0.332394311738  0.350933000000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:6:  SOD   OCL  1  0.287760285959  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:7:  SOD   OBL  1  0.278851298778  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:8:  SOD   O2L  1  0.281523994932  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:9:  SOD    OC  1  0.287760285959  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:10:  SOD OC2D2  1  0.287760285959  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/nbfix.itp:11:  SOD OG2D2  1  0.287760285959  0.313883680000
+/state/partition1/home/jackh/simulations/toppar/charmm36-jun2015.ff/atomtypes.atp:372:   SOD     22.98977 ; Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/0README:23:   a. modified SOD vdW and SOD-CLA/SOD-O interaction distance
+/state/partition1/home/jackh/simulations/toppar/0README:28: - added a nbfix term for sodium-carbonyl oxygen (SOD-O) to the original toppar_water_ions.str in toppar_c36_aug12
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd.inp:108:MASS    100 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd.inp:1510:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd.inp:1512:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_phmd.inp:2944:SOD      0.0       -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2963:!SOD      0.0       -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2965:SOD      0.0       -0.0469    1.41075   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2983:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2986:!SOD     O     -0.07502      3.245     !  adjusted to yield same         -28.1
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2987:                                      !  dA as SOD in liquid
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd.inp:2989:SOD    O        -0.075020   3.2975 ! Adjustment for solvation in NMA. Noskov,J. Mol. Biol. (2008). 377: 804-818. -- added by Wei Chen, Feb. 2, 2013.
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd_newheme.inp:112:MASS    100 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd_newheme.inp:1514:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_ephmd_newheme.inp:1516:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2973:!SOD      0.0       -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2975:SOD      0.0       -0.0469    1.41075   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2993:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2996:!SOD     O     -0.07502      3.245     !  adjusted to yield same         -28.1
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2997:                                      !  dA as SOD in liquid
+/state/partition1/home/jackh/simulations/toppar/prot/par_all22_prot_cmap_ephmd_newheme.inp:2999:SOD    O        -0.075020   3.2975 ! Adjustment for solvation in NMA. Noskov,J. Mol. Biol. (2008). 377: 804-818. -- added by Wei Chen, Feb. 2, 2013.
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3385:!SOD      0.0       -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3387:SOD      0.0       -0.0469    1.41075   ! sodium
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3408:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3411:!SOD     O     -0.07502      3.245     !  adjusted to yield same         -28.1
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3412:                                      !  dA as SOD in liquid
+/state/partition1/home/jackh/simulations/toppar/prot/par_c27_prot_c36_lipid_cmap_ephmd.inp:3414:SOD    O        -0.075020   3.2975 ! Adjustment for solvation in NMA. Noskov,J. Mol. Biol. (2008). 377: 804-818. -- added by Wei Chen, Feb. 2, 2013.
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_phmd.inp:100:MASS    100 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_phmd.inp:1434:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_all22_prot_cmap_phmd.inp:1436:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/prot/top_c27_prot_c36_lipid_cmap_ephmd.inp:180:MASS    200 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_c27_prot_c36_lipid_cmap_ephmd.inp:1586:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/prot/top_c27_prot_c36_lipid_cmap_ephmd.inp:1588:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/top_all36_carb.rtf:139:!MASS   111 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/toppar_drude_positive_swm4_ions.str:26:MASS    61 SOD   22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/toppar_drude_positive_swm4_ions.str:66:RESI SOD          1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/toppar_drude_positive_swm4_ions.str:68:ATOM SOD  SOD     1.00 ALPHA 0.1570
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/toppar_drude_positive_swm4_ions.str:176:SOD      0.0       -0.031510  1.450000 ! sodium
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/positive_drude_test_temp.inp:84:if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/positive_drude_test.inp:78:if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/positive_drude_test_temp.out:90:    9  100   61  DRUD      SOD       500.0000    0.0000      5011
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/positive_drude_test_temp.out:142: CHARMM>    if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/c36/drude/positive_drude/data/swm4_ion_sod.dat:1: SOD
+/state/partition1/home/jackh/simulations/toppar/c36/ace/acepar27_na.inp:51:SOD     10.6241 ! van der Waals volume
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_amber_98.inp:497:SOD 0.0  -0.00277    1.8680    0.0  -0.001385   1.8680  ! niu
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:93:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:95:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:155:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:234:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:258:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:288:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:289:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:290:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_f.str:291:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:102:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:104:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:164:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:246:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:270:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:300:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:301:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:302:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p.str:303:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:96:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:98:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:158:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:237:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:261:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:291:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:292:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:293:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc_e.str:294:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:91:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:93:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:153:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:232:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:256:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:286:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:287:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:288:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip3p_pme_b.str:289:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_2005.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/top_amber_cornell.inp:151:MASS   31  SOD 22.99          ! niu
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/top_amber_cornell.inp:724:RESI SOD      1.00 ! Sodium Ion ! niu
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/top_amber_cornell.inp:726:ATOM SOD   SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:635:!SOD      0.0     -1.607       0.9485   !Na+ JACS 106, 903 (1984) oplsaa
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:638:!SOD      0.0     -0.002772    1.665222 !Na+ Aqvist's cation/oplsaa
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:639:!SOD      0.0     -0.00277     1.8680   !Na+ Aqvist JPC 1990,94,8021. (AMBER4.1)
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:640:!SOD      0.0     -0.1000      1.532    !from Benoit Roux, CHARMM22
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:643:!SOD      0.0     -0.0469      1.36375  !Na+ D. Beglovd and B. Roux, dA=-100.8 kcal/mol
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:646:! the SOD and XCL prameters below are being tested to do away with the NBFIX terms required when using Benoit Roux Na+ (SOD).
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:647: SOD      0.0     -0.3100      1.163    !Na+ DRL !Na-OH2 -25.6814@2.2365(RHF/6-31G**++) or -25.6807@2.23678(RHF/CSDZ**++)
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:664:! Only use these with Benoit Roux Na+ (SOD)
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:665:!SOD   OT      -0.5831     2.6880 ! from Benoit Roux
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:666:!SOD   OKG     -2.0000     2.4500 ! DRL Use with Benoit Roux Na+
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/par_bms_dec03.inp:667:!SOD   NBG     -2.0        2.5500 ! DRL Use with Benoit Roux Na+
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:96:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:98:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:158:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:237:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:261:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:291:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:292:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:293:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_spc.str:294:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/top_bms_dec03.inp:69:MASS 41   SOD  22.989770 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/top_bms_dec03.inp:1123:ATOM NA  SOD      1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip5p_ew.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:53:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:100:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:102:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:162:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:244:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:268:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:298:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:299:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:300:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/non_charmm/toppar_water_ions_tip4p_ew.str:301:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:105:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:107:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:167:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:246:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:270:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:301:!new SOD NBFIX values
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:307:SOD    OCL      -0.07502    3.23  ! osmotic P; carboxylate =O
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:308:SOD    OBL      -0.07502    3.13  ! POPC optim.; ester =O 
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:309:SOD    O2L      -0.07502    3.16  ! POPC optim.; phosphate =O 
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:311:SOD    OC       -0.07502    3.23  ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:312:SOD    OC2D2    -0.07502    3.23  ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_water_ions.str:313:SOD    OG2D2    -0.07502    3.23  ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c36/gbsw/par_all22_prot_gbsw.inp:3231:SOD      0.0     -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/c36/gbsw/radius_gbsw.str:124:scalar wmain set 1.66 select resname SOD end
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_all.history:311:    11) Correction to NBFIX for SOD and MG: ON1C atom types added
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_all.history:434:  *3) Additional NBFIXes associated with sodium (SOD), potassium (K) and
+/state/partition1/home/jackh/simulations/toppar/c36/toppar_all.history:436:  Mg) and Benoit Roux's thesis (for SOD and K).  Changes also made in
+/state/partition1/home/jackh/simulations/toppar/c36/par_all36_carb.prm:2520:!SOD      0.0     -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:33:!NBFIX for sodium-carbonyl oxygen (SOD-O) - added by Wei Chen, Feb. 2013.
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:56:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:109:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:111:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:171:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:250:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:274:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:304:SOD    O        -0.075020   3.2975 ! Adjustment for solvation in NMA. Noskov,J. Mol. Biol. (2008). 377: 804-818. - Wei Chen
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:305:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:306:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:307:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_water_ions.str:308:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/ephmd_rxnfield.in:135:SOD 7.0 -87.6348 0.08752 0.5 ! Couple to Lys/Arg/Hsp 
+/state/partition1/home/jackh/simulations/toppar/ephmd_rxnfield.in:136:SOD 0.0 1.0
+/state/partition1/home/jackh/simulations/toppar/radius_gbsw.str:134:scalar wmain set 1.66 select resname SOD end
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:105:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:107:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:167:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:246:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:270:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:301:!new SOD NBFIX values
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:307:SOD    OCL      -0.07502    3.23  ! osmotic P; carboxylate =O
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:308:SOD    OBL      -0.07502    3.13  ! POPC optim.; ester =O 
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:309:SOD    O2L      -0.07502    3.16  ! POPC optim.; phosphate =O 
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:311:SOD    OC       -0.07502    3.23  ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:312:SOD    OC2D2    -0.07502    3.23  ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c27/toppar_water_ions.str:313:SOD    OG2D2    -0.07502    3.23  ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/c27/radius_gbsw.str:124:scalar wmain set 1.66 select resname SOD end
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/top_all36_carb.rtf:139:!MASS   111 SOD  22.989770 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/toppar_drude_positive_swm4_ions.str:26:MASS    61 SOD   22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/toppar_drude_positive_swm4_ions.str:66:RESI SOD          1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/toppar_drude_positive_swm4_ions.str:68:ATOM SOD  SOD     1.00 ALPHA 0.1570
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/toppar_drude_positive_swm4_ions.str:176:SOD      0.0       -0.031510  1.450000 ! sodium
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/positive_drude_test_temp.inp:84:if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/positive_drude_test.inp:78:if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/positive_drude_test_temp.out:90:    9  100   61  DRUD      SOD       500.0000    0.0000      5011
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/positive_drude_test_temp.out:142: CHARMM>    if count eq 2 set iontype SOD
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/drude/positive_drude/data/swm4_ion_sod.dat:1: SOD
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/ace/acepar27_na.inp:51:SOD     10.6241 ! van der Waals volume
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_amber_98.inp:497:SOD 0.0  -0.00277    1.8680    0.0  -0.001385   1.8680  ! niu
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:93:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:95:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:155:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:234:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:258:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:288:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:289:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:290:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_f.str:291:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:102:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:104:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:164:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:246:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:270:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:300:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:301:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:302:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p.str:303:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:96:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:98:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:158:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:237:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:261:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:291:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:292:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:293:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc_e.str:294:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:91:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:93:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:153:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:232:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:256:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:286:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:287:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:288:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip3p_pme_b.str:289:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_2005.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/top_amber_cornell.inp:151:MASS   31  SOD 22.99          ! niu
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/top_amber_cornell.inp:724:RESI SOD      1.00 ! Sodium Ion ! niu
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/top_amber_cornell.inp:726:ATOM SOD   SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:635:!SOD      0.0     -1.607       0.9485   !Na+ JACS 106, 903 (1984) oplsaa
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:638:!SOD      0.0     -0.002772    1.665222 !Na+ Aqvist's cation/oplsaa
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:639:!SOD      0.0     -0.00277     1.8680   !Na+ Aqvist JPC 1990,94,8021. (AMBER4.1)
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:640:!SOD      0.0     -0.1000      1.532    !from Benoit Roux, CHARMM22
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:643:!SOD      0.0     -0.0469      1.36375  !Na+ D. Beglovd and B. Roux, dA=-100.8 kcal/mol
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:646:! the SOD and XCL prameters below are being tested to do away with the NBFIX terms required when using Benoit Roux Na+ (SOD).
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:647: SOD      0.0     -0.3100      1.163    !Na+ DRL !Na-OH2 -25.6814@2.2365(RHF/6-31G**++) or -25.6807@2.23678(RHF/CSDZ**++)
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:664:! Only use these with Benoit Roux Na+ (SOD)
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:665:!SOD   OT      -0.5831     2.6880 ! from Benoit Roux
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:666:!SOD   OKG     -2.0000     2.4500 ! DRL Use with Benoit Roux Na+
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/par_bms_dec03.inp:667:!SOD   NBG     -2.0        2.5500 ! DRL Use with Benoit Roux Na+
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:55:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:96:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:98:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:158:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:237:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:261:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:291:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:292:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:293:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_spc.str:294:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/top_bms_dec03.inp:69:MASS 41   SOD  22.989770 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/top_bms_dec03.inp:1123:ATOM NA  SOD      1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:99:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:101:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:161:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:243:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:267:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:297:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:298:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:299:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip5p_ew.str:300:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:53:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:100:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:102:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:162:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:244:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:268:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:298:SOD    OC       -0.075020   3.190 ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:299:SOD    OCL      -0.075020   3.190 ! For lipid carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:300:SOD    OC2D2    -0.075020   3.190 ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/non_charmm/toppar_water_ions_tip4p_ew.str:301:SOD    OG2D2    -0.075020   3.190 ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:52:MASS  6   SOD  22.98977 NA ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:105:RESI SOD       1.00 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:107:ATOM SOD  SOD  1.00
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:167:MASS  6   SOD  22.98977 ! Sodium Ion
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:246:SOD      0.0       -0.0469    1.41075  ! new CHARMM Sodium 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:270:SOD    CLA      -0.083875   3.731 !  From osmotic pressure calibration, J. Phys.Chem.Lett. 1:183-189
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:301:!new SOD NBFIX values
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:307:SOD    OCL      -0.07502    3.23  ! osmotic P; carboxylate =O
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:308:SOD    OBL      -0.07502    3.13  ! POPC optim.; ester =O 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:309:SOD    O2L      -0.07502    3.16  ! POPC optim.; phosphate =O 
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:311:SOD    OC       -0.07502    3.23  ! For prot carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:312:SOD    OC2D2    -0.07502    3.23  ! For carb carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_water_ions.str:313:SOD    OG2D2    -0.07502    3.23  ! For CGenFF carboxylate groups
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/gbsw/par_all22_prot_gbsw.inp:3231:SOD      0.0     -0.0469    1.36375   ! sodium
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/gbsw/radius_gbsw.str:124:scalar wmain set 1.66 select resname SOD end
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_all.history:311:    11) Correction to NBFIX for SOD and MG: ON1C atom types added
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_all.history:434:  *3) Additional NBFIXes associated with sodium (SOD), potassium (K) and
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/toppar_all.history:436:  Mg) and Benoit Roux's thesis (for SOD and K).  Changes also made in
+/state/partition1/home/jackh/simulations/toppar/toppar_c36_aug14/par_all36_carb.prm:2520:!SOD      0.0     -0.0469    1.36375   ! sodium

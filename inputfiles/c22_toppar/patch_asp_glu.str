@@ -1,0 +1,15 @@
+* patch dummy atoms for ASP and GLU
+*
+define ANY sele bynu 1 end
+set res1 = ?selresi         ! get the starting value of resid
+calc reslast = ?selresi + ?nres -1
+
+set ires @res1
+label patch
+ define residue sele segid @segid .and. resid @ires show end
+ if ?selresn eq asp patch aspp2 @segid @ires
+ if ?selresn eq glu patch glup2 @segid @ires
+ incr ires
+if ires le @reslast goto patch
+
+AUTOGEN ANGLes DIHEd
