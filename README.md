@@ -1,19 +1,17 @@
-# DayhoffShen2027
-Accompaniment for Guy W. Dayhoff II and Jana Shen "High-Performance All-Atom Continuous Constant-pH Molecular Dynamics and Native Asynchronous Replica Exchange in Amber"
+# Amber split-kernel PME-CpHMD # 
+Data in Guy W. Dayhoff II and Jana Shen "High-Performance All-Atom Continuous Constant-pH Molecular Dynamics and Native Asynchronous Replica Exchange in Amber". Under review.
 
 
-The patch is in patch.
+patch: The patch is in patch.
 
-The parmfiles and phmdin files are in parmfiles.
+parmfiles: Parmfiles and phmdin files.
 
-The input files for for tripeptide TI/validation, performance benchmarking and and HEWL validation are in inputfiles.
+inputfiles: Simulation input files for tripeptide TI, validation, performance benchmarking and and HEWL validation.
 
-Initial systems were prepared in the prep (pre) directory
+pre: Preparation of initial systems.
 
-Minimization was performed in the minimization (min) directory
+min: Energy minimization.
 
-Production runs/validation runs were performed in the validation (val) directories
-
-Validation consists of NVT equilibration (val/nvt) and a production run using AREX (val/rex)
+val: Production runs and validation runs. Validation consists of NVT equilibration (val/nvt) and a production run using AREX (val/rex)
 
 More complete data/additional information is available on Zenodo: https://doi.org/10.5281/zenodo.22003476
