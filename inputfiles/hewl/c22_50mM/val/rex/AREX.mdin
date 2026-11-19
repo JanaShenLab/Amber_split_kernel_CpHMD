@@ -24,7 +24,6 @@ Production stage 1 of hewl
 	ntb=2, 
 	ntp=1,
   iphmd=3, 
-	solvph=3.86, 
 	nscm=500,
   ioutfm=1,
   arex=1,
