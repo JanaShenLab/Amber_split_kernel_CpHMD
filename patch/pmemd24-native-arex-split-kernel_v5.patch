@@ -68,10 +68,10 @@ index aae138a..2b29ea6 100644
          target_link_libraries(pmemd.OMP.MPI openmp_fortran ${KMMD_LIB})
 diff --git a/src/pmemd/src/arex_arm.F90 b/src/pmemd/src/arex_arm.F90
 new file mode 100644
-index 0000000..fc1c2e9
+index 0000000..34e5072
 --- /dev/null
 +++ b/src/pmemd/src/arex_arm.F90
-@@ -0,0 +1,2327 @@
+@@ -0,0 +1,2334 @@
 +!*******************************************************************************
 +! Module: arex_arm_mod
 +!
@@ -136,6 +136,7 @@ index 0000000..fc1c2e9
 +module arex_arm_mod
 +
 +  use iso_fortran_env, only : int32, real64
++  use get_cmdline_mod, only : arex_output_directory
 +
 +  implicit none
 +  private
@@ -2005,9 +2006,12 @@ index 0000000..fc1c2e9
 +  logical :: history_exists
 +  logical :: continuing_history
 +  character(len=256) :: io_msg
-+  character(len=*), parameter :: history_filename = 'arex.history.tsv'
++  character(len=256) :: history_filename
 +
 +  call arm_set_status(ierr, message, ARM_OK, '')
++  history_filename = 'arex.history.tsv'
++  if (len_trim(arex_output_directory) > 0) &
++    history_filename = trim(arex_output_directory) // '/arex.history.tsv'
 +
 +  if (.not. mgr%initialized) then
 +    call arm_set_status(ierr, message, ARM_ERR_INVALID, &
@@ -2134,9 +2138,12 @@ index 0000000..fc1c2e9
 +  logical :: history_exists
 +  logical, allocatable :: old_retained(:)
 +  character(len=256) :: io_msg
-+  character(len=*), parameter :: history_filename = 'arex.history.tsv'
++  character(len=256) :: history_filename
 +
 +  call arm_set_status(ierr, message, ARM_OK, '')
++  history_filename = 'arex.history.tsv'
++  if (len_trim(arex_output_directory) > 0) &
++    history_filename = trim(arex_output_directory) // '/arex.history.tsv'
 +
 +  if (.not. mgr%initialized) then
 +    call arm_set_status(ierr, message, ARM_ERR_INVALID, &
@@ -2401,10 +2408,10 @@ index 0000000..fc1c2e9
 +end module arex_arm_mod
 diff --git a/src/pmemd/src/arex_io.F90 b/src/pmemd/src/arex_io.F90
 new file mode 100644
-index 0000000..de642f3
+index 0000000..db42116
 --- /dev/null
 +++ b/src/pmemd/src/arex_io.F90
-@@ -0,0 +1,1172 @@
+@@ -0,0 +1,1175 @@
 +#include "copyright.i"
 +
 +!*******************************************************************************
@@ -2460,6 +2467,9 @@ index 0000000..de642f3
 +    ! Logical MD time accumulated by this slot-owned coordinate trajectory.
 +    ! AREX slot output must be keyed to slot time, not worker wall time.
 +    integer :: mdcrd_logical_steps = 0
++    ! Cumulative step at which this output PART began. Used only for file
++    ! frame indices; logical steps and MD time never reset on continuation.
++    integer :: part_start_step     = 0
 +    double precision :: mdcrd_time_origin_ps  = 0.0d0
 +    double precision :: mdcrd_logical_time_ps = 0.0d0
 +
@@ -3579,10 +3589,10 @@ index 0000000..de642f3
 +end module arex_io_mod
 diff --git a/src/pmemd/src/arex_mpi.F90 b/src/pmemd/src/arex_mpi.F90
 new file mode 100644
-index 0000000..d8a278e
+index 0000000..e752be8
 --- /dev/null
 +++ b/src/pmemd/src/arex_mpi.F90
-@@ -0,0 +1,3307 @@
+@@ -0,0 +1,3438 @@
 +#include "copyright.i"
 +
 +!*******************************************************************************
@@ -3641,18 +3651,22 @@ index 0000000..d8a278e
 +                   ARM_REPLICA_IDLE, ARM_WORKER_IDLE
 +  use arex_restraint_mod, only : arex_restraint_apply
 +  use file_io_dat_mod, only : mdout, max_fn_len
-+  use get_cmdline_mod, only : arexrst_specified, arexrst_name
-+  use arex_rst_mod, only : arex_rst_write_checkpoint, &
++  use get_cmdline_mod, only : arexrst_specified, arexrst_name, arex_append, &
++                              arex_checkpoint_output_name
++  use arex_rst_mod, only : arex_rst_checkpoint_t, arex_rst_read_checkpoint, &
++                           arex_rst_release_checkpoint, arex_rst_write_checkpoint, &
++                           arex_rst_remove_numbered_set, arex_rst_capture_checkpoint, &
 +                           arex_rst_restore_from_checkpoint, &
 +                           arex_rst_get_checkpoint_warmup_state, &
-+                           arex_rst_ladder_count, &
++                           arex_rst_ladder_count, arex_rst_build_migration_map, &
 +                           AREX_RST_OK
 +  use arex_io_mod,  only : arex_io_init, arex_io_bintraj_state_t, &
 +                           arex_io_get_slot_bintraj_state, &
 +                           arex_io_set_slot_bintraj_state, &
++                           arex_io_get_slot_names, arex_io_set_slot_restart_initialized, &
 +                           arex_io_set_slot_phmd_output_initialized
 +  use mdin_ctrl_dat_mod, only : arex_warmup_segments, arex_ladder, arex_ladder_unset, &
-+                                arex_segment_steps, ntwx, ntwv, ntwf, dt, &
++                                arex_segment_steps, ntwx, ntwv, ntwf, dt, t, &
 +                                arex_emulate_restart, arex_restraint_npoints
 +  use arex_pay_phrex_mod, only : arex_pay_phrex_build_api, &
 +                               arex_pay_phrex_init_authoritative_storage, &
@@ -3672,6 +3686,11 @@ index 0000000..d8a278e
 +#ifdef MPI
 +
 +  integer, parameter :: arex_mpi_msg_len = 256
++
++  ! Every worker rank needs the same fixed output-part frame origin after slot
++  ! migration. This cache is loaded once from the authoritative source checkpoint.
++  integer, allocatable, save :: arex_part_start_steps(:)
++  real(dp), allocatable, save :: arex_part_time_origins(:)
 +
 +  integer, parameter :: AREX_MPI_REQ_ASSIGN        = 1
 +  integer, parameter :: AREX_MPI_REQ_COMPLETE      = 2
@@ -3710,6 +3729,12 @@ index 0000000..d8a278e
 +    ! checkpoint is always written when the campaign completes.
 +    integer :: checkpoint_frequency = 0
 +    integer :: checkpoint_segments_since_write = 0
++    integer :: epoch_restart_number = 0   ! 0: none, >0: numbered, -1: final
++    integer :: last_checkpoint_number = 0
++    integer :: pending_checkpoint_number = 0
++    integer :: pending_previous_number = 0
++    type(arex_rst_checkpoint_t) :: pending_checkpoint
++    integer :: assigned_restart_number = 0
 +    logical :: stop_requested = .false.
 +
 +    type(arm_manager_t) :: mgr
@@ -3737,6 +3762,7 @@ index 0000000..d8a278e
 +    integer, allocatable :: response_slot(:)
 +    integer, allocatable :: response_completed_segments(:)
 +    integer, allocatable :: response_sync_mode(:)
++    integer, allocatable :: response_restart_number(:)
 +    character(len=arex_mpi_msg_len), allocatable :: response_msg(:)
 +  end type arex_mpi_state_t
 +
@@ -3974,6 +4000,7 @@ index 0000000..d8a278e
 +  if (allocated(state%response_replica))  deallocate(state%response_replica)
 +  if (allocated(state%response_slot))     deallocate(state%response_slot)
 +  if (allocated(state%response_sync_mode)) deallocate(state%response_sync_mode)
++  if (allocated(state%response_restart_number)) deallocate(state%response_restart_number)
 +  if (allocated(state%response_msg))      deallocate(state%response_msg)
 +
 +end subroutine arex_mpi_run_scheduler
@@ -4530,6 +4557,7 @@ index 0000000..d8a278e
 +           state%response_slot(state%nworkers),    &
 +           state%response_completed_segments(state%nworkers), &
 +           state%response_sync_mode(state%nworkers), &
++           state%response_restart_number(state%nworkers), &
 +           state%response_msg(state%nworkers),     &
 +           stat=alloc_stat)
 +  if (alloc_stat /= 0) then
@@ -4552,6 +4580,7 @@ index 0000000..d8a278e
 +  state%response_slot(:)      = 0
 +  state%response_completed_segments(:) = 0
 +  state%response_sync_mode(:) = AREX_MPI_SYNC_FULL
++  state%response_restart_number(:) = 0
 +  state%response_msg(:)       = ''
 +
 +  ladder_count_local = arex_rst_ladder_count()
@@ -4582,6 +4611,14 @@ index 0000000..d8a278e
 +    ierr = ARM_ERR_INVALID
 +    message = 'arex_mpi_scheduler_bootstrap: local ladder count mismatch; see scheduler debug log'
 +    goto 900
++  end if
++
++  ! The scheduler is a dedicated MPI rank and did not read the initial
++  ! coordinate restart.  Give its slot I/O contexts the same absolute time
++  ! origin as the workers, rather than the scheduler's default t (zero).
++  ! On -arexrst, the checkpoint restores the authoritative slot origins.
++  if (.not. arexrst_specified .and. initial_md%valid) then
++    t = initial_md%time
 +  end if
 +
 +  arex_io_ierr = 0
@@ -4679,6 +4716,21 @@ index 0000000..d8a278e
 +
 +  state%initialized = .true.
 +
++  ! An in-place append from arex.chk.K must not reuse K's filename.
++  if (arex_append .and. arexrst_specified) then
++    dbg_i = scan(trim(arex_checkpoint_output_name), '.', back=.true.)
++    if (dbg_i > 0) then
++      read(arex_checkpoint_output_name(dbg_i+1:), *, iostat=alloc_stat) &
++        state%last_checkpoint_number
++      if (alloc_stat == 0 .and. state%last_checkpoint_number > 0) then
++        arex_checkpoint_output_name = arex_checkpoint_output_name(:dbg_i-1)
++      else
++        state%last_checkpoint_number = 0
++      end if
++    end if
++  end if
++  call arex_mpi_choose_epoch_restart(state)
++
 +900 continue
 +  bcast_message = ''
 +  if (len_trim(message) > 0) bcast_message = message
@@ -4710,6 +4762,7 @@ index 0000000..d8a278e
 +    if (allocated(state%response_slot))   deallocate(state%response_slot)
 +    if (allocated(state%response_completed_segments)) &
 +      deallocate(state%response_completed_segments)
++    if (allocated(state%response_restart_number)) deallocate(state%response_restart_number)
 +    if (allocated(state%response_msg))    deallocate(state%response_msg)
 +  end if
 +end subroutine arex_mpi_scheduler_bootstrap
@@ -5237,6 +5290,7 @@ index 0000000..d8a278e
 +  call mpi_bcast(ierr, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(state%assigned_sync_mode, 1, mpi_integer, 0, pmemd_comm, &
 +                 err_code_mpi)
++  call mpi_bcast(state%assigned_restart_number, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(replica_id, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(slot_id, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(state%assigned_completed_segments, 1, mpi_integer, 0, &
@@ -5331,6 +5385,65 @@ index 0000000..d8a278e
 +! Process-local NetCDF handles (ncid / var ids) are NOT authoritative and must
 +! be reopened locally when a slot migrates to a different worker.
 +!===============================================================================
++! Read the source checkpoint once per worker MPI rank.  Slots may move
++! between workers, but every worker must calculate frame indices relative to
++! the same per-slot part-start step rather than its first assignment.
++subroutine arex_mpi_cache_part_origins(ierr, message)
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  type(arex_rst_checkpoint_t) :: ckpt
++  integer :: i, nslots
++  integer, allocatable :: source_old_slot(:), source_old_replica(:), source_restart_slot(:)
++  logical, allocatable :: retained(:)
++  logical :: migrating
++
++  ierr = ARM_OK
++  message = ''
++  if (.not. arexrst_specified) return
++  if (allocated(arex_part_start_steps)) return
++
++  call arex_rst_read_checkpoint(trim(arexrst_name), ckpt, ierr, message)
++  if (ierr /= AREX_RST_OK) return
++
++  nslots = ckpt%nslots
++  migrating = .false.
++  if (.not. arex_append) then
++    nslots = arex_rst_ladder_count()
++    migrating = (nslots /= ckpt%nslots)
++    if (.not. migrating) &
++      migrating = any(abs(arex_ladder(1:nslots) - ckpt%slot_ladder(:)) > 1.0e-12_dp)
++  end if
++
++  if (migrating) then
++    ! Use the scheduler's existing migration mapping for the new slot origins.
++    allocate(source_old_slot(nslots), source_old_replica(nslots), &
++             source_restart_slot(nslots), retained(nslots))
++    call arex_rst_build_migration_map(ckpt, source_old_slot, source_old_replica, &
++                                      source_restart_slot, retained, ierr, message)
++    if (ierr /= AREX_RST_OK) then
++      call arex_rst_release_checkpoint(ckpt)
++      return
++    end if
++  end if
++
++  allocate(arex_part_start_steps(nslots), arex_part_time_origins(nslots))
++  do i = 1, nslots
++    if (migrating) then
++      ! Fresh output part: step zero and the mapped replica's restart time.
++      arex_part_start_steps(i) = 0
++      arex_part_time_origins(i) = ckpt%slot_output(source_restart_slot(i))%restart_time_ps
++    else
++      arex_part_time_origins(i) = ckpt%slot_output(i)%mdcrd_time_origin_ps
++      if (arex_append) then
++        arex_part_start_steps(i) = ckpt%slot_output(i)%part_start_step
++      else
++        arex_part_start_steps(i) = ckpt%slot_output(i)%mdcrd_logical_steps
++      end if
++    end if
++  end do
++  call arex_rst_release_checkpoint(ckpt)
++end subroutine arex_mpi_cache_part_origins
++
 +subroutine arex_mpi_sync_assigned_slot_bintraj_metadata(state, campaign_done, replica_id, &
 +                                                        slot_id, completed_segments, ierr, message)
 +
@@ -5346,8 +5459,10 @@ index 0000000..d8a278e
 +  character(len=*), intent(out) :: message
 +
 +  type(arex_io_bintraj_state_t) :: slot_state
-+  logical :: initialized
-+  integer :: logical_steps
++  logical :: initialized, restart_exists, lambda_exists
++  integer :: logical_steps, part_start
++  character(len=max_fn_len) :: mdcrd_path, mdvel_path, mdfrc_path, restart_path
++  character(len=max_fn_len) :: lambda_path, phmdrestart_path
 +
 +  ierr = ARM_OK
 +  message = ''
@@ -5362,6 +5477,19 @@ index 0000000..d8a278e
 +
 +  call arex_io_get_slot_bintraj_state(slot_id, slot_state, initialized, ierr, message)
 +  if (ierr /= 0) return
++  call arex_mpi_cache_part_origins(ierr, message)
++  if (ierr /= AREX_RST_OK) return
++
++  if (arexrst_specified) then
++    if (slot_id > size(arex_part_start_steps)) then
++      ierr = ARM_ERR_INVALID
++      message = 'AREX: worker assigned slot outside source checkpoint dimensions'
++      return
++    end if
++    slot_state%part_start_step = arex_part_start_steps(slot_id)
++    slot_state%mdcrd_time_origin_ps = arex_part_time_origins(slot_id)
++  end if
++  part_start = slot_state%part_start_step
 +
 +  logical_steps = completed_segments * arex_segment_steps
 +
@@ -5375,9 +5503,14 @@ index 0000000..d8a278e
 +  slot_state%mdcrd_logical_steps = logical_steps
 +  slot_state%mdcrd_logical_time_ps = slot_state%mdcrd_time_origin_ps + dble(logical_steps) * dt
 +
-+  if (ntwx > 0) slot_state%mdcrd_frame = logical_steps / ntwx + 1
-+  if (ntwv > 0) slot_state%mdvel_frame = logical_steps / ntwv + 1
-+  if (ntwf > 0) slot_state%mdfrc_frame = logical_steps / ntwf + 1
++  if (logical_steps < part_start) then
++    ierr = ARM_ERR_INVALID
++    message = 'AREX: slot step count precedes continuation part start'
++    return
++  end if
++  if (ntwx > 0) slot_state%mdcrd_frame = logical_steps / ntwx - part_start / ntwx + 1
++  if (ntwv > 0) slot_state%mdvel_frame = logical_steps / ntwv - part_start / ntwv + 1
++  if (ntwf > 0) slot_state%mdfrc_frame = logical_steps / ntwf - part_start / ntwf + 1
 +
 +  ! Process-local NetCDF handles must not survive slot migration.
 +  !
@@ -5437,22 +5570,25 @@ index 0000000..d8a278e
 +  call arex_io_set_slot_bintraj_state(slot_id, slot_state, initialized, ierr, message)
 +  if (ierr /= 0) return
 +
-+  ! PHMD slot-owned text output must track authoritative slot progress too.
-+  !
-+  ! At startup / warmup-to-production boundary, completed_segments rewinds to
-+  ! zero and the slot-owned .lambda file must be recreated from scratch.
-+  !
-+  ! After the slot has completed at least one segment in the current campaign,
-+  ! the destination worker must treat the file as already initialized so slot
-+  ! migration appends instead of recreating and wiping earlier records.
-+! if (completed_segments == 0) then
-+!   call arex_io_set_slot_phmd_output_initialized(slot_id, .false., ierr, message)
-+!   if (ierr /= 0) return
-+! else
-+  if (completed_segments > 0) then
-+    call arex_io_set_slot_phmd_output_initialized(slot_id, .true., ierr, message)
-+    if (ierr /= 0) return
++  ! Determine local file lifecycle from actual output-part files, never from
++  ! cumulative campaign steps. A continuation may start millions of steps in,
++  ! yet not have written its first local trajectory/restart/lambda record.
++  call arex_io_get_slot_names(slot_id, mdcrd_path, mdvel_path, mdfrc_path, &
++       restart_path, lambda_path, phmdrestart_path, ierr, message)
++  if (ierr /= 0) return
++  if (.not. arexrst_specified .and. completed_segments == 0) then
++    ! A fresh campaign intentionally recreates its output, even if the user
++    ! copied old files into the working directory with -O.
++    restart_exists = .false.
++    lambda_exists = .false.
++  else
++    inquire(file=trim(restart_path), exist=restart_exists)
++    inquire(file=trim(lambda_path), exist=lambda_exists)
 +  end if
++  call arex_io_set_slot_restart_initialized(slot_id, restart_exists, ierr, message)
++  if (ierr /= 0) return
++  call arex_io_set_slot_phmd_output_initialized(slot_id, lambda_exists, ierr, message)
++  if (ierr /= 0) return
 +end subroutine arex_mpi_sync_assigned_slot_bintraj_metadata
 +
 +!===============================================================================
@@ -5485,6 +5621,7 @@ index 0000000..d8a278e
 +  state%assigned_completed_segments = 0
 +
 +  state%assigned_sync_mode = AREX_MPI_SYNC_FULL
++  state%assigned_restart_number = 0
 +  request_kind = AREX_MPI_REQ_COMPLETE
 +  if (present(stop_after_segment)) then
 +    if (stop_after_segment) request_kind = AREX_MPI_REQ_COMPLETE_STOP
@@ -5513,6 +5650,7 @@ index 0000000..d8a278e
 +  call mpi_bcast(ierr, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(state%assigned_sync_mode, 1, mpi_integer, 0, pmemd_comm, &
 +                 err_code_mpi)
++  call mpi_bcast(state%assigned_restart_number, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(replica_id, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(slot_id, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(state%assigned_completed_segments, 1, mpi_integer, 0, &
@@ -5606,7 +5744,7 @@ index 0000000..d8a278e
 +  character(len=*), intent(out) :: message
 +
 +  integer :: request(2)
-+  integer :: response(6)
++  integer :: response(7)
 +  integer :: status(mpi_status_size)
 +  character(len=arex_mpi_msg_len) :: response_msg
 +
@@ -5640,7 +5778,7 @@ index 0000000..d8a278e
 +    if (ierr /= ARM_OK) return
 +  end if
 +
-+  call mpi_recv(response, 6, mpi_integer, 0, AREX_MPI_TAG_RESP, &
++  call mpi_recv(response, 7, mpi_integer, 0, AREX_MPI_TAG_RESP, &
 +                arex_sched_comm, status, err_code_mpi)
 +
 +  call mpi_recv(response_msg, arex_mpi_msg_len, mpi_character, 0, &
@@ -5653,6 +5791,7 @@ index 0000000..d8a278e
 +  slot_id = response(4)
 +  state%assigned_completed_segments = response(5)
 +  state%assigned_sync_mode = response(6)
++  state%assigned_restart_number = response(7)
 +
 +#ifdef AREX_DEBUG
 +  if (state%worker_id == 1 .and. ierr == ARM_OK) then
@@ -6035,17 +6174,9 @@ index 0000000..d8a278e
 +  integer :: nresolved
 +  integer :: current_replica
 +  integer :: current_slot
-+  integer :: chk_ierr
-+  character(len=256) :: chk_message
-+  character(len=max_fn_len) :: checkpoint_name
-+  logical :: write_checkpoint_now
 +
 +  ierr = ARM_OK
 +  message = ''
-+  chk_ierr = AREX_RST_OK
-+  chk_message = ''
-+  checkpoint_name = ''
-+  write_checkpoint_now = .false.
 +
 +  if (.not. state%is_global_master) then
 +    ierr = ARM_ERR_INVALID
@@ -6116,19 +6247,9 @@ index 0000000..d8a278e
 +
 +    state%pending_request(worker_id) = .true.
 +
-+    ! Count scheduler-observed completed AREX segments.
-+    !
-+    ! arex_chkfrq = 0 : disable checkpoint writing
-+    ! arex_chkfrq = 1 : checkpoint after every completed segment
-+    ! arex_chkfrq = N : checkpoint after every N completed segments
-+    if (state%checkpoint_frequency > 0) then
++    if (state%checkpoint_frequency > 0) &
 +      state%checkpoint_segments_since_write = &
 +        state%checkpoint_segments_since_write + 1
-+
-+      if (state%checkpoint_segments_since_write >= state%checkpoint_frequency) then
-+        write_checkpoint_now = .true.
-+      end if
-+    end if
 +  case default
 +    ierr = ARM_ERR_INVALID
 +    message = 'arex_mpi_process_request: invalid request kind'
@@ -6138,56 +6259,6 @@ index 0000000..d8a278e
 +  call arex_mpi_try_pending_assignments(state, ierr, message)
 +  if (ierr /= ARM_OK) return
 +
-+  ! Always leave a final continuation point when the campaign completes,
-+  ! regardless of arex_chkfrq.  arex_chkfrq controls only the frequency of
-+  ! checkpoints written before normal campaign completion.
-+  if (request_kind == AREX_MPI_REQ_COMPLETE .or. &
-+      request_kind == AREX_MPI_REQ_COMPLETE_STOP) then
-+    if (arm_campaign_complete(state%mgr)) write_checkpoint_now = .true.
-+    if (state%stop_requested .and. arm_restart_set_ready(state%mgr) .and. &
-+        all(state%mgr%workers(:)%status == ARM_WORKER_IDLE)) then
-+      write_checkpoint_now = .true.
-+    end if
-+  end if
-+
-+  ! A native checkpoint is only useful when the slot-owned standard restart
-+  ! files collectively contain one latest physical state for every active
-+  ! replica. Mid-epoch exchanges can temporarily violate that invariant, so a
-+  ! due periodic checkpoint is deferred until the restart set is complete.
-+  if (write_checkpoint_now .and. .not. arm_restart_set_ready(state%mgr)) then
-+    if (arm_campaign_complete(state%mgr)) then
-+      ierr = ARM_ERR_INVALID
-+      message = 'arex_mpi_process_request: final AREX restart set is incomplete'
-+      return
-+    end if
-+    write_checkpoint_now = .false.
-+  end if
-+
-+  if (write_checkpoint_now) then
-+    if (arexrst_specified) then
-+      checkpoint_name = arexrst_name
-+    else
-+      checkpoint_name = 'arex.chk'
-+    end if
-+
-+    ! Emit the authoritative AREX checkpoint only on the global scheduler,
-+    ! after segment completion has been absorbed, any ready exchanges have been
-+    ! resolved, and epoch-transition bookkeeping has been finalized.
-+    call arex_rst_write_checkpoint(checkpoint_name, state%mgr, &
-+                                   state%warmup_segments_target, &
-+                                   state%warmup_segments_completed, &
-+                                   chk_ierr, chk_message)
-+    if (chk_ierr /= AREX_RST_OK) then
-+      !write(0,'(a,a)') 'AREX CHK DBG write failed: ', trim(chk_message)
-+      ierr = ARM_ERR_INVALID
-+      message = trim(chk_message)
-+      return
-+    !else
-+      !write(0,'(a,a)') 'AREX CHK DBG wrote checkpoint: ', trim(checkpoint_name)
-+    end if
-+
-+    state%checkpoint_segments_since_write = 0
-+  end if
 + end subroutine arex_mpi_process_request
 +
 +!===============================================================================
@@ -6197,6 +6268,29 @@ index 0000000..d8a278e
 +! occurs naturally near the end of an epoch while other workers are still
 +! finishing their current segments.
 +!===============================================================================
++! Decide once per epoch, before any workers are assigned. All slots in
++! that epoch therefore either write the same numbered set or write nothing.
++subroutine arex_mpi_choose_epoch_restart(state)
++  type(arex_mpi_state_t), intent(inout) :: state
++  integer :: i
++  logical :: final_epoch
++
++  state%epoch_restart_number = 0
++  final_epoch = .not. state%warmup_active
++  if (final_epoch) then
++    do i = 1, state%mgr%nreplicas
++      if (state%mgr%replicas(i)%segments_completed + 1 < state%mgr%segments_per_replica) &
++        final_epoch = .false.
++    end do
++  end if
++  if (final_epoch) then
++    state%epoch_restart_number = -1
++  else if (state%checkpoint_frequency > 0) then
++    if (state%checkpoint_segments_since_write + state%mgr%nslots >= state%checkpoint_frequency) &
++      state%epoch_restart_number = state%last_checkpoint_number + 1
++  end if
++end subroutine arex_mpi_choose_epoch_restart
++
 +subroutine arex_mpi_try_pending_assignments(state, ierr, message)
 +  type(arex_mpi_state_t), intent(inout) :: state
 +  integer, intent(out) :: ierr
@@ -6209,14 +6303,40 @@ index 0000000..d8a278e
 +  integer :: resident_prev_slot
 +  integer :: sync_mode
 +  logical :: found
++  logical :: epoch_done
++  integer :: chk_ierr
++  character(len=256) :: chk_message
 +
 +  ierr = ARM_OK
 +  message = ''
++  epoch_done = arm_epoch_complete(state%mgr)
++
++  if (epoch_done) then
++    if (state%warmup_active) &
++      state%warmup_segments_completed = state%warmup_segments_completed + 1
++    if (state%epoch_restart_number /= 0) then
++      if (.not. arm_restart_set_ready(state%mgr)) then
++        ierr = ARM_ERR_INVALID
++        message = 'AREX: checkpoint epoch restart set is incomplete'
++        return
++      end if
++      call arex_rst_capture_checkpoint(state%mgr, state%warmup_segments_target, &
++           state%warmup_segments_completed, state%pending_checkpoint, chk_ierr, chk_message)
++      if (chk_ierr /= AREX_RST_OK) then
++        ierr = ARM_ERR_INVALID
++        message = trim(chk_message)
++        return
++      end if
++      state%pending_previous_number = state%last_checkpoint_number
++      state%pending_checkpoint_number = max(0, state%epoch_restart_number)
++      state%last_checkpoint_number = state%pending_checkpoint_number
++      state%checkpoint_segments_since_write = 0
++      state%epoch_restart_number = 0
++    end if
++  end if
 +
 +  if (state%warmup_active) then
-+    if (arm_epoch_complete(state%mgr)) then
-+      state%warmup_segments_completed = state%warmup_segments_completed + 1
-+
++    if (epoch_done) then
 +      if (state%warmup_segments_completed >= state%warmup_segments_target) then
 +        call arex_mpi_finish_warmup(state, ierr, message)
 +        if (ierr /= ARM_OK) return
@@ -6229,10 +6349,11 @@ index 0000000..d8a278e
 +
 +        call arm_begin_epoch(state%mgr, ierr, message)
 +        if (ierr /= ARM_OK) return
++        call arex_mpi_choose_epoch_restart(state)
 +      end if
 +    end if
 +  else
-+    if (arm_epoch_complete(state%mgr)) then
++    if (epoch_done) then
 +      call arm_write_exchange_history(state%mgr, ierr, message)
 +      if (ierr /= ARM_OK) return
 +    end if
@@ -6247,9 +6368,10 @@ index 0000000..d8a278e
 +      return
 +    end if
 +
-+    if (arm_epoch_complete(state%mgr)) then
++    if (epoch_done) then
 +      call arm_begin_epoch(state%mgr, ierr, message)
 +      if (ierr /= ARM_OK) return
++      call arex_mpi_choose_epoch_restart(state)
 +
 +#ifdef AREX_DEBUG
 +      write(6,'(a,i0,a,i0)') ' AREX> begin epoch ', state%mgr%epoch, &
@@ -6399,6 +6521,9 @@ index 0000000..d8a278e
 +  state%response_slot(worker_id)     = slot_in
 +  state%response_completed_segments(worker_id) = completed_segments_in
 +  state%response_sync_mode(worker_id)= sync_mode_in
++  state%response_restart_number(worker_id) = 0
++  if (done_in == 0 .and. replica_in > 0 .and. slot_in > 0) &
++    state%response_restart_number(worker_id) = state%epoch_restart_number
 +  state%response_msg(worker_id)      = ''
 +
 +  if (len_trim(message_in) > 0) then
@@ -6434,7 +6559,7 @@ index 0000000..d8a278e
 +  character(len=*), intent(out) :: message
 +
 +  integer :: i
-+  integer :: response(6)
++  integer :: response(7)
 +  character(len=arex_mpi_msg_len) :: response_msg
 +
 +  ierr = ARM_OK
@@ -6453,11 +6578,12 @@ index 0000000..d8a278e
 +    response(4) = state%response_slot(i)
 +    response(5) = state%response_completed_segments(i)
 +    response(6) = state%response_sync_mode(i)
++    response(7) = state%response_restart_number(i)
 +
 +    response_msg = ''
 +    if (len_trim(state%response_msg(i)) > 0) response_msg = state%response_msg(i)
 +
-+    call mpi_send(response, 6, mpi_integer, i, AREX_MPI_TAG_RESP, &
++    call mpi_send(response, 7, mpi_integer, i, AREX_MPI_TAG_RESP, &
 +                  arex_sched_comm, err_code_mpi)
 +
 +    call mpi_send(response_msg, arex_mpi_msg_len, mpi_character, i, &
@@ -6484,6 +6610,19 @@ index 0000000..d8a278e
 +
 +    state%response_ready(i) = .false.
 +  end do
++
++  ! Replies have been sent: GPU workers can already run the next epoch while
++  ! this scheduler writes the checkpoint captured at the previous boundary.
++  if (state%pending_checkpoint%allocated) then
++    call arex_rst_write_checkpoint(arex_checkpoint_output_name, state%pending_checkpoint, &
++                                   ierr, message, state%pending_checkpoint_number)
++    if (ierr /= AREX_RST_OK) return
++    if (state%pending_previous_number > 0) &
++      call arex_rst_remove_numbered_set(arex_checkpoint_output_name, &
++                                        state%pending_previous_number)
++    state%pending_previous_number = 0
++    state%pending_checkpoint_number = 0
++  end if
 +end subroutine arex_mpi_flush_remote_responses
 +
 +!===============================================================================
@@ -6519,6 +6658,7 @@ index 0000000..d8a278e
 +  slot_id = state%response_slot(state%worker_id)
 +  state%assigned_completed_segments = state%response_completed_segments(state%worker_id)
 +  state%assigned_sync_mode = state%response_sync_mode(state%worker_id)
++  state%assigned_restart_number = state%response_restart_number(state%worker_id)
 +
 +  if (len(message) > 0) then
 +    message = state%response_msg(state%worker_id)(1:len(message))
@@ -6579,6 +6719,7 @@ index 0000000..d8a278e
 +
 +  call arm_begin_epoch(state%mgr, ierr, message)
 +  if (ierr /= ARM_OK) return
++  call arex_mpi_choose_epoch_restart(state)
 +
 +#ifdef AREX_DEBUG
 +  write(6,'(a,i0,a,i0,a)') ' AREX> warmup complete after ', &
@@ -10257,10 +10398,10 @@ index 0000000..1dc77e2
 +end module arex_restraint_mod
 diff --git a/src/pmemd/src/arex_rst.F90 b/src/pmemd/src/arex_rst.F90
 new file mode 100644
-index 0000000..992db88
+index 0000000..4f91f11
 --- /dev/null
 +++ b/src/pmemd/src/arex_rst.F90
-@@ -0,0 +1,2479 @@
+@@ -0,0 +1,2866 @@
 +#include "copyright.i"
 +
 +!*******************************************************************************
@@ -10292,6 +10433,7 @@ index 0000000..992db88
 +
 +module arex_rst_mod
 +
++  use, intrinsic :: iso_c_binding, only : c_int, c_char, c_null_char
 +  use arex_arm_mod, only : arm_manager_t, arm_md_snapshot_t,                  &
 +                           arm_snapshot_allocate, arm_snapshot_deallocate,    &
 +                           dp, ARM_PARITY_EVEN, ARM_OK,                     &
@@ -10315,6 +10457,7 @@ index 0000000..992db88
 +                                 arex_pay_phrex_seed_replica_from_restart
 +  use binrestart_mod, only : read_nc_restart, read_nc_restart_atoms
 +  use file_io_dat_mod, only : max_fn_len
++  use get_cmdline_mod, only : arexrst_specified, arex_append, arex_continuation_part
 +  use mdin_ctrl_dat_mod, only : arex, arex_type, arex_segment_steps, arex_ladder, &
 +                                arex_ladder_unset, iphmd, ntb, ntxo, ntwx, ntwv,  &
 +                                ntwf, dt
@@ -10331,7 +10474,7 @@ index 0000000..992db88
 +  integer, parameter, public :: AREX_RST_ERR_MISMATCH        = 4
 +  integer, parameter, public :: AREX_RST_ERR_NOT_IMPLEMENTED = 5
 +
-+  integer, parameter, public :: AREX_RST_FORMAT_VERSION = 8
++  integer, parameter, public :: AREX_RST_FORMAT_VERSION = 9
 +  character(len=*), parameter :: AREX_RST_MAGIC = 'AREX_RST'
 +
 +  integer, parameter :: AREX_RST_RESTART_FORMAT_UNKNOWN     = 0
@@ -10366,6 +10509,7 @@ index 0000000..992db88
 +    integer :: mdvel_frame             = 1
 +    integer :: mdfrc_frame             = 1
 +    integer :: mdcrd_logical_steps     = 0
++    integer :: part_start_step         = 0
 +    real(dp) :: mdcrd_time_origin_ps   = 0.0_dp
 +    real(dp) :: mdcrd_logical_time_ps  = 0.0_dp
 +  end type arex_rst_slot_output_state_t
@@ -10383,6 +10527,13 @@ index 0000000..992db88
 +    integer :: nslots              = 0
 +    integer :: next_replica_uid    = 1
 +    integer :: history_generation  = 0
++    integer :: continuation_part   = 0
++    integer :: checkpoint_generation = -1
++    character(len=max_fn_len) :: source_directory = '.'
++    ! Restart snapshots owned by this checkpoint generation, relative to its
++    ! directory. Present in v9; v8 resolves the legacy per-ladder basenames.
++    character(len=max_fn_len), allocatable :: restart_files(:)
++    character(len=max_fn_len), allocatable :: phmd_restart_files(:)
 +    integer :: segments_per_replica = 0
 +    integer :: epoch                = 0
 +    integer :: current_parity       = ARM_PARITY_EVEN
@@ -10424,12 +10575,23 @@ index 0000000..992db88
 +  public :: arex_rst_release_checkpoint
 +  public :: arex_rst_get_required_slot_files
 +  public :: arex_rst_validate_restart_inventory
++  public :: arex_rst_capture_checkpoint
 +  public :: arex_rst_write_checkpoint
++  public :: arex_rst_remove_numbered_set
 +  public :: arex_rst_read_checkpoint
 +  public :: arex_rst_get_checkpoint_warmup_state
 +  public :: arex_rst_apply_logical_state
 +  public :: arex_rst_restore_from_checkpoint
 +  public :: arex_rst_ladder_count
++  public :: arex_rst_build_migration_map
++
++  interface
++    integer(c_int) function arex_c_rename(oldpath, newpath) bind(C, name='rename')
++      import :: c_int, c_char
++      character(kind=c_char), intent(in) :: oldpath(*)
++      character(kind=c_char), intent(in) :: newpath(*)
++    end function arex_c_rename
++  end interface
 +contains
 +
 +subroutine arex_rst_set_status(ierr, message, code, text)
@@ -10450,6 +10612,8 @@ index 0000000..992db88
 +  if (allocated(ckpt%slot_owner))         deallocate(ckpt%slot_owner)
 +  if (allocated(ckpt%replicas))           deallocate(ckpt%replicas)
 +  if (allocated(ckpt%slot_output))        deallocate(ckpt%slot_output)
++  if (allocated(ckpt%restart_files))      deallocate(ckpt%restart_files)
++  if (allocated(ckpt%phmd_restart_files)) deallocate(ckpt%phmd_restart_files)
 +  if (allocated(ckpt%phrex_valid))        deallocate(ckpt%phrex_valid)
 +  if (allocated(ckpt%phrex_iupdate))      deallocate(ckpt%phrex_iupdate)
 +  if (allocated(ckpt%phrex_proton_count)) deallocate(ckpt%phrex_proton_count)
@@ -10472,6 +10636,9 @@ index 0000000..992db88
 +  ckpt%nslots                = 0
 +  ckpt%next_replica_uid      = 1
 +  ckpt%history_generation    = 0
++  ckpt%continuation_part     = 0
++  ckpt%checkpoint_generation = -1
++  ckpt%source_directory = '.'
 +  ckpt%segments_per_replica   = 0
 +  ckpt%epoch                  = 0
 +  ckpt%current_parity         = ARM_PARITY_EVEN
@@ -10582,6 +10749,7 @@ index 0000000..992db88
 +  slot_output%mdvel_frame             = 1
 +  slot_output%mdfrc_frame             = 1
 +  slot_output%mdcrd_logical_steps     = 0
++  slot_output%part_start_step         = 0
 +  slot_output%mdcrd_time_origin_ps    = 0.0_dp
 +  slot_output%mdcrd_logical_time_ps   = 0.0_dp
 +
@@ -10602,6 +10770,7 @@ index 0000000..992db88
 +  end if
 +
 +  slot_output%mdcrd_time_origin_ps = bintraj_state%mdcrd_time_origin_ps
++  slot_output%part_start_step = bintraj_state%part_start_step
 +
 +  ! Derive authoritative slot progress from the fixed condition slot, not from
 +  ! the replica currently occupying that slot.
@@ -10645,12 +10814,9 @@ index 0000000..992db88
 +    return
 +  end if
 +
-+  ! The standard Amber restart stores the absolute MD time inherited from the
-+  ! input restart.  Preserve that actual physical snapshot time separately from
-+  ! AREX-local trajectory/output time bookkeeping.
-+  slot_output%restart_time_ps = &
-+    mgr%replicas(slot_output%restart_replica_id)%md%time
-+
++  ! The slot-owned MD restart is written with arex_io_active_slot_time(),
++  ! not the running PMEMD t captured in the replica MD snapshot.  Use the
++  ! same slot logical clock for the checkpoint's restart-time validation.
 +  completed_segments = mgr%slot_segments_completed(slot_id)
 +  if (completed_segments < 0) then
 +    call arex_rst_set_status(ierr, message, AREX_RST_ERR_MISMATCH, &
@@ -10662,15 +10828,16 @@ index 0000000..992db88
 +
 +  slot_output%mdcrd_logical_steps   = logical_steps
 +  slot_output%mdcrd_logical_time_ps = slot_output%mdcrd_time_origin_ps + dble(logical_steps) * dt
++  slot_output%restart_time_ps       = slot_output%mdcrd_logical_time_ps
 +
 +  if (ntwx > 0) then
-+    slot_output%mdcrd_frame = logical_steps / ntwx + 1
++    slot_output%mdcrd_frame = logical_steps / ntwx - slot_output%part_start_step / ntwx + 1
 +  else
 +    slot_output%mdcrd_frame = 1
 +  end if
 +
 +  if (ntwv > 0) then
-+    slot_output%mdvel_frame = logical_steps / ntwv + 1
++    slot_output%mdvel_frame = logical_steps / ntwv - slot_output%part_start_step / ntwv + 1
 +  else if (ntwv < 0) then
 +    slot_output%mdvel_frame = slot_output%mdcrd_frame
 +  else
@@ -10678,7 +10845,7 @@ index 0000000..992db88
 +  end if
 +
 +  if (ntwf > 0) then
-+    slot_output%mdfrc_frame = logical_steps / ntwf + 1
++    slot_output%mdfrc_frame = logical_steps / ntwf - slot_output%part_start_step / ntwf + 1
 +  else if (ntwf < 0) then
 +    slot_output%mdfrc_frame = slot_output%mdcrd_frame
 +  else
@@ -10692,7 +10859,7 @@ index 0000000..992db88
 +
 +  ! PHMD slot-owned text output should append iff the slot has already emitted
 +  ! at least one completed segment in the current campaign.
-+  slot_output%phmd_output_initialized = (completed_segments > 0)
++  slot_output%phmd_output_initialized = (logical_steps > slot_output%part_start_step)
 +
 +end subroutine arex_rst_derive_slot_output_state
 +
@@ -10754,9 +10921,8 @@ index 0000000..992db88
 +  do slot_id = 1, ckpt%nslots
 +    io_ierr = AREX_IO_OK
 +    io_message = ''
-+    call arex_io_get_names_for_ladder_value(ckpt%slot_ladder(slot_id), &
-+         mdcrd_name, mdvel_name, mdfrc_name, restrt_name, phmdout_name, &
-+         phmdrestrt_out_name, io_ierr, io_message)
++    call arex_rst_source_slot_paths(ckpt, slot_id, restrt_name, &
++                                    phmdrestrt_out_name, io_ierr, io_message)
 +    if (io_ierr /= AREX_IO_OK) then
 +      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
 +      return
@@ -10813,6 +10979,7 @@ index 0000000..992db88
 +  end if
 +
 +  allocate(ckpt%slot_ladder(mgr%nslots), ckpt%slot_owner(mgr%nslots),        &
++           ckpt%restart_files(mgr%nslots), ckpt%phmd_restart_files(mgr%nslots), &
 +           ckpt%replicas(mgr%nreplicas), ckpt%slot_output(mgr%nslots))
 +
 +  ckpt%allocated             = .true.
@@ -10824,6 +10991,7 @@ index 0000000..992db88
 +  ckpt%nslots                = mgr%nslots
 +  ckpt%next_replica_uid      = mgr%next_replica_uid
 +  ckpt%history_generation    = mgr%history_generation
++  ckpt%continuation_part = arex_continuation_part
 +  ckpt%segments_per_replica    = mgr%segments_per_replica
 +  ckpt%epoch                   = mgr%epoch
 +  ckpt%current_parity          = mgr%current_parity
@@ -11021,19 +11189,237 @@ index 0000000..992db88
 +  ckpt%have_payload_checkpoint = .true.
 +end subroutine arex_rst_payload_capture_checkpoint
 +
-+subroutine arex_rst_write_checkpoint(checkpoint_name, mgr, warmup_segments_target, &
-+                                     warmup_segments_completed, ierr, message)
++
++! The source checkpoint's directory is independent of the current working
++! directory and of the destination scratch/output paths.
++function arex_rst_directory(path) result(directory)
++  character(len=*), intent(in) :: path
++  character(len=max_fn_len) :: directory
++  integer :: slash
++  slash = scan(trim(path), '/', back=.true.)
++  directory = '.'
++  if (slash == 1) directory = '/'
++  if (slash > 1) directory = path(:slash-1)
++end function arex_rst_directory
++
++function arex_rst_basename(path) result(base)
++  character(len=*), intent(in) :: path
++  character(len=max_fn_len) :: base
++  integer :: slash
++  slash = scan(trim(path), '/', back=.true.)
++  base = path(slash+1:)
++end function arex_rst_basename
++
++subroutine arex_rst_source_slot_paths(ckpt, slot_id, md_restart, phmd_restart, ierr, message)
++  type(arex_rst_checkpoint_t), intent(in) :: ckpt
++  integer, intent(in) :: slot_id
++  character(len=*), intent(out) :: md_restart, phmd_restart
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  character(len=max_fn_len) :: mdcrd, mdvel, mdfrc, old_md, phmdout, old_phmd
++  character(len=max_fn_len) :: md_basename, phmd_basename
++
++  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
++  if (slot_id < 1 .or. slot_id > ckpt%nslots) then
++    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, 'invalid source slot')
++    return
++  end if
++  if (ckpt%format_version >= 9) then
++    md_basename = ckpt%restart_files(slot_id)
++    phmd_basename = ckpt%phmd_restart_files(slot_id)
++  else
++    ! Legacy v8 did not save restart paths: derive old ladder labels using
++    ! supplied output *basenames*, then anchor them to -arexrst's directory.
++    call arex_io_get_names_for_ladder_value(ckpt%slot_ladder(slot_id), &
++         mdcrd, mdvel, mdfrc, old_md, phmdout, old_phmd, ierr, message)
++    if (ierr /= AREX_RST_OK) return
++    md_basename = arex_rst_basename(old_md)
++    phmd_basename = arex_rst_basename(old_phmd)
++  end if
++  if (trim(md_basename) == '-' .or. len_trim(md_basename) == 0 .or. &
++      scan(trim(md_basename), '/') /= 0 .or. &
++      len_trim(ckpt%source_directory) + len_trim(md_basename) + 1 > len(md_restart)) then
++    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, 'invalid checkpoint MD restart filename')
++    return
++  end if
++  md_restart = trim(ckpt%source_directory) // '/' // trim(md_basename)
++  phmd_restart = ''
++  if (trim(phmd_basename) /= '-') then
++    if (len_trim(phmd_basename) == 0 .or. scan(trim(phmd_basename), '/') /= 0 .or. &
++        len_trim(ckpt%source_directory) + len_trim(phmd_basename) + 1 > len(phmd_restart)) then
++      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, 'invalid checkpoint PHMD restart filename')
++      return
++    end if
++    phmd_restart = trim(ckpt%source_directory) // '/' // trim(phmd_basename)
++  end if
++end subroutine arex_rst_source_slot_paths
++
++! Copy binary NetCDF/formatted restart files as opaque bytes into same-filesystem
++! staging files. A generation is only published after every member was copied.
++subroutine arex_rst_copy_file(source, destination, ierr, message)
++  character(len=*), intent(in) :: source, destination
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  integer :: input_unit, output_unit, ios, n
++  integer(kind=8) :: size_bytes, offset
++  character(len=1) :: buffer(65536)
++  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
++  open(newunit=input_unit, file=trim(source), status='old', action='read', &
++       form='unformatted', access='stream', iostat=ios)
++  if (ios /= 0) goto 900
++  inquire(unit=input_unit, size=size_bytes, iostat=ios)
++  if (ios /= 0) goto 910
++  open(newunit=output_unit, file=trim(destination), status='replace', action='write', &
++       form='unformatted', access='stream', iostat=ios)
++  if (ios /= 0) goto 910
++  offset = 0_8
++  do while (offset < size_bytes)
++    n = int(min(65536_8, size_bytes - offset))
++    read(input_unit, iostat=ios) buffer(1:n)
++    if (ios /= 0) goto 920
++    write(output_unit, iostat=ios) buffer(1:n)
++    if (ios /= 0) goto 920
++    offset = offset + n
++  end do
++  close(output_unit, iostat=ios)
++  if (ios /= 0) goto 910
++  close(input_unit)
++  return
++920 close(output_unit, status='delete')
++910 close(input_unit)
++900 call arex_rst_set_status(ierr, message, AREX_RST_ERR_IO, &
++       'AREX: failed copying restart/checkpoint snapshot: ' // trim(source))
++end subroutine arex_rst_copy_file
++
++subroutine arex_rst_atomic_rename(source, destination, ierr, message)
++  character(len=*), intent(in) :: source, destination
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  integer(c_int) :: rc
++  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
++  rc = arex_c_rename(trim(source)//c_null_char, trim(destination)//c_null_char)
++  if (rc /= 0) call arex_rst_set_status(ierr, message, AREX_RST_ERR_IO, &
++                          'AREX: failed publishing checkpoint generation: ' // trim(destination))
++end subroutine arex_rst_atomic_rename
++
++! Returns -1 for no previous checkpoint (or for an old v8 checkpoint).
++integer function arex_rst_previous_generation(checkpoint_name)
 +  character(len=*), intent(in) :: checkpoint_name
++  integer :: u, ios, version
++  character(len=256) :: discard
++  logical :: exists
++  arex_rst_previous_generation = -1
++  version = -1
++  inquire(file=trim(checkpoint_name), exist=exists)
++  if (.not. exists) return
++  open(newunit=u, file=trim(checkpoint_name), status='old', action='read', iostat=ios)
++  if (ios /= 0) return
++  read(u,'(a)',iostat=ios) discard
++  if (ios == 0) read(u,*,iostat=ios) version
++  if (ios == 0 .and. version == 9) then
++    read(u,'(a)',iostat=ios) discard
++    read(u,'(a)',iostat=ios) discard
++    read(u,'(a)',iostat=ios) discard
++    read(u,'(a)',iostat=ios) discard
++    read(u,'(a)',iostat=ios) discard
++    read(u,'(a)',iostat=ios) discard  ! continuation part
++    if (ios == 0) read(u,*,iostat=ios) arex_rst_previous_generation
++  end if
++  close(u)
++  if (ios /= 0) arex_rst_previous_generation = -1
++end function arex_rst_previous_generation
++
++subroutine arex_rst_prepare_snapshots(checkpoint_name, ckpt, ierr, message)
++  character(len=*), intent(in) :: checkpoint_name
++  type(arex_rst_checkpoint_t), intent(inout) :: ckpt
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  character(len=max_fn_len) :: mdcrd, mdvel, mdfrc, restart, phmdout, phmdrst
++  character(len=max_fn_len) :: root_dir, dst
++  character(len=8) :: suffix
++  integer :: i, prev_gen
++  logical :: want_phmd
++  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
++  root_dir = arex_rst_directory(checkpoint_name)
++  if (len_trim(checkpoint_name) + 9 > max_fn_len) then
++    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, &
++      'AREX: checkpoint path too long to stage generational snapshots')
++    return
++  end if
++  prev_gen = arex_rst_previous_generation(checkpoint_name)
++  ckpt%checkpoint_generation = mod(prev_gen+1,2)
++  write(suffix,'(".gen",i1)') ckpt%checkpoint_generation
++  want_phmd = (iphmd > 0 .or. trim(ckpt%payload_type) == 'phrex')
++  do i = 1, ckpt%nslots
++    call arex_io_get_slot_names(i, mdcrd, mdvel, mdfrc, restart, phmdout, phmdrst, ierr, message)
++    if (ierr /= AREX_RST_OK) return
++    if (len_trim(root_dir) + len_trim(arex_rst_basename(restart)) + 11 > max_fn_len .or. &
++        (want_phmd .and. len_trim(root_dir) + len_trim(arex_rst_basename(phmdrst)) + 11 > max_fn_len)) then
++      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, &
++        'AREX: slot restart path too long for two-generation staging')
++      return
++    end if
++    ckpt%restart_files(i) = trim(arex_rst_basename(restart)) // trim(suffix)
++    if (want_phmd) then
++      ckpt%phmd_restart_files(i) = trim(arex_rst_basename(phmdrst)) // trim(suffix)
++    else
++      ckpt%phmd_restart_files(i) = '-'
++    end if
++    dst = trim(root_dir) // '/' // trim(ckpt%restart_files(i)) // '.tmp'
++    call arex_rst_copy_file(restart, dst, ierr, message)
++    if (ierr /= AREX_RST_OK) return
++    if (want_phmd) then
++      dst = trim(root_dir) // '/' // trim(ckpt%phmd_restart_files(i)) // '.tmp'
++      call arex_rst_copy_file(phmdrst, dst, ierr, message)
++      if (ierr /= AREX_RST_OK) return
++    end if
++  end do
++  ! Existing selected generation is always older than the root checkpoint;
++  ! the other generation remains intact if promotion is interrupted.
++  do i = 1, ckpt%nslots
++    dst = trim(root_dir) // '/' // trim(ckpt%restart_files(i))
++    call arex_rst_atomic_rename(trim(dst)//'.tmp', dst, ierr, message)
++    if (ierr /= AREX_RST_OK) return
++    if (want_phmd) then
++      dst = trim(root_dir) // '/' // trim(ckpt%phmd_restart_files(i))
++      call arex_rst_atomic_rename(trim(dst)//'.tmp', dst, ierr, message)
++      if (ierr /= AREX_RST_OK) return
++    end if
++  end do
++end subroutine arex_rst_prepare_snapshots
++
++! Capture a consistent scheduler checkpoint in memory before starting the
++! next epoch. Disk publication can then overlap with the next MD segment.
++subroutine arex_rst_capture_checkpoint(mgr, warmup_segments_target, &
++                                       warmup_segments_completed, ckpt, ierr, message)
 +  type(arm_manager_t), intent(in) :: mgr
-+  integer, intent(in) :: warmup_segments_target
-+  integer, intent(in) :: warmup_segments_completed
++  integer, intent(in) :: warmup_segments_target, warmup_segments_completed
++  type(arex_rst_checkpoint_t), intent(inout) :: ckpt
 +  integer, intent(out) :: ierr
 +  character(len=*), intent(out) :: message
 +
-+  type(arex_rst_checkpoint_t) :: ckpt
++  call arex_rst_init_checkpoint_from_manager(mgr, warmup_segments_target, &
++                                             warmup_segments_completed, ckpt, ierr, message)
++  if (ierr /= AREX_RST_OK) return
++  call arex_rst_payload_capture_checkpoint(ckpt, ierr, message)
++  if (ierr /= AREX_RST_OK) call arex_rst_release_checkpoint(ckpt)
++end subroutine arex_rst_capture_checkpoint
++
++subroutine arex_rst_write_checkpoint(checkpoint_name, ckpt, ierr, message, checkpoint_number)
++  character(len=*), intent(in) :: checkpoint_name
++  type(arex_rst_checkpoint_t), intent(inout) :: ckpt
++  integer, intent(out) :: ierr
++  character(len=*), intent(out) :: message
++  integer, intent(in), optional :: checkpoint_number
++
 +  integer :: unitno
 +  integer :: i
 +  integer :: valid_i
++  integer :: n
++  logical :: exists, want_phmd
++  character(len=max_fn_len) :: mdcrd, mdvel, mdfrc, restrt, phmdout, phmdrst
++  character(len=max_fn_len) :: output_checkpoint, restart_path
++  character(len=16) :: suffix
 +
 +  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
 +
@@ -11043,18 +11429,54 @@ index 0000000..992db88
 +    return
 +  end if
 +
-+  call arex_rst_init_checkpoint_from_manager(mgr, warmup_segments_target, &
-+                                             warmup_segments_completed, ckpt, &
-+                                             ierr, message)
-+  if (ierr /= AREX_RST_OK) return
++  n = 0
++  if (present(checkpoint_number)) n = checkpoint_number
++  if (n < 0) then
++    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, &
++      'AREX: negative checkpoint number')
++    call arex_rst_release_checkpoint(ckpt)
++    return
++  end if
++  suffix = ''
++  if (n > 0) write(suffix, '(".",i0)') n
++  if (len_trim(checkpoint_name) + len_trim(suffix) > max_fn_len) then
++    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, &
++      'AREX: numbered checkpoint path exceeds filename limit')
++    call arex_rst_release_checkpoint(ckpt)
++    return
++  end if
++  output_checkpoint = trim(checkpoint_name) // trim(suffix)
 +
-+  call arex_rst_payload_capture_checkpoint(ckpt, ierr, message)
-+  if (ierr /= AREX_RST_OK) then
++  ! Workers have already written and closed this epoch's slot restarts.
++  ! Only list their filenames; do not copy the same data on the scheduler.
++  ckpt%checkpoint_generation = 0  ! Keep the existing v9 metadata layout.
++  want_phmd = (iphmd > 0 .or. trim(ckpt%payload_type) == 'phrex')
++  do i = 1, ckpt%nslots
++    call arex_io_get_slot_names(i, mdcrd, mdvel, mdfrc, restrt, phmdout, phmdrst, ierr, message)
++    if (ierr /= AREX_RST_OK) exit
++    ckpt%restart_files(i) = trim(arex_rst_basename(restrt)) // trim(suffix)
++    restart_path = trim(restrt) // trim(suffix)
++    inquire(file=trim(restart_path), exist=exists)
++    if (.not. exists) exit
++    if (want_phmd) then
++      ckpt%phmd_restart_files(i) = trim(arex_rst_basename(phmdrst)) // trim(suffix)
++      restart_path = trim(phmdrst) // trim(suffix)
++      inquire(file=trim(restart_path), exist=exists)
++      if (.not. exists) exit
++    else
++      ckpt%phmd_restart_files(i) = '-'
++    end if
++  end do
++  if (ierr /= AREX_RST_OK .or. i <= ckpt%nslots) then
++    if (ierr == AREX_RST_OK) call arex_rst_set_status(ierr, message, AREX_RST_ERR_IO, &
++      'AREX: missing completed slot restart for checkpoint')
 +    call arex_rst_release_checkpoint(ckpt)
 +    return
 +  end if
 +
-+  open(newunit=unitno, file=trim(checkpoint_name), status='REPLACE', action='WRITE', &
++  ! Write checkpoint metadata last; an interrupted write leaves the previous
++  ! numbered checkpoint set available for manual continuation.
++  open(newunit=unitno, file=trim(output_checkpoint), status='REPLACE', action='WRITE', &
 +       form='FORMATTED', iostat=i)
 +  if (i /= 0) then
 +    call arex_rst_release_checkpoint(ckpt)
@@ -11073,6 +11495,8 @@ index 0000000..992db88
 +                              ckpt%warmup_segments_completed
 +  write(unitno, '(i0)') ckpt%next_replica_uid
 +  write(unitno, '(i0)') ckpt%history_generation
++  write(unitno, '(i0)') ckpt%continuation_part
++  write(unitno, '(i0)') ckpt%checkpoint_generation
 +  write(unitno, '(i0)') ckpt%scheduler_rng_size
 +  write(unitno, '(*(1x,i0))') ckpt%scheduler_rng(:)
 +  write(unitno, '(*(1x,es24.16))') ckpt%slot_ladder(:)
@@ -11089,7 +11513,7 @@ index 0000000..992db88
 +  end do
 +
 +  do i = 1, ckpt%nslots
-+    write(unitno, '(9(1x,i0))') ckpt%slot_output(i)%slot_id,                     &
++    write(unitno, '(10(1x,i0))') ckpt%slot_output(i)%slot_id,                     &
 +                                ckpt%slot_output(i)%restart_replica_id,            &
 +                                ckpt%slot_output(i)%restart_replica_segments,      &
 +                                merge(1, 0, ckpt%slot_output(i)%binary_initialized), &
@@ -11097,10 +11521,16 @@ index 0000000..992db88
 +                                ckpt%slot_output(i)%mdcrd_frame,                  &
 +                                ckpt%slot_output(i)%mdvel_frame,                  &
 +                                ckpt%slot_output(i)%mdfrc_frame,                  &
-+                                ckpt%slot_output(i)%mdcrd_logical_steps
++                                ckpt%slot_output(i)%mdcrd_logical_steps, &
++                                ckpt%slot_output(i)%part_start_step
 +    write(unitno, '(3(1x,es24.16))') ckpt%slot_output(i)%restart_time_ps,       &
 +                                     ckpt%slot_output(i)%mdcrd_time_origin_ps,    &
 +                                     ckpt%slot_output(i)%mdcrd_logical_time_ps
++  end do
++
++  do i = 1, ckpt%nslots
++    write(unitno, '(a)') trim(ckpt%restart_files(i))
++    write(unitno, '(a)') trim(ckpt%phmd_restart_files(i))
 +  end do
 +
 +  if (ckpt%have_payload_checkpoint) then
@@ -11141,9 +11571,52 @@ index 0000000..992db88
 +#endif
 +  end if
 +
-+  close(unitno)
++  close(unitno, iostat=i)
++  if (i /= 0) call arex_rst_set_status(ierr, message, AREX_RST_ERR_IO, &
++    'AREX: checkpoint close failed')
 +  call arex_rst_release_checkpoint(ckpt)
 +end subroutine arex_rst_write_checkpoint
++
++! Remove only the previous numbered checkpoint set, after publishing its
++! successor. These files are never used during an active MD segment.
++subroutine arex_rst_remove_numbered_set(checkpoint_name, checkpoint_number)
++  character(len=*), intent(in) :: checkpoint_name
++  integer, intent(in) :: checkpoint_number
++  integer :: slot_id, io_ierr, u, ios
++  character(len=256) :: io_message
++  character(len=max_fn_len) :: mdcrd, mdvel, mdfrc, restrt, phmdout, phmdrst
++  character(len=max_fn_len) :: filename
++  character(len=16) :: suffix
++  logical :: exists
++
++  if (checkpoint_number <= 0) return
++  write(suffix, '(".",i0)') checkpoint_number
++  do slot_id = 1, arex_rst_ladder_count()
++    call arex_io_get_slot_names(slot_id, mdcrd, mdvel, mdfrc, restrt, &
++         phmdout, phmdrst, io_ierr, io_message)
++    if (io_ierr /= AREX_IO_OK) return
++    filename = trim(restrt) // trim(suffix)
++    inquire(file=trim(filename), exist=exists)
++    if (exists) then
++      open(newunit=u, file=trim(filename), status='old', iostat=ios)
++      if (ios == 0) close(u, status='delete', iostat=ios)
++    end if
++    if (iphmd > 0 .or. trim(arex_pay_tolower(adjustl(arex_type))) == 'phrex') then
++      filename = trim(phmdrst) // trim(suffix)
++      inquire(file=trim(filename), exist=exists)
++      if (exists) then
++        open(newunit=u, file=trim(filename), status='old', iostat=ios)
++        if (ios == 0) close(u, status='delete', iostat=ios)
++      end if
++    end if
++  end do
++  filename = trim(checkpoint_name) // trim(suffix)
++  inquire(file=trim(filename), exist=exists)
++  if (exists) then
++    open(newunit=u, file=trim(filename), status='old', iostat=ios)
++    if (ios == 0) close(u, status='delete', iostat=ios)
++  end if
++end subroutine arex_rst_remove_numbered_set
 +
 +subroutine arex_rst_read_checkpoint(checkpoint_name, ckpt, ierr, message)
 +  character(len=*), intent(in) :: checkpoint_name
@@ -11161,6 +11634,7 @@ index 0000000..992db88
 +  character(len=32) :: payload_buf
 +  integer :: binary_initialized_i
 +  integer :: phmd_output_initialized_i
++  character(len=512) :: slot_line
 +
 +  call arex_rst_set_status(ierr, message, AREX_RST_OK, '')
 +  call arex_rst_release_checkpoint(ckpt)
@@ -11190,7 +11664,7 @@ index 0000000..992db88
 +
 +  read(unitno, *, iostat=ios) ckpt%format_version
 +  if (ios /= 0) goto 900
-+  if (ckpt%format_version /= AREX_RST_FORMAT_VERSION) then
++  if (ckpt%format_version /= 8 .and. ckpt%format_version /= AREX_RST_FORMAT_VERSION) then
 +    close(unitno)
 +    call arex_rst_set_status(ierr, message, AREX_RST_ERR_MISMATCH, &
 +      'arex_rst_read_checkpoint: unsupported AREX checkpoint format version')
@@ -11214,6 +11688,15 @@ index 0000000..992db88
 +
 +  read(unitno, *, iostat=ios) ckpt%history_generation
 +  if (ios /= 0) goto 900
++  if (ckpt%format_version >= 9) then
++    read(unitno, *, iostat=ios) ckpt%continuation_part
++    if (ios /= 0) goto 900
++    read(unitno, *, iostat=ios) ckpt%checkpoint_generation
++    if (ios /= 0) goto 900
++    if (ckpt%continuation_part < 0 .or. ckpt%continuation_part > 9999 .or. &
++        ckpt%checkpoint_generation < 0 .or. ckpt%checkpoint_generation > 1) goto 900
++  end if
++  ckpt%source_directory = arex_rst_directory(checkpoint_name)
 +
 +  read(unitno, *, iostat=ios) ckpt%scheduler_rng_size
 +  if (ios /= 0) goto 900
@@ -11243,7 +11726,8 @@ index 0000000..992db88
 +  end if
 +
 +  allocate(ckpt%slot_ladder(ckpt%nslots), ckpt%slot_owner(ckpt%nslots),         &
-+           ckpt%replicas(ckpt%nreplicas), ckpt%slot_output(ckpt%nslots))
++           ckpt%replicas(ckpt%nreplicas), ckpt%slot_output(ckpt%nslots), &
++           ckpt%restart_files(ckpt%nslots), ckpt%phmd_restart_files(ckpt%nslots))
 +
 +  read(unitno, *, iostat=ios) ckpt%slot_ladder(:)
 +  if (ios /= 0) goto 900
@@ -11262,19 +11746,27 @@ index 0000000..992db88
 +  end do
 +
 +  do i = 1, ckpt%nslots
-+    read(unitno, *, iostat=ios) ckpt%slot_output(i)%slot_id,                    &
-+                                ckpt%slot_output(i)%restart_replica_id,          &
-+                                ckpt%slot_output(i)%restart_replica_segments,    &
-+                                binary_initialized_i,                           &
-+                                phmd_output_initialized_i,                      &
-+                                ckpt%slot_output(i)%mdcrd_frame,                &
-+                                ckpt%slot_output(i)%mdvel_frame,                &
-+                                ckpt%slot_output(i)%mdfrc_frame,                &
-+                                ckpt%slot_output(i)%mdcrd_logical_steps
++    read(unitno, '(a)', iostat=ios) slot_line
 +    if (ios /= 0) goto 900
-+
-+    read(unitno, *, iostat=ios) ckpt%slot_output(i)%restart_time_ps,             &
-+                                ckpt%slot_output(i)%mdcrd_time_origin_ps,        &
++    if (ckpt%format_version >= 9) then
++      read(slot_line, *, iostat=ios) ckpt%slot_output(i)%slot_id, &
++           ckpt%slot_output(i)%restart_replica_id, &
++           ckpt%slot_output(i)%restart_replica_segments, &
++           binary_initialized_i, phmd_output_initialized_i, &
++           ckpt%slot_output(i)%mdcrd_frame, ckpt%slot_output(i)%mdvel_frame, &
++           ckpt%slot_output(i)%mdfrc_frame, ckpt%slot_output(i)%mdcrd_logical_steps, &
++           ckpt%slot_output(i)%part_start_step
++    else
++      read(slot_line, *, iostat=ios) ckpt%slot_output(i)%slot_id, &
++           ckpt%slot_output(i)%restart_replica_id, &
++           ckpt%slot_output(i)%restart_replica_segments, &
++           binary_initialized_i, phmd_output_initialized_i, &
++           ckpt%slot_output(i)%mdcrd_frame, ckpt%slot_output(i)%mdvel_frame, &
++           ckpt%slot_output(i)%mdfrc_frame, ckpt%slot_output(i)%mdcrd_logical_steps
++    end if
++    if (ios /= 0) goto 900
++    read(unitno, *, iostat=ios) ckpt%slot_output(i)%restart_time_ps, &
++                                ckpt%slot_output(i)%mdcrd_time_origin_ps, &
 +                                ckpt%slot_output(i)%mdcrd_logical_time_ps
 +    if (ios /= 0) goto 900
 +
@@ -11293,6 +11785,23 @@ index 0000000..992db88
 +   !  ckpt%slot_output(i)%mdcrd_logical_time_ps
 +   !call flush(0)
 +  end do
++
++  if (ckpt%format_version >= 9) then
++    do i = 1, ckpt%nslots
++      read(unitno, '(a)', iostat=ios) ckpt%restart_files(i)
++      if (ios /= 0) goto 900
++      read(unitno, '(a)', iostat=ios) ckpt%phmd_restart_files(i)
++      if (ios /= 0) goto 900
++      if (len_trim(ckpt%restart_files(i)) == 0 .or. &
++          trim(ckpt%restart_files(i)) == '.' .or. &
++          trim(ckpt%restart_files(i)) == '..' .or. &
++          scan(trim(ckpt%restart_files(i)), '/\') /= 0 .or. &
++          scan(trim(ckpt%phmd_restart_files(i)), '/\') /= 0) goto 900
++    end do
++  else
++    ckpt%restart_files(:) = ''
++    ckpt%phmd_restart_files(:) = ''
++  end if
 +
 +  read(unitno, *, iostat=ios) have_payload_i
 +  if (ios /= 0) goto 900
@@ -11494,9 +12003,18 @@ index 0000000..992db88
 +      return
 +    end if
 +
-+    if (ckpt%slot_output(i)%mdcrd_logical_steps < 0) then
++    if (ckpt%slot_output(i)%mdcrd_logical_steps < 0 .or. &
++        ckpt%slot_output(i)%part_start_step < 0 .or. &
++        ckpt%slot_output(i)%part_start_step > ckpt%slot_output(i)%mdcrd_logical_steps) then
 +      call arex_rst_set_status(ierr, message, AREX_RST_ERR_MISMATCH, &
-+        'arex_rst_validate_checkpoint_compatibility: invalid slot restart progress')
++        'arex_rst_validate_checkpoint_compatibility: invalid slot restart/part progress')
++      return
++    end if
++    if (abs(ckpt%slot_output(i)%restart_time_ps - &
++        (ckpt%slot_output(i)%mdcrd_time_origin_ps + &
++         dble(ckpt%slot_output(i)%mdcrd_logical_steps)*dt)) > max(1.0e-2_dp, 2.0_dp*dt)) then
++      call arex_rst_set_status(ierr, message, AREX_RST_ERR_MISMATCH, &
++        'AREX checkpoint timestamp disagrees with logical step/time origin; repair source checkpoint first')
 +      return
 +    end if
 +
@@ -11643,7 +12161,8 @@ index 0000000..992db88
 +  do i = 1, mgr%nslots
 +    io_ierr = AREX_IO_OK
 +    io_message = ''
-+    call arex_io_set_slot_restart_initialized(i, .true., io_ierr, io_message)
++    call arex_io_set_slot_restart_initialized(i, &
++         (.not. arexrst_specified .or. arex_append), io_ierr, io_message)
 +    if (io_ierr /= AREX_IO_OK) then
 +      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
 +      return
@@ -12056,8 +12575,9 @@ index 0000000..992db88
 +  snapshot%valid    = .true.
 +end subroutine arex_rst_read_common_restart
 +
-+subroutine arex_rst_seed_common_snapshot_from_slot_restart(mgr, slot_id, restart_ladder_value, &
++subroutine arex_rst_seed_common_snapshot_from_slot_restart(ckpt, mgr, slot_id, restart_ladder_value, &
 +                                                              replica_id, expected_time_ps, ierr, message)
++  type(arex_rst_checkpoint_t), intent(in) :: ckpt
 +  type(arm_manager_t), intent(inout) :: mgr
 +  integer, intent(in) :: slot_id
 +  real(dp), intent(in) :: restart_ladder_value
@@ -12093,9 +12613,8 @@ index 0000000..992db88
 +
 +  io_ierr = 0
 +  io_message = ''
-+  call arex_io_get_names_for_ladder_value(restart_ladder_value, mdcrd_name, mdvel_name, &
-+                                           mdfrc_name, restrt_name, phmdout_name, &
-+                                           phmdrestrt_out_name, io_ierr, io_message)
++  call arex_rst_source_slot_paths(ckpt, slot_id, restrt_name, &
++                                  phmdrestrt_out_name, io_ierr, io_message)
 +  if (io_ierr /= 0) then
 +    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
 +    return
@@ -12116,8 +12635,9 @@ index 0000000..992db88
 +  end if
 +end subroutine arex_rst_seed_common_snapshot_from_slot_restart
 +
-+subroutine arex_rst_seed_payload_from_slot_restart(slot_id, restart_ladder_value, replica_id, &
++subroutine arex_rst_seed_payload_from_slot_restart(ckpt, slot_id, restart_ladder_value, replica_id, &
 +                                                    payload_type, ierr, message)
++  type(arex_rst_checkpoint_t), intent(in) :: ckpt
 +  integer, intent(in) :: slot_id
 +  real(dp), intent(in) :: restart_ladder_value
 +  integer, intent(in) :: replica_id
@@ -12152,9 +12672,8 @@ index 0000000..992db88
 +
 +  io_ierr = 0
 +  io_message = ''
-+  call arex_io_get_names_for_ladder_value(restart_ladder_value, mdcrd_name, mdvel_name, &
-+                                           mdfrc_name, restrt_name, phmdout_name, &
-+                                           phmdrestrt_out_name, io_ierr, io_message)
++  call arex_rst_source_slot_paths(ckpt, slot_id, restrt_name, &
++                                  phmdrestrt_out_name, io_ierr, io_message)
 +  if (io_ierr /= 0) then
 +    call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
 +    return
@@ -12287,6 +12806,13 @@ index 0000000..992db88
 +    bintraj_state%mdvel_frame         = ckpt%slot_output(slot_id)%mdvel_frame
 +    bintraj_state%mdfrc_frame         = ckpt%slot_output(slot_id)%mdfrc_frame
 +    bintraj_state%mdcrd_logical_steps = ckpt%slot_output(slot_id)%mdcrd_logical_steps
++    bintraj_state%part_start_step = ckpt%slot_output(slot_id)%part_start_step
++    if (arexrst_specified .and. .not. arex_append) then
++      bintraj_state%part_start_step = bintraj_state%mdcrd_logical_steps
++      bintraj_state%mdcrd_frame = 1
++      bintraj_state%mdvel_frame = 1
++      bintraj_state%mdfrc_frame = 1
++    end if
 +    bintraj_state%mdcrd_time_origin_ps = ckpt%slot_output(slot_id)%mdcrd_time_origin_ps
 +    bintraj_state%mdcrd_logical_time_ps = ckpt%slot_output(slot_id)%mdcrd_logical_time_ps
 +    bintraj_state%atom_wrt_cnt        = 0
@@ -12302,7 +12828,8 @@ index 0000000..992db88
 +    end if
 +
 +    call arex_io_set_slot_phmd_output_initialized(slot_id, &
-+         ckpt%slot_output(slot_id)%phmd_output_initialized, io_ierr, io_message)
++         ckpt%slot_output(slot_id)%phmd_output_initialized .and. &
++         (.not. arexrst_specified .or. arex_append), io_ierr, io_message)
 +    if (io_ierr /= AREX_IO_OK) then
 +      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
 +      return
@@ -12463,7 +12990,7 @@ index 0000000..992db88
 +    bintraj_state%mdcrd_logical_steps = 0
 +    bintraj_state%atom_wrt_cnt = 0
 +
-+    if (retained(new_slot)) then
++    if (retained(new_slot) .and. arex_append) then
 +      old_slot = source_old_slot(new_slot)
 +      bintraj_state%mdcrd_frame = ckpt%slot_output(old_slot)%mdcrd_frame
 +      bintraj_state%mdvel_frame = ckpt%slot_output(old_slot)%mdvel_frame
@@ -12489,7 +13016,8 @@ index 0000000..992db88
 +    end if
 +
 +    call arex_io_set_slot_phmd_output_initialized(new_slot, &
-+         retained(new_slot) .and. ckpt%slot_output(source_old_slot(new_slot))%phmd_output_initialized, &
++         arex_append .and. retained(new_slot) .and. &
++         ckpt%slot_output(source_old_slot(new_slot))%phmd_output_initialized, &
 +         io_ierr, io_message)
 +    if (io_ierr /= AREX_IO_OK) then
 +      call arex_rst_set_status(ierr, message, AREX_RST_ERR_INVALID, trim(io_message))
@@ -12609,7 +13137,7 @@ index 0000000..992db88
 +      next_uid = next_uid + 1
 +    end if
 +
-+    call arex_rst_seed_common_snapshot_from_slot_restart(mgr, restart_slot, &
++    call arex_rst_seed_common_snapshot_from_slot_restart(ckpt, mgr, restart_slot, &
 +         ckpt%slot_ladder(restart_slot), i, ckpt%slot_output(restart_slot)%restart_time_ps, &
 +         ierr, message)
 +    if (ierr /= AREX_RST_OK) goto 900
@@ -12626,7 +13154,7 @@ index 0000000..992db88
 +  else
 +    do i = 1, mgr%nreplicas
 +      restart_slot = source_restart_slot(i)
-+      call arex_rst_seed_payload_from_slot_restart(restart_slot, &
++      call arex_rst_seed_payload_from_slot_restart(ckpt, restart_slot, &
 +           ckpt%slot_ladder(restart_slot), i, ckpt%payload_type, ierr, message)
 +      if (ierr /= AREX_RST_OK) goto 900
 +    end do
@@ -12709,7 +13237,7 @@ index 0000000..992db88
 +    ! which can differ from the post-exchange slot_owner mapping.
 +    replica_id = ckpt%slot_output(slot_id)%restart_replica_id
 +
-+    call arex_rst_seed_common_snapshot_from_slot_restart(mgr, slot_id, &
++    call arex_rst_seed_common_snapshot_from_slot_restart(ckpt, mgr, slot_id, &
 +      ckpt%slot_ladder(slot_id), replica_id, ckpt%slot_output(slot_id)%restart_time_ps, &
 +      ierr, message)
 +    if (ierr /= AREX_RST_OK) then
@@ -12718,7 +13246,7 @@ index 0000000..992db88
 +    end if
 +
 +    if (.not. ckpt%have_payload_checkpoint) then
-+      call arex_rst_seed_payload_from_slot_restart(slot_id, ckpt%slot_ladder(slot_id), &
++      call arex_rst_seed_payload_from_slot_restart(ckpt, slot_id, ckpt%slot_ladder(slot_id), &
 +           replica_id, ckpt%payload_type, ierr, message)
 +      if (ierr /= AREX_RST_OK) then
 +        call arex_rst_release_checkpoint(ckpt)
@@ -14477,7 +15005,7 @@ index a7c74e0..eecdb9e 100644
    int* pImageGrplist2;                        // Pointer to image grplist
    int* pImageIndexPHMD;                       //Pointer to image indices
 diff --git a/src/pmemd/src/cuda/gpu.cpp b/src/pmemd/src/cuda/gpu.cpp
-index c507bc2..69b1901 100644
+index c507bc2..c799386 100644
 --- a/src/pmemd/src/cuda/gpu.cpp
 +++ b/src/pmemd/src/cuda/gpu.cpp
 @@ -23,6 +23,8 @@
@@ -14583,7 +15111,22 @@ index c507bc2..69b1901 100644
  
    // Test for single node run
    bool bSingleNode = true;
-@@ -171,16 +207,15 @@ extern "C" void gpu_init_(void)
+@@ -159,8 +195,12 @@ extern "C" void gpu_init_(void)
+   }
+ #endif
+ 
+-  // Activate zero-copy
+-  cudaSetDeviceFlags(cudaDeviceMapHost);
++  // Avoid CUDA context creation before MPI rank-based device selection.
++  // NVIDIA documents that cudaSetDeviceFlags() may initialize a default
++  // device when none is current; this can conflict with EXCLUSIVE_PROCESS.
++  // cudaDeviceMapHost is implicit for CUDA Runtime-created contexts,
++  // so setting it explicitly is unnecessary here.
++  // https://docs.nvidia.com/cuda/archive/12.6.1/cuda-runtime-api/group__CUDART__DEVICE.html
+ 
+   // If the device id is -1 this means it was left at the default so we
+   // or the user specified -1 on the command line meaning autoselect GPU.
+@@ -171,16 +211,15 @@ extern "C" void gpu_init_(void)
      // Check for duplicate processes on current node
      int localCount = 0;
      int offset = 1;
@@ -14602,7 +15145,7 @@ index c507bc2..69b1901 100644
        // Choose nth gpu that can run AMBER
        int pos = 0;
        while (offset > 0) {
-@@ -817,6 +852,8 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
+@@ -817,6 +856,8 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
    delete gpu->pbAtomCharge;
    delete gpu->pbAtomChargeSP;
    delete gpu->pbAtomChargeSPLJID;
@@ -14611,7 +15154,7 @@ index c507bc2..69b1901 100644
    delete gpu->pbAtomMass;
    delete gpu->pbAtomIonMask;
    delete gpu->pbReff;
-@@ -840,6 +877,24 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
+@@ -840,6 +881,24 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
    gpu->pbAtomChargeSP       = new GpuBuffer<PMEFloat>(gpu->sim.stride);
    gpu->pbAtomSigEps         = new GpuBuffer<PMEFloat2>(gpu->sim.stride);
    gpu->pbAtomChargeSPLJID   = new GpuBuffer<PMEFloat2>(gpu->sim.stride);
@@ -14636,7 +15179,7 @@ index c507bc2..69b1901 100644
    gpu->pbAtomLJID           = new GpuBuffer<unsigned int>(gpu->sim.stride);
    gpu->pbAtomRBorn          = new GpuBuffer<PMEFloat>(gpu->sim.stride);
    gpu->pbAtomS              = new GpuBuffer<PMEFloat>(gpu->sim.stride);
-@@ -906,7 +961,7 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
+@@ -906,7 +965,7 @@ extern "C" void gpu_setup_system_(int *atoms, int *imin, double* tol, int* ntf,
    delete gpu->pbAFEBuffer;
    delete gpu->pbKineticEnergyBuffer;
    delete gpu->pbAFEKineticEnergyBuffer;
@@ -14645,7 +15188,7 @@ index c507bc2..69b1901 100644
    // Only allocate GB accumulators if they're needed
    if (gpu->ntb == 0 || gpu->sim.icnstph == 2 || gpu->sim.icnste == 2 || gpu->sim.hybridgb > 0) {
  
-@@ -1959,6 +2014,22 @@ extern "C" void gpu_reset_park_(double park[])
+@@ -1959,6 +2018,22 @@ extern "C" void gpu_reset_park_(double park[])
    gpu->park->Upload();
  }
  
@@ -14668,7 +15211,7 @@ index c507bc2..69b1901 100644
  //---------------------------------------------------------------------------------------------
  // gpu_upload_phmd_: upload phmd information.
  //
-@@ -2048,6 +2119,7 @@ bool* use_linked, bool* use_forces)
+@@ -2048,6 +2123,7 @@ bool* use_linked, bool* use_forces)
    delete gpu->charge_phmd;
    delete gpu->grplist;
    delete gpu->linkgrplist;
@@ -14676,7 +15219,7 @@ index c507bc2..69b1901 100644
    delete gpu->ImageGrplist;
    delete gpu->ImageIndexPHMD;
    delete gpu->sp_grp;
-@@ -2086,6 +2158,11 @@ bool* use_linked, bool* use_forces)
+@@ -2086,6 +2162,11 @@ bool* use_linked, bool* use_forces)
    gpu->ImageCharge_phmd = new GpuBuffer<PMEFloat>(2 * gpu->sim.paddedNumberOfAtoms);
    gpu->grplist = new GpuBuffer <int>(gpu->sim.paddedNumberOfAtoms);
    gpu->linkgrplist = new GpuBuffer <int>(gpu->sim.paddedNumberOfAtoms);
@@ -14688,7 +15231,7 @@ index c507bc2..69b1901 100644
    gpu->ImageGrplist = new GpuBuffer <int>(2 * gpu->sim.paddedNumberOfAtoms);
    gpu->ImageIndexPHMD = new GpuBuffer<int>(2 * gpu->sim.paddedNumberOfAtoms);
    gpu->sp_grp = new GpuBuffer<int>(gpu->sim.phmd_padded_ntitr);
-@@ -2158,13 +2235,29 @@ bool* use_linked, bool* use_forces)
+@@ -2158,13 +2239,29 @@ bool* use_linked, bool* use_forces)
        gpu->parmod->_pSysData[i*6+j] = (PMEFloat)0.0;
      }
    }
@@ -14725,7 +15268,7 @@ index c507bc2..69b1901 100644
      gpu->grplist->_pSysData[i] = grplist[i];
      gpu->ImageGrplist->_pSysData[i] = grplist[i];
      gpu->ImageIndexPHMD->_pSysData[i] = i;
-@@ -2224,6 +2317,26 @@ bool* use_linked, bool* use_forces)
+@@ -2224,6 +2321,26 @@ bool* use_linked, bool* use_forces)
      gpu->dph_plus_accumulator->_pSysData[i] = 0;
      gpu->linkgrplist->_pSysData[i] = 0;
    }
@@ -14752,7 +15295,7 @@ index c507bc2..69b1901 100644
    gpu->para->Upload();
    gpu->parb->Upload();
    gpu->park->Upload();
-@@ -2237,6 +2350,7 @@ bool* use_linked, bool* use_forces)
+@@ -2237,6 +2354,7 @@ bool* use_linked, bool* use_forces)
    gpu->ImageCharge_phmd->Upload();
    gpu->grplist->Upload();
    gpu->linkgrplist->Upload();
@@ -14760,7 +15303,7 @@ index c507bc2..69b1901 100644
    gpu->ImageGrplist->Upload();
    gpu->ImageIndexPHMD->Upload();
    gpu->sp_grp->Upload();
-@@ -2294,6 +2408,10 @@ bool* use_linked, bool* use_forces)
+@@ -2294,6 +2412,10 @@ bool* use_linked, bool* use_forces)
    gpu->sim.pexcludeatoms = gpu->excludeatoms->_pDevData;
    gpu->sim.pgrplist = gpu->grplist->_pDevData;
    gpu->sim.plinkgrplist = gpu->linkgrplist->_pDevData;
@@ -14771,7 +15314,7 @@ index c507bc2..69b1901 100644
    gpu->sim.pImageGrplist = gpu->ImageGrplist->_pDevData;
    gpu->sim.pImageIndexPHMD = gpu->ImageIndexPHMD->_pDevData;
    gpu->sim.pImageIndexPHMD2 = gpu->sim.pImageIndexPHMD + gpu->sim.paddedNumberOfAtoms;
-@@ -2379,6 +2497,198 @@ extern "C" void gpu_download_phmd_theta_(double ph_theta[], double dph_theta[],
+@@ -2379,6 +2501,198 @@ extern "C" void gpu_download_phmd_theta_(double ph_theta[], double dph_theta[],
    }
  }
  
@@ -14970,7 +15513,7 @@ index c507bc2..69b1901 100644
  //---------------------------------------------------------------------------------------------
  // gpu_upload_charges_: upload the charges for atoms in the simulation.
  //
-@@ -2437,50 +2747,64 @@ extern "C" void gpu_upload_charges_pme_cph_(double charge[])
+@@ -2437,50 +2751,64 @@ extern "C" void gpu_upload_charges_pme_cph_(double charge[])
    PRINTMETHOD("gpu_upload_charges_pme_cph");
  
    FloatShift ljid;
@@ -15040,7 +15583,7 @@ index c507bc2..69b1901 100644
  //---------------------------------------------------------------------------------------------
  // gpu_upload_charges_gb_cph_: this routine is a method for uploading charges in constant PH
  //                             (implicit or explicit solvent) and GB simulations.
-@@ -4481,7 +4805,7 @@ static void DetectLennardJonesPotentials(int ico[], double cn1[], double cn2[],
+@@ -4481,7 +4809,7 @@ static void DetectLennardJonesPotentials(int ico[], double cn1[], double cn2[],
        r4arr.map[0][i*4-1] = cn8[i] / 81.0;
      }
    }
@@ -15049,7 +15592,7 @@ index c507bc2..69b1901 100644
    // Loop over both matrices and detect whether any atom types experience non-zero
    // potentials in the presence of any others.
    unsigned int T1 = 0;
-@@ -4606,8 +4930,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
+@@ -4606,8 +4934,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
    gpu->sim.LJOffset = (*ntypes + 1) * (*ntypes + 1);
    gpu->sim.LJTerms  = gpu->sim.LJOffset * LJMultiplier + *C4Pairwise*4; //C4PairwiseCUDA2023
    gpu->pbLJTerm     = new GpuBuffer<PMEFloat2>(gpu->sim.LJTerms);
@@ -15060,7 +15603,7 @@ index c507bc2..69b1901 100644
      for (j = 1; j <= i; j++) {
        int pos = ico[*ntypes * (i - 1) + j - 1] - 1;
        int o1  = (i * gpu->sim.LJTypes) + j;
-@@ -4670,7 +4994,7 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
+@@ -4670,7 +4998,7 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
        gpu->pbLJTerm->_pSysData[oooffset+k*4-1].x = cn8[k];
      }
    }
@@ -15069,7 +15612,7 @@ index c507bc2..69b1901 100644
  
    gpu->pbLJTerm->Upload();
    gpu->sim.pLJTerm = gpu->pbLJTerm->_pDevData;
-@@ -4831,8 +5155,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
+@@ -4831,8 +5159,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
    }
    // C4PairwiseCUDA2023
    if (*lj1264 == 0 && *plj1264 == 1) {
@@ -15080,7 +15623,7 @@ index c507bc2..69b1901 100644
      int* typcounts = (int*)calloc(*ntypes, sizeof(int));
      for (i = 0; i < gpu->sim.atoms; i++) {
        typcounts[iac[i] - 1] += 1;
-@@ -4854,8 +5178,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
+@@ -4854,8 +5182,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
          totcov += r4intr.map[i][j];
        }
      }
@@ -15091,7 +15634,7 @@ index c507bc2..69b1901 100644
      int nacc = 0;
      int* r4list = (int*)malloc((*ntypes) * sizeof(int));
      int nlist = 0;
-@@ -4896,8 +5220,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
+@@ -4896,8 +5224,8 @@ extern "C" void gpu_nb14_setup_(int *nb14_cnt, int cit_nb14[][3], double gbl_one
          r4intr.map[tbest][i] = 0;
        }
      }
@@ -15102,7 +15645,7 @@ index c507bc2..69b1901 100644
      int nR4 = 0;
      for (i = 0; i < nlist; i++) {
        for (j = 0; j < gpu->sim.atoms; j++) {
-@@ -5360,6 +5684,61 @@ extern "C" void gpu_constraints_setup_(int* natc, int* atm_jrc, double* atm_weig
+@@ -5360,6 +5688,94 @@ extern "C" void gpu_constraints_setup_(int* natc, int* atm_jrc, double* atm_weig
    gpuCopyConstants();
  }
  
@@ -15119,6 +15662,13 @@ index c507bc2..69b1901 100644
 +//   2: restraint GPU buffer is not initialized
 +//   3: simulation/buffer restraint-count mismatch
 +//---------------------------------------------------------------------------------------------
++// GPU-only stiffness update, implemented in kForcesUpdate.cu.  The CUDA
++// barostat owns the current device reference coordinates: never overwrite them
++// with the potentially stale host shadow during an AREX stiffness update.
++extern "C" cudaError_t gpu_arex_set_constraint_stiffness_cuda(
++    int n, PMEDouble k, PMEDouble2* master,
++    const unsigned int* packed_index, PMEDouble2* packed);
++
 +extern "C" void gpu_constraints_update_weights_(int* natc, double* atm_weight,
 +                                                int* ierr)
 +{
@@ -15152,19 +15702,45 @@ index c507bc2..69b1901 100644
 +    return;
 +  }
 +
-+  for (int i = 0; i < constraints; i++) {
-+    gpu->pbConstraint1->_pSysData[i].x = atm_weight[i];
++  // Both representations must exist.  The packed representation is what
++  // kBWU_cnst.h actually uses to compute positional-restraint forces.
++  if (gpu->pbBondWorkUnitUINT == NULL ||
++      gpu->pbBondWorkUnitDBL2 == NULL ||
++      gpu->sim.pBwuCnstUpdateIdx == NULL ||
++      gpu->sim.pBwuCnst == NULL) {
++    *ierr = 2;
++    return;
 +  }
 +
-+  // Upload both components of pbConstraint1. The reference-coordinate y
-+  // components remain unchanged in the existing host shadow.
-+  gpu->pbConstraint1->Upload();
++  // The AREX scheduler guarantees uniform weights for this call.
++  const PMEDouble k = static_cast<PMEDouble>(atm_weight[0]);
++
++  // One launch per *force change*, never on a normal MD timestep.
++  // Alter only .x (stiffness) in both GPU representations, preserving all
++  // device-adjusted reference coordinates (.y and pConstraint2).
++  cudaError_t status = gpu_arex_set_constraint_stiffness_cuda(
++      constraints, k,
++      gpu->pbConstraint1->_pDevData,
++      gpu->sim.pBwuCnstUpdateIdx,
++      gpu->sim.pBwuCnst);
++  RTERROR(status, "AREX restraint stiffness kernel launch failed");
++
++  // Preserve completed-on-return behavior of the old synchronous Upload().
++  // This is at the infrequent schedule boundary, NOT in the MD hot path.
++  status = cudaStreamSynchronize(0);
++  RTERROR(status, "AREX restraint stiffness kernel execution failed");
++
++  // bondRemap.cpp repacks from this master host shadow.  Update the host
++  // stiffness but NEVER upload its stale reference-coordinate component.
++  for (int i = 0; i < constraints; ++i) {
++    gpu->pbConstraint1->_pSysData[i].x = atm_weight[i];
++  }
 +}
 +
  //---------------------------------------------------------------------------------------------
  // gpu_angles_ub_setup_: setup for Urey-Bradley angles on the GPU
  //
-@@ -6482,7 +6861,7 @@ extern "C" void gpu_create_outputbuffers_()
+@@ -6482,7 +6898,7 @@ extern "C" void gpu_create_outputbuffers_()
      gpu->sim.pAFEKineticEnergy = gpu->pbAFEKineticEnergyBuffer->_pDevData;
    }
  
@@ -15173,7 +15749,7 @@ index c507bc2..69b1901 100644
   // Calculate offsets
    gpu->sim.bondOffset = (((gpu->sim.bonds +
                             (gpu->sim.grid - 1)) >> gpu->sim.gridBits) << gpu->sim.gridBits);
-@@ -6764,8 +7143,13 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
+@@ -6764,8 +7180,13 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
    delete gpu->pbNLExclusionList;
    delete gpu->pbNLExclusionStartCount;
    delete gpu->pbNLAtomList;
@@ -15187,7 +15763,7 @@ index c507bc2..69b1901 100644
    delete gpu->pbFinishedBlocksCounters;
    delete gpu->pbKernelCompletionFlags;
    delete gpu->pbNLbSkinTestFail;
-@@ -7318,6 +7702,10 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
+@@ -7318,6 +7739,10 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
    gpu->sim.NLMaxEntries           = NLMaxEntries;
    gpu->pbNLRecord                 = new GpuBuffer<NLRecord>(NLRecords);
    gpu->pbNLEntry                  = new GpuBuffer<NLEntry>(NLMaxEntries);
@@ -15198,7 +15774,7 @@ index c507bc2..69b1901 100644
    gpu->sim.NLYDivisor             = yDivisor;
    gpu->sim.NLXEntryWidth          = xEntryWidth;
  
-@@ -7332,6 +7720,11 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
+@@ -7332,6 +7757,11 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
    NLRecord* pNLRecord             = gpu->pbNLRecord->_pSysData;
    gpu->sim.pNLRecord              = gpu->pbNLRecord->_pDevData;
    gpu->sim.pNLEntry               = gpu->pbNLEntry->_pDevData;
@@ -15210,7 +15786,7 @@ index c507bc2..69b1901 100644
    NLRecords                       = 0;
  
    // Build Neighbor list records from raw neighbor cell data
-@@ -7368,7 +7761,10 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
+@@ -7368,7 +7798,10 @@ extern "C" void gpu_neighbor_list_setup_(int numex[], int natex[], double *vdw_c
                                  offsetPerWarp;
    gpu->pbNLAtomList         = new GpuBuffer<unsigned int>(maxTotalOffset,
                                                            bShadowedOutputBuffers);
@@ -15221,7 +15797,7 @@ index c507bc2..69b1901 100644
    gpu->sim.NLMaxTotalOffset = maxTotalOffset;
    gpu->sim.NLOffsetPerWarp  = offsetPerWarp;
    gpu->pbNLTotalOffset      = new GpuBuffer<unsigned int>(1);
-@@ -7942,6 +8338,12 @@ extern "C" void gpu_build_neighbor_list_()
+@@ -7942,6 +8375,12 @@ extern "C" void gpu_build_neighbor_list_()
      gpuCopyConstants();
      kNLCalculateCellCoordinates(gpu);
      kNLBuildNeighborList(gpu);
@@ -15234,7 +15810,7 @@ index c507bc2..69b1901 100644
      kNLRemapLocalInteractions(gpu);
      kNLRemapBondWorkUnits(gpu);
  #ifdef MPI
-@@ -9320,7 +9722,7 @@ extern "C" void gpu_grad_sum_()
+@@ -9320,7 +9759,7 @@ extern "C" void gpu_grad_sum_()
  //   ene:         self energy of each charge
  //   factor:      factor for computing self contribution to dph/dlambda if iphmd=3
  //   vol:         unit cell volume for computing self contribution to dph/dlambda if iphmd=3
@@ -15243,7 +15819,21 @@ index c507bc2..69b1901 100644
  //---------------------------------------------------------------------------------------------
  extern "C" void gpu_self_(double* ee_plasma, double* ene, double* factor, double* vol, double* ewaldcof)
  {
-@@ -11407,7 +11809,7 @@ extern "C" void gpu_final_setup_()
+@@ -10846,6 +11285,13 @@ extern "C" void gpu_ucell_set_(double ucell[3][3], double recip[3][3], double* u
+     }
+     // Recalculate COM of everything to ensure correct virial.
+     kCalculateCOM(gpu);
++
++    // AREX restores a replica's box without doing a pressure-scale move.
++    // Rebuild device master and packed positional-restraint reference
++    // coordinates for the restored cell, just as gpu_pressure_scale_ does.
++    if (gpu->sim.constraints > 0) {
++      kPressureScaleConstraintCoordinates(gpu);
++    }
+   }
+ }
+ 
+@@ -11407,7 +11853,7 @@ extern "C" void gpu_final_setup_()
  extern "C" void gpu_update_phmd_(double* dtx)
  {
    kUpdatePHMD(*dtx, gpu);
@@ -15252,7 +15842,7 @@ index c507bc2..69b1901 100644
  }
  //---------------------------------------------------------------------------------------------
  // gpu_update_: update critical parameters for Langevin thermostating
-@@ -11485,7 +11887,7 @@ PRINTMETHOD("gpu_sgld_setup");
+@@ -11485,7 +11931,7 @@ PRINTMETHOD("gpu_sgld_setup");
      gpu->sim.tsgset                                 = *tsgset;
      gpu->sim.sgmsum                                 = *sgmsum;
  
@@ -15261,7 +15851,7 @@ index c507bc2..69b1901 100644
      delete gpu->pbSGLDAverageBuffer;
  
       //  Allocate SGLD  buffer
-@@ -11590,13 +11992,13 @@ PRINTMETHOD("gpu_sgld_setup");
+@@ -11590,13 +12036,13 @@ PRINTMETHOD("gpu_sgld_setup");
      }
      else
      {
@@ -15280,7 +15870,7 @@ index c507bc2..69b1901 100644
  
          gpu->pbWsg                          = new GpuBuffer<int>(gpu->sim.stride);
          gpu->pbX0sg                         = new GpuBuffer<double>(gpu->sim.stride3);
-@@ -11646,7 +12048,7 @@ PRINTMETHOD("gpu_sgld_setup");
+@@ -11646,7 +12092,7 @@ PRINTMETHOD("gpu_sgld_setup");
          gpu->pbRsg->Upload();
          gpu->pbFPsg->Upload();
          gpu->pbPPsg->Upload();
@@ -15289,7 +15879,7 @@ index c507bc2..69b1901 100644
  
      gpuCopyConstants();
  
-@@ -11670,18 +12072,18 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
+@@ -11670,18 +12116,18 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
  
       double tsgfac =gpu->sim.sgavg/(*dt)/20.455;
       kCalculateSGLDaverages(gpu, *dt);
@@ -15313,7 +15903,7 @@ index c507bc2..69b1901 100644
      for (int i = 0; i < gpu->blocks; i++)
      {
          E[0]                                   += gpu->pbSGLDAverageBuffer->_pSysData[i].SGLDavg.EKT;
-@@ -11698,7 +12100,7 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
+@@ -11698,7 +12144,7 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
          E[11]                                   += gpu->pbSGLDAverageBuffer->_pSysData[i].SGLDavg.COM2SG[2];
      }
  
@@ -15322,7 +15912,7 @@ index c507bc2..69b1901 100644
      double sgavp0=1.0-gpu->sim.sgavp;
      double tempt = gpu->sim.tsgset;
      *templf=sgavp0*(*templf)+ gpu->sim.sgavp*(PMEDouble)E[1]*gpu->sim.tsgset/(PMEDouble)E[0];           // templfi=eksg/sgrndf/botz;
-@@ -11713,7 +12115,7 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
+@@ -11713,7 +12159,7 @@ PRINTMETHOD("gpu_calculate_SGLD_averages");
      com2[0]=E[9]/(double)(gpu->sim.sgmsum);                // COM;
      com2[1]=E[10]/(double)(gpu->sim.sgmsum);                // COM;
      com2[2]=E[11]/(double)(gpu->sim.sgmsum);                // COM;
@@ -15331,7 +15921,7 @@ index c507bc2..69b1901 100644
  }
  
  //---------------------------------------------------------------------------------------------
-@@ -11810,7 +12212,7 @@ extern "C" void gpu_download_sgld_(int sgatoms[],double avgx0[][3],double avgx1[
+@@ -11810,7 +12256,7 @@ extern "C" void gpu_download_sgld_(int sgatoms[],double avgx0[][3],double avgx1[
        sgfps[i] = gpu->pbFPsg->_pSysData[i];
        sgpps[i] = gpu->pbPPsg->_pSysData[i];
      }
@@ -15340,7 +15930,7 @@ index c507bc2..69b1901 100644
  }
  
  //---------------------------------------------------------------------------------------------
-@@ -11900,7 +12302,7 @@ extern "C" void gpu_upload_sgld_(int sgatoms[],double avgx0[][3],double avgx1[][
+@@ -11900,7 +12346,7 @@ extern "C" void gpu_upload_sgld_(int sgatoms[],double avgx0[][3],double avgx1[][
        gpu->pbRsg->_pSysData[i + gpu->sim.stride2]= avgr[i][2];
        gpu->pbFPsg->_pSysData[i] = sgfps[i];
        gpu->pbPPsg->_pSysData[i] = sgpps[i];
@@ -15349,7 +15939,7 @@ index c507bc2..69b1901 100644
      gpu->pbWsg->Upload();
      gpu->pbX0sg->Upload();
      gpu->pbX1sg->Upload();
-@@ -11908,15 +12310,15 @@ extern "C" void gpu_upload_sgld_(int sgatoms[],double avgx0[][3],double avgx1[][
+@@ -11908,15 +12354,15 @@ extern "C" void gpu_upload_sgld_(int sgatoms[],double avgx0[][3],double avgx1[][
      gpu->pbRsg->Upload();
      gpu->pbFPsg->Upload();
      gpu->pbPPsg->Upload();
@@ -15403,6 +15993,18 @@ index c3f9fd3..22dce18 100644
  extern "C" void gpu_update_phmd_(double* dtx);
  void cpu_kRandomPHMD(gpuContext gpu);
  // void kCalculateGBNonbondPHMD(gpuContext gpu);
+diff --git a/src/pmemd/src/cuda/kCalculateLocalForces.cu b/src/pmemd/src/cuda/kCalculateLocalForces.cu
+index d07291a..52d5906 100644
+--- a/src/pmemd/src/cuda/kCalculateLocalForces.cu
++++ b/src/pmemd/src/cuda/kCalculateLocalForces.cu
+@@ -135,6 +135,7 @@ kExecBondWorkUnitsNrgNL_kernel(int NMRnstep)
+ #undef LOCAL_ENERGY
+ 
+ //---------------------------------------------------------------------------------------------
++#define LOCAL_ENERGY
+ #define PHMD
+ __global__ void
+ __launch_bounds__(BOND_WORK_UNIT_THREADS_PER_BLOCK, BOND_WORK_UNIT_BLOCKS_MULTIPLIER)
 diff --git a/src/pmemd/src/cuda/kCalculatePMENonbondEnergy.cu b/src/pmemd/src/cuda/kCalculatePMENonbondEnergy.cu
 index 2308240..a68749a 100644
 --- a/src/pmemd/src/cuda/kCalculatePMENonbondEnergy.cu
@@ -19551,10 +20153,49 @@ index 2308240..a68749a 100644
            else {
              if (gpu->sim.is_orthog) {
 diff --git a/src/pmemd/src/cuda/kForcesUpdate.cu b/src/pmemd/src/cuda/kForcesUpdate.cu
-index abb0cc3..6f604aa 100644
+index abb0cc3..6550ba1 100644
 --- a/src/pmemd/src/cuda/kForcesUpdate.cu
 +++ b/src/pmemd/src/cuda/kForcesUpdate.cu
-@@ -133,7 +133,7 @@ kModelForces_PHMD_kernel()
+@@ -22,6 +22,38 @@
+ #include "simulationConst.h"
+ CSIM_STO simulationConst cSim;
+ 
++// AREX-only positional-restraint stiffness update.  The main MD kernels,
++// work-unit layout, and dynamically scaled reference coordinates are unchanged.
++__global__ void kArexSetConstraintStiffness_kernel(
++    const int n, const PMEDouble k,
++    PMEDouble2* const master,
++    const unsigned int* const packed_index,
++    PMEDouble2* const packed)
++{
++  const unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
++  if (i >= static_cast<unsigned int>(n)) return;
++
++  // A field-only store cannot overwrite an NPT/recentering-adjusted reference.
++  master[i].x = k;
++  packed[packed_index[i]].x = k;
++}
++
++// This entry point is intentionally implemented in a .cu translation unit;
++// the original gpu.cpp is a host C++ translation unit.
++extern "C" cudaError_t gpu_arex_set_constraint_stiffness_cuda(
++    int n, PMEDouble k, PMEDouble2* master,
++    const unsigned int* packed_index, PMEDouble2* packed)
++{
++  if (n <= 0 || master == NULL || packed_index == NULL || packed == NULL)
++    return cudaErrorInvalidValue;
++
++  const int threads = 256;
++  const int blocks = (n + threads - 1) / threads;
++  kArexSetConstraintStiffness_kernel<<<blocks, threads>>>(
++      n, k, master, packed_index, packed);
++  return cudaGetLastError();
++}
++
+ #if !defined(__HIPCC_RDC__)
+ 
+ //---------------------------------------------------------------------------------------------
+@@ -133,7 +165,7 @@ kModelForces_PHMD_kernel()
        lambda *= lambda;
        dph_theta = cSim.ppark[pos] + (0.5 - lambda) * 8.0 * cSim.pbarr[pos] -
                    2.0 * cSim.ppara[pos] * ( lambda - cSim.pparb[pos] );
@@ -19563,7 +20204,7 @@ index abb0cc3..6f604aa 100644
                   cSim.ppara[pos] * ( lambda - cSim.pparb[pos] ) *
                   ( lambda - cSim.pparb[pos] ) -
                   4.0 * cSim.pbarr[pos] * ( 0.5 - lambda ) * ( 0.5 - lambda );
-@@ -748,8 +748,18 @@ kNLNTPLangevinUpdate_kernel(PMEDouble dt, PMEDouble temp0, PMEDouble gamma_ln, i
+@@ -748,8 +780,18 @@ kNLNTPLangevinUpdate_kernel(PMEDouble dt, PMEDouble temp0, PMEDouble gamma_ln, i
  __global__ void
  kUpdateForces_PHMDNL_kernel()
  {
@@ -19583,7 +20224,7 @@ index abb0cc3..6f604aa 100644
    int atmX, lowerbound, upperbound, patmX;
    if(restype == 0 || restype == 1 || restype == 3) {
      lowerbound = cSim.presbounds[pos].x - 1;
-@@ -773,8 +783,18 @@ kUpdateForces_PHMDNL_kernel()
+@@ -773,8 +815,18 @@ kUpdateForces_PHMDNL_kernel()
  __global__ void
  kUpdateForces_PHMD_kernel()
  {
@@ -19603,7 +20244,7 @@ index abb0cc3..6f604aa 100644
    int atmX, lowerbound, upperbound, patmX;
    if(restype == 0 || restype == 1 || restype == 3) {
      lowerbound = cSim.presbounds[pos].x - 1;
-@@ -793,11 +813,23 @@ kUpdateForces_PHMD_kernel()
+@@ -793,11 +845,23 @@ kUpdateForces_PHMD_kernel()
      }
    }
  }
@@ -19628,7 +20269,7 @@ index abb0cc3..6f604aa 100644
    PMEFloat gam = 0.0488882 * cSim.phbeta * dtx;
    PMEFloat mass = cSim.qmass_phmd;
    PMEFloat rfd = sqrt(2.0 * mass * gam * kbt) / dtx;
-@@ -823,6 +855,88 @@ kLangevinUpdatePHMD_kernel(PMEDouble dtx, int rpos)
+@@ -823,6 +887,88 @@ kLangevinUpdatePHMD_kernel(PMEDouble dtx, int rpos)
    cSim.pvph_theta[pos] = pvph_theta;
  }
  
@@ -19717,7 +20358,7 @@ index abb0cc3..6f604aa 100644
  //---------------------------------------------------------------------------------------------
  // kChargeUpdatePHMD_kernel: kernel to update phmd charges.
  //
-@@ -846,7 +960,7 @@ kChargeUpdatePHMD_kernel()
+@@ -846,7 +992,7 @@ kChargeUpdatePHMD_kernel()
      if( i < cSim.presbounds[rpos].y ) {
        qprot = x2 * cSim.pqstate1[i].x + ( 1.0 - x2 ) * cSim.pqstate1[i].y;
        qunprot = x2 * cSim.pqstate2[i].x + ( 1.0 - x2 ) * cSim.pqstate2[i].y;
@@ -19726,7 +20367,7 @@ index abb0cc3..6f604aa 100644
        qprot = x2 * cSim.pqstate1_md[i].x + ( 1.0 - x2 ) * cSim.pqstate1_md[i].y;
        qunprot = x2 * cSim.pqstate2_md[i].x + ( 1.0 - x2 ) * cSim.pqstate2_md[i].y;
        double charge = ( 1.0 - x1 ) * qprot + x1 * qunprot;
-@@ -888,7 +1002,7 @@ kChargeUpdatePHMDNL_kernel()
+@@ -888,7 +1034,7 @@ kChargeUpdatePHMDNL_kernel()
          else {
            x1 = sin(cSim.pph_theta[k]);
            x1 *= x1;
@@ -19735,7 +20376,7 @@ index abb0cc3..6f604aa 100644
          }
          cSim.pcharge_phmd[pos + i] = charge;
          cSim.pImageCharge_phmd[atmx] = charge;
-@@ -901,6 +1015,371 @@ kChargeUpdatePHMDNL_kernel()
+@@ -901,6 +1047,371 @@ kChargeUpdatePHMDNL_kernel()
    }
  }
  
@@ -20107,7 +20748,7 @@ index abb0cc3..6f604aa 100644
  //---------------------------------------------------------------------------------------------
  // kUpdatePHMD: launch kernel to update titration forces.
  //
-@@ -919,23 +1398,32 @@ void kUpdatePHMD(PMEDouble dtx, gpuContext gpu)
+@@ -919,23 +1430,32 @@ void kUpdatePHMD(PMEDouble dtx, gpuContext gpu)
      }
      gpu->randomCounterPHMD = 0;
    }
@@ -20154,7 +20795,7 @@ index abb0cc3..6f604aa 100644
    }
    cudaDeviceSynchronize();
    gpu->randomCounterPHMD++;
-@@ -954,7 +1442,7 @@ void kUpdateForces_PHMD(gpuContext gpu)
+@@ -954,7 +1474,7 @@ void kUpdateForces_PHMD(gpuContext gpu)
    else {
      kUpdateForces_PHMD_kernel<<<1,gpu->sim.phmd_padded_ntitr>>>();
    }
@@ -20163,7 +20804,7 @@ index abb0cc3..6f604aa 100644
  }
  //---------------------------------------------------------------------------------------------
  // kUpdate: launch the appropriate kernel to update forces.
-@@ -1021,7 +1509,7 @@ void kUpdate(gpuContext gpu, PMEDouble dt, PMEDouble temp0, PMEDouble gamma_ln)
+@@ -1021,7 +1541,7 @@ void kUpdate(gpuContext gpu, PMEDouble dt, PMEDouble temp0, PMEDouble gamma_ln)
  
  
  //---------------------------------------------------------------------------------------------
@@ -20172,7 +20813,7 @@ index abb0cc3..6f604aa 100644
  //---------------------------------------------------------------------------------------------
  #define UPDATE_SGLD
  
-@@ -2776,12 +3264,12 @@ kCalculateSGLDaverages_kernel(double dt)
+@@ -2776,12 +3296,12 @@ kCalculateSGLDaverages_kernel(double dt)
      y2sg         += mass * y2;
      z2sg         += mass * z2;
      }
@@ -20188,7 +20829,7 @@ index abb0cc3..6f604aa 100644
    sG[threadIdx.x].SGLDavg.EKT   = ekt;
    sG[threadIdx.x].SGLDavg.EKSG  = eksg;
    sG[threadIdx.x].SGLDavg.GAMSG = sumgam;
-@@ -2914,11 +3402,11 @@ kPMECalculateSGLDaverages_kernel(double dt)
+@@ -2914,11 +3434,11 @@ kPMECalculateSGLDaverages_kernel(double dt)
      z2sg         += mass * z2;
      }
      pos          += blockDim.x * gridDim.x;
@@ -20202,7 +20843,7 @@ index abb0cc3..6f604aa 100644
    sG[threadIdx.x].SGLDavg.EKT   = ekt;
    sG[threadIdx.x].SGLDavg.EKSG  = eksg;
    sG[threadIdx.x].SGLDavg.GAMSG = sumgam;
-@@ -3170,7 +3658,7 @@ kPersistentAddAccumulators_kernel(PMEAccumulator* buffer,
+@@ -3170,7 +3690,7 @@ kPersistentAddAccumulators_kernel(PMEAccumulator* buffer,
    }
  }
  
@@ -25052,14 +25693,17 @@ index 29a0fc3..96932df 100644
    integer, parameter    :: decomp_unit   = 48
  ! Flags to allow certain risky simulations
 diff --git a/src/pmemd/src/get_cmdline.F90 b/src/pmemd/src/get_cmdline.F90
-index cefcabc..8f90ea7 100644
+index cefcabc..8e38af9 100644
 --- a/src/pmemd/src/get_cmdline.F90
 +++ b/src/pmemd/src/get_cmdline.F90
-@@ -10,11 +10,20 @@
+@@ -10,11 +10,40 @@
  
  module get_cmdline_mod
  
 +  use file_io_dat_mod, only : max_fn_len
++#ifdef MPI
++  use, intrinsic :: iso_c_binding, only : c_int, c_char, c_null_char
++#endif
 +
    implicit none
  
@@ -25072,11 +25716,28 @@ index cefcabc..8f90ea7 100644
 +  ! modules compiled in multiple build variants can import a stable interface.
 +  logical, save, public :: arexrst_specified = .false.
 +  character(len=max_fn_len), save, public :: arexrst_name = ''
++  logical, save, public :: arex_append = .false.
++  logical, save, public :: arex_outdir_specified = .false.
++  character(len=max_fn_len), save, public :: arex_outdir_name = ''
++  character(len=max_fn_len), save, public :: arex_output_directory = ''
++  character(len=max_fn_len), save, public :: arex_checkpoint_output_name = 'arex.chk'
++  integer, save, public :: arex_continuation_part = 0
++
++#ifdef MPI
++  ! Atomic POSIX mkdir avoids shell expansion and protects against -O collisions.
++  interface
++    integer(c_int) function arex_c_mkdir(path, mode) bind(C, name='mkdir')
++      import :: c_int, c_char
++      character(kind=c_char), intent(in) :: path(*)
++      integer(c_int), value :: mode
++    end function arex_c_mkdir
++  end interface
++#endif
 +
  #ifdef MPI
    public get_cmdline_bcast
  #endif /* MPI */
-@@ -129,7 +138,7 @@ subroutine get_cmdline(terminal_flag)
+@@ -129,7 +158,7 @@ subroutine get_cmdline(terminal_flag)
    !! end
    logical       :: scaledMDlog_specified
    logical       :: always_apply_suffix
@@ -25085,7 +25746,7 @@ index cefcabc..8f90ea7 100644
    integer       :: suffix_len
  
    mdout_specified = .false.
-@@ -156,8 +165,11 @@ subroutine get_cmdline(terminal_flag)
+@@ -156,8 +185,17 @@ subroutine get_cmdline(terminal_flag)
    scaledMDlog_specified = .false.
    always_apply_suffix = .false.
  
@@ -25093,12 +25754,18 @@ index cefcabc..8f90ea7 100644
 +  ! Reset AREX continuation command-line state on every parse.
 +  arexrst_specified = .false.
 +  arexrst_name = ''
++  arex_append = .false.
++  arex_outdir_specified = .false.
++  arex_outdir_name = ''
++  arex_output_directory = ''
++  arex_checkpoint_output_name = 'arex.chk'
++  arex_continuation_part = 0
  
 +! Default file names:
    mdin_name   = 'mdin'
    mdout_name  = 'mdout'
    inpcrd_name = 'inpcrd'
-@@ -182,9 +194,9 @@ subroutine get_cmdline(terminal_flag)
+@@ -182,9 +220,9 @@ subroutine get_cmdline(terminal_flag)
  ! PHMD
    phmdin_name = 'phmdin'
    phmdout_name = 'phmdout'
@@ -25110,7 +25777,7 @@ index cefcabc..8f90ea7 100644
  #ifdef TIDECOMP
    decomp_name = 'decomp.log'
  #endif
-@@ -290,6 +302,22 @@ subroutine get_cmdline(terminal_flag)
+@@ -290,6 +328,36 @@ subroutine get_cmdline(terminal_flag)
      outfile_suffix_specified = .true.
    else if (arg .eq. '-AllowSmallBox') then
      smbx_permit = 1
@@ -25128,12 +25795,26 @@ index cefcabc..8f90ea7 100644
 +    iarg = iarg + 1
 +    call getarg_wrap(iarg, arexrst_name)
 +    arexrst_specified = .true.
++  else if (arg .eq. '-arex_append') then
++    if (in_groupfile) then
++      write(0, '(a)') '-arex_append is not valid in a groupfile'
++      call mexit(6, 1)
++    end if
++    arex_append = .true.
++  else if (arg .eq. '-arex_outdir') then
++    if (in_groupfile) then
++      write(0, '(a)') '-arex_outdir is not valid in a groupfile'
++      call mexit(6, 1)
++    end if
++    iarg = iarg + 1
++    call getarg_wrap(iarg, arex_outdir_name)
++    arex_outdir_specified = .true.
 +#endif
 +
    ! PHMD
    else if (arg .eq. '-phmdin') then
      iarg = iarg + 1
-@@ -299,10 +327,10 @@ subroutine get_cmdline(terminal_flag)
+@@ -299,10 +367,10 @@ subroutine get_cmdline(terminal_flag)
      call getarg_wrap(iarg, phmdout_name)
    else if (arg .eq. '-phmdrestrt') then
      iarg = iarg + 1
@@ -25146,7 +25827,7 @@ index cefcabc..8f90ea7 100644
    else if (arg .eq. '-phmdparm') then
      iarg = iarg + 1
      call getarg_wrap(iarg, phmdparm_name)
-@@ -359,7 +387,7 @@ subroutine get_cmdline(terminal_flag)
+@@ -359,7 +427,7 @@ subroutine get_cmdline(terminal_flag)
      iarg = iarg + 1
      call getarg_wrap(iarg, scaledMDlog_name)
      scaledMDlog_specified = .true.
@@ -25155,7 +25836,7 @@ index cefcabc..8f90ea7 100644
    else if (arg .eq. '-sams_init') then
      iarg = iarg + 1
      call getarg_wrap(iarg, sams_init_name)
-@@ -382,7 +410,7 @@ subroutine get_cmdline(terminal_flag)
+@@ -382,7 +450,7 @@ subroutine get_cmdline(terminal_flag)
      call getarg_wrap(iarg, reservoir_name(1))
    else if (arg .eq. '-reservoir2') then
      iarg = iarg + 1
@@ -25164,21 +25845,163 @@ index cefcabc..8f90ea7 100644
  
    else if (arg .eq. '-help' .or. arg .eq. '--help' .or. arg .eq. '-H') then
  #ifdef MPI
-@@ -538,6 +566,7 @@ subroutine get_cmdline(terminal_flag)
+@@ -532,12 +600,16 @@ subroutine get_cmdline(terminal_flag)
+       call add_suffix(scaledMDlog_name, outfile_suffix, suffix_len)
+   end if
+ 
++#ifdef MPI
++  call arex_prepare_continuation_paths()
++#endif
+   return
+ #ifdef MPI
+ 9000 format(/, 2x, &
        'usage: pmemd  [-O] -i mdin -o mdout -p prmtop -c inpcrd -r restrt', &
        /14x, '[-ref refc -x mdcrd -v mdvel -frc mdfrc -e mden &
               &-inf mdinfo -l logfile]', &
-+      /14x, '[-arexrst arex_checkpoint_file]', &
++      /14x, '[-arexrst checkpoint] [-arex_append] [-arex_outdir directory]', &
        /14x, '[-ng numgroups -groupfile groupfile -rem remd_method]', &
        /14x, '[-rremd rremd_type -reservoir reservoir.nc]', &
        /14x, '[-hybridsolvent_remd_traj hybridsolvent_remd_traj_name]', &
-@@ -702,6 +731,10 @@ subroutine get_cmdline_bcast()
+@@ -685,6 +757,127 @@ subroutine getarg_wrap(iarg, arg)
+ end subroutine getarg_wrap
+ 
+ 
++
++#ifdef MPI
++! Only the world scheduler (rank zero) creates the output directory. Worker
++! masters independently parse the same command line, after MPI setup has
++! returned from rank zero; they rebase names but must not mkdir it again.
++subroutine arex_prepare_continuation_paths()
++  use file_io_dat_mod
++  use parallel_dat_mod, only : worldrank
++  use pmemd_lib_mod, only : mexit
++  implicit none
++  integer :: ios, u, fmt_version, prior_part, status_mkdir
++  character(len=32) :: magic
++  character(len=256) :: discarded
++  character(len=32) :: part_label
++
++  if (.not. arexrst_specified) then
++    if (arex_append .or. arex_outdir_specified) then
++      write(0,'(a)') 'AREX: -arex_append/-arex_outdir require -arexrst'
++      call mexit(6,1)
++    end if
++    return
++  end if
++  if (len_trim(arexrst_name) == 0) then
++    write(0,'(a)') 'AREX: empty -arexrst checkpoint filename'
++    call mexit(6,1)
++  end if
++  if (arex_append .and. arex_outdir_specified) then
++    write(0,'(a)') 'AREX: -arex_append cannot be combined with -arex_outdir'
++    call mexit(6,1)
++  end if
++  ! Fixed-format header prefix shared by checkpoints v8 and v9.
++  magic = ''
++  fmt_version = -1
++  prior_part = 0
++  open(newunit=u, file=trim(arexrst_name), status='old', action='read', iostat=ios)
++  if (ios /= 0) then
++    write(0,'(a)') 'AREX: cannot open source checkpoint: ' // trim(arexrst_name)
++    call mexit(6,1)
++  end if
++  read(u,'(a)',iostat=ios) magic
++  if (ios == 0) read(u,*,iostat=ios) fmt_version
++  if (ios == 0) read(u,'(a)',iostat=ios) discarded  ! payload name
++  if (ios == 0) read(u,'(a)',iostat=ios) discarded  ! dimensions
++  if (ios == 0) read(u,'(a)',iostat=ios) discarded  ! warmup progress
++  if (ios == 0) read(u,'(a)',iostat=ios) discarded  ! next replica UID
++  if (ios == 0) read(u,'(a)',iostat=ios) discarded  ! history generation
++  prior_part = 0
++  if (ios == 0 .and. fmt_version == 9) read(u,*,iostat=ios) prior_part
++  close(u)
++  if (ios /= 0 .or. trim(magic) /= 'AREX_RST' .or. &
++      (fmt_version /= 8 .and. fmt_version /= 9) .or. &
++      prior_part < 0 .or. prior_part >= 9999) then
++    write(0,'(a)') 'AREX: invalid/unsupported checkpoint header or continuation part'
++    call mexit(6,1)
++  end if
++  if (arex_append) then
++    arex_continuation_part = prior_part
++    arex_checkpoint_output_name = arexrst_name
++    return
++  end if
++  arex_continuation_part = prior_part + 1
++  if (arex_outdir_specified) then
++    arex_output_directory = trim(arex_outdir_name)
++  else
++    write(part_label,'("cont",i4.4)') arex_continuation_part
++    arex_output_directory = part_label
++  end if
++  if (len_trim(arex_output_directory) == 0 .or. &
++      len_trim(arex_output_directory) > max_fn_len - 70) then
++    write(0,'(a)') 'AREX: empty or excessively long continuation directory'
++    call mexit(6,1)
++  end if
++  if (worldrank == 0) then
++    status_mkdir = arex_c_mkdir(trim(arex_output_directory) // c_null_char, int(504,c_int))
++    if (status_mkdir /= 0) then
++      write(0,'(a)') 'AREX: destination exists or cannot be created (never overwrite): ' // &
++                     trim(arex_output_directory)
++      call mexit(6,1)
++    end if
++  end if
++
++  arex_checkpoint_output_name = trim(arex_output_directory) // '/arex.chk'
++  ! Inputs (-i, -p, -c, -ref, -phmdin, -phmdstrt, etc.) remain untouched.
++  call arex_rebase_output(mdout_name)
++  call arex_rebase_output(mdinfo_name)
++  call arex_rebase_output(mdcrd_name)
++  call arex_rebase_output(mdvel_name)
++  call arex_rebase_output(mdfrc_name)
++  call arex_rebase_output(mden_name)
++  call arex_rebase_output(restrt_name)
++  call arex_rebase_output(logfile_name)
++  call arex_rebase_output(phmdout_name)
++  call arex_rebase_output(phmdrestrt_out_name)
++  call arex_rebase_output(cpout_name)
++  call arex_rebase_output(cprestrt_name)
++  call arex_rebase_output(ceout_name)
++  call arex_rebase_output(cerestrt_name)
++  call arex_rebase_output(cpeout_name)
++  call arex_rebase_output(cperestrt_name)
++  call arex_rebase_output(amdlog_name)
++  call arex_rebase_output(gamdlog_name)
++  call arex_rebase_output(gamdres_name)
++  call arex_rebase_output(scaledMDlog_name)
++end subroutine arex_prepare_continuation_paths
++
++subroutine arex_rebase_output(filename)
++  use pmemd_lib_mod, only : mexit
++  character(len=*), intent(inout) :: filename
++  integer :: slash
++  character(len=len(filename)) :: result
++  if (len_trim(filename) == 0) return
++  slash = scan(trim(filename), '/', back=.true.)
++  result = trim(arex_output_directory) // '/' // trim(filename(slash+1:))
++  if (len_trim(arex_output_directory) + 1 + len_trim(filename(slash+1:)) > len(filename)) then
++    write(0,'(a)') 'AREX: continuation output path exceeds max filename length'
++    call mexit(6,1)
++  end if
++  filename = result
++end subroutine arex_rebase_output
++#endif
++
+ #ifdef MPI
+ !*******************************************************************************
+ !
+@@ -702,6 +895,15 @@ subroutine get_cmdline_bcast()
  
    call mpi_bcast(cpein_specified, 1, mpi_logical, 0, pmemd_comm, err_code_mpi)
  
 +  ! Keep AREX continuation command-line state consistent on all MPI ranks.
 +  call mpi_bcast(arexrst_specified, 1, mpi_logical, 0, pmemd_comm, err_code_mpi)
 +  call mpi_bcast(arexrst_name, len(arexrst_name), mpi_character, 0, pmemd_comm, err_code_mpi)
++  call mpi_bcast(arex_append, 1, mpi_logical, 0, pmemd_comm, err_code_mpi)
++  call mpi_bcast(arex_continuation_part, 1, mpi_integer, 0, pmemd_comm, err_code_mpi)
++  call mpi_bcast(arex_output_directory, len(arex_output_directory), mpi_character, 0, pmemd_comm, err_code_mpi)
++  call mpi_bcast(arex_checkpoint_output_name, len(arex_checkpoint_output_name), &
++                 mpi_character, 0, pmemd_comm, err_code_mpi)
 +
  end subroutine get_cmdline_bcast
  #endif /* MPI */
@@ -29320,7 +30143,7 @@ index bb62023..1bc9485 100644
  #else
  9089 format(1x, 'DV/DL  = ',f14.4)
 diff --git a/src/pmemd/src/runmd.F90 b/src/pmemd/src/runmd.F90
-index 5193314..d75c46c 100644
+index 5193314..c3fe852 100644
 --- a/src/pmemd/src/runmd.F90
 +++ b/src/pmemd/src/runmd.F90
 @@ -29,7 +29,6 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel, my_atm_lst, &
@@ -29331,7 +30154,7 @@ index 5193314..d75c46c 100644
    use barostats_mod, only : mcbar_trial, mcbar_summary
    use cit_mod
    use constantph_mod
-@@ -67,9 +66,17 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
+@@ -67,9 +66,18 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
    use pmemd_lib_mod
    use prmtop_dat_mod
  #ifdef MPI
@@ -29340,7 +30163,8 @@ index 5193314..d75c46c 100644
    use remd_mod
    use remd_exchg_mod
 +  use arex_io_mod, only : arex_io_bind_slot, &
-+                          arex_io_advance_active_mdcrd_logical_steps
++                          arex_io_advance_active_mdcrd_logical_steps, &
++                          arex_io_set_active_restart_initialized
 +  use arex_arm_mod, only : arm_payload_api_t, ARM_OK
 +  use arex_mpi_mod, only : arex_mpi_state_t, arex_mpi_init, &
 +                           arex_mpi_finalize, &
@@ -29350,7 +30174,7 @@ index 5193314..d75c46c 100644
  #endif
  #ifndef MPI
  #ifndef NOXRAY
-@@ -91,7 +98,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
+@@ -91,7 +99,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
  #ifdef TIDECOMP
    use ti_decomp_mod
  #endif
@@ -29359,7 +30183,7 @@ index 5193314..d75c46c 100644
  #ifdef GTI
    use gti_mod
  #endif
-@@ -102,7 +109,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
+@@ -102,7 +110,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
             gpu_sgenergy
  #else
    use sgld_mod, only : trxsgld,sgld_init_ene_rec,sgenergy,sgld_avg,sgld_fluc, &
@@ -29368,7 +30192,7 @@ index 5193314..d75c46c 100644
  #endif
  #ifdef MPI
    use sgld_mod, only :sg_allgather
-@@ -234,6 +241,22 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
+@@ -234,6 +242,25 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
    integer               :: total_nstep   ! For REMD
    integer               :: total_nstlim  ! For REMD
  
@@ -29384,6 +30208,9 @@ index 5193314..d75c46c 100644
 +  logical                 :: arex_done
 +  character(len=256)      :: arex_message
 +  character(len=256)      :: arex_io_message
++  character(len=len(restrt_name)) :: arex_saved_mdrst
++  character(len=len(phmdrestrt_out_name)) :: arex_saved_phmdrst
++  character(len=16)       :: arex_restart_suffix
 +  type(arm_payload_api_t) :: arex_payload_api
 +  type(arex_mpi_state_t)  :: arex_state
 +#endif
@@ -29391,7 +30218,7 @@ index 5193314..d75c46c 100644
    logical               :: belly
    logical               :: lout
    logical              :: proc_new_list
-@@ -376,7 +399,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
+@@ -376,7 +403,7 @@ subroutine runmd(atm_cnt, crd, mass, frc, vel, last_vel)
  
     rndfp=0.0
     rndfs=0.0
@@ -29400,7 +30227,7 @@ index 5193314..d75c46c 100644
  ! Get the degrees of freedom for the solute (rndfp) and solvent (rndfs).
  ! Then correct the solute value for the minimum degrees of freedom in the
  ! system (due to removal of translational or rotational motion, etc.).
-@@ -1222,7 +1245,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1222,7 +1249,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
            end if
          end do
  #ifdef GTI
@@ -29409,7 +30236,7 @@ index 5193314..d75c46c 100644
  #endif
        end if
        if (.not. usemidpoint) then
-@@ -1244,27 +1267,365 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1244,27 +1271,365 @@ DBG_ARRAYS_TIME_STEP(nstep)
        call cnste_write_ceout(0, total_nstlim, t, local_remd_method, remd_types, replica_indexes)
    end if
  
@@ -29592,19 +30419,16 @@ index 5193314..d75c46c 100644
 +    end if
 +
 +  else
- 
--  ! Make sure we go through the runmd loop at least once
++
 +    ! Make sure we go through the runmd loop at least once.
 +    if (local_numexchg .eq. 0) &
 +      local_numexchg = local_numexchg + 1
- 
--  if (local_numexchg .eq. 0) local_numexchg = local_numexchg + 1
++
 +    ! Some basic REMD setup that only has to be done once.
 +    if (local_remd_method .ne. 0) then
 +      total_nstlim = nstlim * local_numexchg
 +    end if
- 
--  ! Some basic REMD setup that only has to be done once
++
 +    do mdloop = 1, local_numexchg
 +
 +      call advance_md_interval()
@@ -29620,12 +30444,9 @@ index 5193314..d75c46c 100644
 +      end if
 +
 +    end do ! REMD loop (mdloop)
- 
--  if (local_remd_method .ne. 0) then
--    total_nstlim = nstlim * local_numexchg
-   end if
- 
--  do mdloop = 1, local_numexchg
++
++  end if
++
 +  ! Print averages for AREX and for synchronous non-REMD runs.
 +  if (master .and. (arex .eq. 1 .or. &
 +      local_remd_method .eq. 0)) then
@@ -29746,19 +30567,25 @@ index 5193314..d75c46c 100644
 +      end if
 +
 +    end if ! (nvalid .gt. 0)
-+
+ 
+-  ! Make sure we go through the runmd loop at least once
 +    if (ntp .ne. 0 .and. barostat .eq. 2) call mcbar_summary
-+
+ 
+-  if (local_numexchg .eq. 0) local_numexchg = local_numexchg + 1
 +  end if ! master
-+
+ 
+-  ! Some basic REMD setup that only has to be done once
 +  if (ti_mode .ne. 0) call ti_cleanup
-+
+ 
+-  if (local_remd_method .ne. 0) then
+-    total_nstlim = nstlim * local_numexchg
 +  if (igamd.gt.0 .and. ibblig.gt.0) close(gamdlig)
 +  if (igamd.gt.0 .and. ibblig.eq.2) then
 +     if (allocated(lcrd0)) deallocate(lcrd0)
 +     if (allocated(lcrd1)) deallocate(lcrd1)
-+  end if
-+
+   end if
+ 
+-  do mdloop = 1, local_numexchg
 +  call update_time(runmd_time)
 +
 +! PLUMED
@@ -29775,19 +30602,19 @@ index 5193314..d75c46c 100644
 +  601 format(/,'| TI region ', i2, /)
 +
 +contains
-+
-+  subroutine advance_md_interval
  
 -    ! Reset the step counters
++  subroutine advance_md_interval
+ 
 +    use arex_io_mod, only : arex_io_active_slot_hits_freq, &
 +                            arex_io_active_slot_time
 +    implicit none
- 
++
 +    ! Reset the [per-segment] step counters.
      nstep = 0
      irespa = 1
  
-@@ -1273,6 +1634,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1273,6 +1638,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
        if (isgld.gt.0) call sgld_init_ene_rec
      end if
  
@@ -29795,7 +30622,7 @@ index 5193314..d75c46c 100644
      if (local_remd_method .ne. 0) then
        ! We need to get the potential energies again, since the positions
        ! have been updated, so our energies no longer correspond to our
-@@ -1285,12 +1647,10 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1285,12 +1651,10 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
        if (using_pme_potential) then
          if (usemidpoint) then
@@ -29808,7 +30635,7 @@ index 5193314..d75c46c 100644
          else ! usemidpoint
            call pme_force(atm_cnt, crd, frc, gbl_img_atm_map, gbl_atm_img_map, &
                           my_atm_lst, new_list, need_pot_enes, need_virials, &
-@@ -1369,7 +1729,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1369,7 +1733,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
              call mpi_allgathervec(atm_cnt, crd)
  
              call hybridsolvent_exchange(atm_cnt, crd, vel, frc, numwatkeep, &
@@ -29817,7 +30644,7 @@ index 5193314..d75c46c 100644
                            print_exch_data, mdloop)
              new_list = .true.
            else
-@@ -1619,7 +1979,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1619,7 +1983,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
            end if
          end if
  #ifdef MPI
@@ -29826,7 +30653,7 @@ index 5193314..d75c46c 100644
          ! on the first step after a REMD exchange attempt since we already did
          ! it above. However, if running in NPT ensemble and we exchanged, force
          ! should be called again to ensure the virial is properly updated.
-@@ -1669,7 +2029,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1669,7 +2033,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
            call mcbar_trial(atm_cnt, crd, frc, mass, new_list, pme_pot_ene, &
            verbose, pme_err_est)
  #endif
@@ -29835,7 +30662,7 @@ index 5193314..d75c46c 100644
          if (do_mcbar_trial) logdvdl=k
  
          if (ramdint .gt. 0) then
-@@ -1713,7 +2073,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1713,7 +2077,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
          ! Total virial will be printed in mden regardless of ntp value.
          si(si_tot_virial) = virial(1) + virial(2) + virial(3)
          if (iphmd .eq. 3) then
@@ -29848,7 +30675,7 @@ index 5193314..d75c46c 100644
          end if
  
        else if (using_gb_potential) then
-@@ -1772,9 +2136,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1772,9 +2140,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
        ! PHMD
        if (iphmd .eq. 1 ) then
@@ -29863,7 +30690,7 @@ index 5193314..d75c46c 100644
        ! Determine if coordinates will be written
        dump_crds = .false.
        if (ntwx .gt. 0) then
-@@ -1825,11 +2192,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1825,11 +2196,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
        ekin0 = fac(1) * temp0
        target_ekin_update_nstep = tautp / dt
@@ -29877,7 +30704,7 @@ index 5193314..d75c46c 100644
        if (ti_mode .ne. 0) then
          si(si_dvdl) = ti_ene(1, si_dvdl)
          if (ti_mode .gt. 1 .and. using_gb_potential) si(si_dvdl) = si(si_dvdl) + gb_pot_ene%dvdl
-@@ -1938,23 +2305,23 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -1938,23 +2309,23 @@ DBG_ARRAYS_TIME_STEP(nstep)
            end if
  
          end if
@@ -29907,7 +30734,7 @@ index 5193314..d75c46c 100644
  #endif
  
  #ifdef GBTimer
-@@ -2064,26 +2431,26 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2064,26 +2435,26 @@ DBG_ARRAYS_TIME_STEP(nstep)
        !    if (ti_mode .eq. 0) then
  
  #ifdef GTI
@@ -29940,7 +30767,7 @@ index 5193314..d75c46c 100644
             end if
         endif
      endif
-@@ -2110,12 +2477,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2110,12 +2481,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
      else
        if (ischeme == 1) then
          call gpu_update(dt, temp0, therm_par)
@@ -29955,7 +30782,7 @@ index 5193314..d75c46c 100644
          call gti_sync_vector(3, gti_syn_mass+1) ! sync crd & vel: (gti_syn_mass=0: weighted-combination; gti_syn_mass=1: copy over)
        endif
  #endif
-@@ -2395,7 +2762,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2395,7 +2766,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                call middle_langevin_thermostat_midpoint(atm_cnt, proc_num_atms, proc_atm_vel, &
                    proc_atm_mass, dt, temp0, therm_par)
  
@@ -29964,7 +30791,7 @@ index 5193314..d75c46c 100644
                do i = 1, proc_num_atms + proc_ghost_num_atms
                !proc_atm_frc(:,i) = proc_atm_crd(:,i)
                proc_atm_crd(:,i) = proc_atm_crd(:,i) + proc_atm_vel(:,i) * dtx / 2.0
-@@ -2423,7 +2790,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2423,7 +2794,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
         !$omp end do
         !$omp end parallel
  #endif /*_OPENMP_*/
@@ -29973,7 +30800,7 @@ index 5193314..d75c46c 100644
                  call middle_langevin_thermostat(atm_cnt, vel, mass, atm_mass_inv, &
                      dt, temp0, therm_par)
  #ifdef MPI
-@@ -2445,7 +2812,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2445,7 +2816,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
         !$omp end do
         !$omp end parallel
  #endif /*_OPENMP_*/
@@ -29982,7 +30809,7 @@ index 5193314..d75c46c 100644
            end if
        else  ! non-middle-scheme
            if (usemidpoint) then
-@@ -2525,7 +2892,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2525,7 +2896,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
  #endif
  #else
          if (usemidpoint) then
@@ -29991,7 +30818,7 @@ index 5193314..d75c46c 100644
            ! We can't shake until all crds are updated
            call shake(proc_atm_frc, proc_atm_crd)
            call shake_fastwater(proc_atm_frc, proc_atm_crd)
-@@ -2568,12 +2935,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2568,12 +2939,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
            if (ti_latm_cnt(1) .gt. 0) then
  #ifdef CUDA
  #ifdef GTI
@@ -30006,7 +30833,7 @@ index 5193314..d75c46c 100644
  #else
              call gpu_ti_exchange_crd()
  #endif
-@@ -2605,7 +2972,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2605,7 +2976,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
            end if
          end if
  
@@ -30015,7 +30842,7 @@ index 5193314..d75c46c 100644
          if (ischeme .ne. 0) then
              call gpu_rattle(dt)
          end if
-@@ -2712,7 +3079,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2712,7 +3083,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
  #endif /* ndefCUDA */
  
        if (update_kin_energy_on_current_step) then
@@ -30024,7 +30851,7 @@ index 5193314..d75c46c 100644
  #ifdef CUDA
          if (update_kin_energy_on_current_step .or. (mod(irespa, ene_avg_sampling) .eq. 0) .or. &
  
-@@ -2724,7 +3091,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2724,7 +3095,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
              call gpu_calculate_kinetic_energy(c_ave, eke, ekph, ekpbs )
  #ifdef GTI
              if (ntt.eq.1 .or. mod(total_nstep+1, ntpr) .eq. 0 ) then
@@ -30033,7 +30860,7 @@ index 5193314..d75c46c 100644
                if (ti_mode .ne. 0 ) then
                    call gti_kinetic(c_ave)
                    call gti_update_kin_energy_from_gpu(ti_eke, ti_eke, .true. )
-@@ -2951,7 +3318,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -2951,7 +3322,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
            call pressure_scale_pbc_data(rmu, vdw_cutoff + skinnb, verbose)
  
          else if (ntp .gt. 0 .and. barostat .eq. 1) then
@@ -30042,7 +30869,7 @@ index 5193314..d75c46c 100644
            ! WARNING!!   This is not correct for non-orthogonal boxes if NTP > 1
            ! (i.e. non-isotropic scaling).  Currently general cell updates which
            ! allow cell angles to change are not implemented.  The virial tensor
-@@ -3044,7 +3411,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -3044,7 +3415,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                    c_ave=1.0
                    call gti_kinetic(c_ave)
                    call gti_update_kin_energy_from_gpu(ti_eke, ti_eke, .true.)
@@ -30051,7 +30878,7 @@ index 5193314..d75c46c 100644
                    call gti_update_kin_energy_from_gpu(ti_eke, ti_eke, .false.)
                end if
                call gti_update_kin_energy_from_gpu(ti_ekpbs, ti_ekpbs, .false.)
-@@ -3322,7 +3689,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -3322,7 +3693,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
  #endif /* MPI */
            ! Do for MPI and serial runs, see above ...
          if (ti_mode .ne. 0) then
@@ -30060,7 +30887,7 @@ index 5193314..d75c46c 100644
            !we don't need to subtract out any values for the GPU because
            ! we've already taken that into account in the kernel calculation
            if (update_kin_energy_on_current_step) then
-@@ -3361,8 +3728,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -3361,8 +3732,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
                ti_kin_ene(1,ti_ekpbs) = ekpbs - ti_kin_ene(2,ti_ekpbs)
                ti_kin_ene(2,ti_ekpbs) = ekpbs - temp
  
@@ -30071,7 +30898,7 @@ index 5193314..d75c46c 100644
                ti_kin_ene(2,ti_ekph) = ekph - temp
              end if
            end if
-@@ -3444,7 +3811,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -3444,7 +3815,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
          else if (update_bussi_target_kin_energy_on_current_step) then
            if (ti_mode == 0) then
@@ -30080,7 +30907,7 @@ index 5193314..d75c46c 100644
              target_ekin  = resamplekin(eke, ekin0, int(rndf, 4), dt / tautp)
              scaltp = sqrt(target_ekin/eke)
  
-@@ -4019,11 +4386,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4019,11 +4390,11 @@ DBG_ARRAYS_TIME_STEP(nstep)
              do_output_mpi = .true.
              if (master) then
  
@@ -30097,7 +30924,7 @@ index 5193314..d75c46c 100644
  
                !          if (icnstph .gt. 0 .or. (icnste .gt. 0 .and. cpein_specified)) call cnstph_write_restart
              end if !master
-@@ -4108,7 +4475,6 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4108,7 +4479,6 @@ DBG_ARRAYS_TIME_STEP(nstep)
            ! Velocity archive:
  
            if (ntwv .gt. 0) then
@@ -30105,7 +30932,7 @@ index 5193314..d75c46c 100644
              if (mod(total_nstep, ntwv) .eq. 0) then
                if (.not. do_output_mpi) then
                  if (ionstepvelocities.eq.0) then
-@@ -4145,9 +4511,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4145,9 +4515,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                  end if
                end if
              end if
@@ -30115,13 +30942,15 @@ index 5193314..d75c46c 100644
                if (mod(total_nstep, ntwv) .eq. 0) then
                  if (.not. do_output_mpi) then
                    call mpi_output_transfer(crd, vel) ! DRR - I dont think this is necessary
-@@ -4178,11 +4542,23 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4178,13 +4546,50 @@ DBG_ARRAYS_TIME_STEP(nstep)
              ! Restrt:
              write_restrt = .false.
  
 +#ifdef MPI
 +            if (arex .eq. 1) then
-+              if (nstep .eq. nstlim .and. onstep) write_restrt = .true.
++              ! The scheduler chooses the checkpoint epoch before assignment.
++              if (nstep == nstlim .and. onstep .and. &
++                  arex_state%assigned_restart_number /= 0) write_restrt = .true.
 +            else
 +              if (total_nstep .eq. total_nstlim) then
 +                write_restrt = .true.
@@ -30138,8 +30967,33 @@ index 5193314..d75c46c 100644
 +#endif
  
              if (write_restrt) then
++#ifdef MPI
++              if (arex == 1) then
++                arex_saved_mdrst = restrt_name
++                arex_saved_phmdrst = phmdrestrt_out_name
++                if (arex_state%assigned_restart_number > 0) then
++                  write(arex_restart_suffix, '(".",i0)') arex_state%assigned_restart_number
++                  if (len_trim(restrt_name) + len_trim(arex_restart_suffix) > len(restrt_name) .or. &
++                      len_trim(phmdrestrt_out_name) + len_trim(arex_restart_suffix) > len(phmdrestrt_out_name)) then
++                    write(mdout, '(a)') 'AREX: numbered restart path exceeds filename limit'
++                    call mexit(6, 1)
++                  end if
++                  restrt_name = trim(restrt_name) // trim(arex_restart_suffix)
++                  phmdrestrt_out_name = trim(phmdrestrt_out_name) // trim(arex_restart_suffix)
++                end if
++                ! Each numbered restart is a new file, never an update of the
++                ! preceding generation or the ordinary final restart.
++                call arex_io_set_active_restart_initialized(.false., arex_io_ierr, arex_io_message)
++                if (arex_io_ierr /= 0) then
++                  write(mdout, '(a)') trim(arex_io_message)
++                  call mexit(6, 1)
++                end if
++              end if
++#endif
  #ifdef CUDA
-@@ -4195,10 +4571,20 @@ DBG_ARRAYS_TIME_STEP(nstep)
+               call gpu_download_crd(crd)
+               call gpu_download_vel(vel)
+@@ -4195,10 +4600,20 @@ DBG_ARRAYS_TIME_STEP(nstep)
                  call zero_extra_pnts_vec(vel, ep_frames, gbl_frame_cnt)
  #endif
  
@@ -30163,9 +31017,17 @@ index 5193314..d75c46c 100644
                end if
  
                if (icnstph .gt. 0 .or. (icnste .gt. 0 .and. cpein_specified)) call cnstph_write_restart(total_nstep)
-@@ -4212,12 +4598,12 @@ DBG_ARRAYS_TIME_STEP(nstep)
-               if (infe.gt.0) call nfe_on_mdwrit()
+@@ -4210,14 +4625,19 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
+               ! NFE
+               if (infe.gt.0) call nfe_on_mdwrit()
+-
++#ifdef MPI
++              if (arex == 1) then
++                restrt_name = arex_saved_mdrst
++                phmdrestrt_out_name = arex_saved_phmdrst
++              end if
++#endif
              end if
 -
              ! Coordinate archive:
@@ -30178,7 +31040,7 @@ index 5193314..d75c46c 100644
  #ifdef CUDA
                  call gpu_download_crd(crd)
  #endif
-@@ -4267,6 +4653,13 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4267,6 +4687,13 @@ DBG_ARRAYS_TIME_STEP(nstep)
                    endif
                  end if
  
@@ -30192,7 +31054,7 @@ index 5193314..d75c46c 100644
                  ! For ioutfm == 1, coordinate archive may also contain vels
  
                  if (iamd.gt.0)then
-@@ -4307,7 +4700,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4307,7 +4734,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
              if (ntwv .gt. 0) then
  
@@ -30202,7 +31064,7 @@ index 5193314..d75c46c 100644
  #ifdef CUDA
                  call gpu_download_vel(vel)
  #endif
-@@ -4342,7 +4736,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4342,7 +4770,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                end if
              end if
  #endif
@@ -30211,7 +31073,7 @@ index 5193314..d75c46c 100644
            end if ! Exit master for velocity/crd printing
  
          end if ! usemidpoint
-@@ -4390,7 +4784,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4390,7 +4818,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                  end if
                end do
  #ifdef GTI
@@ -30220,7 +31082,7 @@ index 5193314..d75c46c 100644
  #endif
              end if
              if (.not. usemidpoint) then
-@@ -4405,14 +4799,15 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4405,14 +4833,15 @@ DBG_ARRAYS_TIME_STEP(nstep)
              if (ioutfm .eq. 1) then
  
                if (ntwx .gt. 0) then
@@ -30238,7 +31100,7 @@ index 5193314..d75c46c 100644
  #ifdef MPI
  #else
                    ! The zeroing of extra points may be redundant here.
-@@ -4427,7 +4822,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4427,7 +4856,8 @@ DBG_ARRAYS_TIME_STEP(nstep)
                end if
  
                if (ntwf .gt. 0) then
@@ -30248,7 +31110,7 @@ index 5193314..d75c46c 100644
                    call end_binary_frame(mdfrc)
                  end if
                end if
-@@ -4804,7 +5200,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4804,7 +5234,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                    VmaxPt = max(VmaxPt,si(si_pot_ene))
                    VminPt = min(VminPt,si(si_pot_ene))
                  end if
@@ -30257,7 +31119,7 @@ index 5193314..d75c46c 100644
                   if ((igamd.eq.6 .or. igamd.eq.7) .or. (igamd0.eq.6 .or. igamd0.eq.7)) then
                     VDt = si(si_pot_ene) + ti_ene(1,si_elect_14_ene) + ti_ene(1,si_vdw_14_ene)
                     VmaxDt = max(VmaxDt,VDt)
-@@ -4873,7 +5269,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4873,7 +5303,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                    VminP = min(VminP,VminPt)
                    VavgP = VavgPt
                    sigmaVP = sigmaVPt
@@ -30266,7 +31128,7 @@ index 5193314..d75c46c 100644
                    VmaxD = max(VmaxD,VmaxDt)
                    VminD = min(VminD,VminDt)
                    VavgD = VavgDt
-@@ -4895,7 +5291,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4895,7 +5325,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                  end if
                end if
              end if
@@ -30275,7 +31137,7 @@ index 5193314..d75c46c 100644
              ! update Vmax, Vmin, Vavg, sigmaV and then GaMD parameters after adding boost potential
              if ((total_nstep.le.(ntcmd+nteb)).and.(total_nstep.ge.ntcmd).and.(mod(total_nstep,nrespa).eq.0).and.onstep) then
               if ( igamd.eq.1 .or. igamd.eq.3 .or. igamd.eq.4 .or. igamd.eq.5 .or. &
-@@ -4904,7 +5300,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -4904,7 +5334,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                     igamd.eq.15 .or.igamd.eq.16 .or. igamd.eq.17 .or. igamd.eq.18 .or.igamd.eq.19.or.&
                     igamd.eq.20 .or.igamd.eq.21 .or. igamd.eq.22.or.igamd.eq.23.or.igamd.eq.24.or.igamd.eq.25.or.&
                     igamd.eq.26 .or.igamd.eq.27 .or. igamd.eq.28.or. igamd.eq.101 .or. igamd.eq.102 .or. igamd.eq.103 .or. &
@@ -30284,7 +31146,7 @@ index 5193314..d75c46c 100644
                     igamd.eq.114 .or. igamd.eq.115 .or. igamd.eq.116 .or. igamd.eq.117.or. &
                     igamd.eq.118 .or. igamd.eq.119 .or. igamd.eq.120 .or. igamd.eq.20) then
                 if (total_nstep.ge.(ntcmd+ntebprep)) then
-@@ -5166,7 +5562,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -5166,7 +5596,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
                         write(mdout,'(a,2I10,F14.6)')'| GaMD step, ligand, MSD_min: ', total_nstep, blig, dmin
                         write(gamdlig,'(2I10,F14.6)') total_nstep, blig, dmin
                      end if
@@ -30293,7 +31155,7 @@ index 5193314..d75c46c 100644
  
                    ! swap ligand coordinates
                    if (blig.ne.blig0) then
-@@ -5317,7 +5713,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -5317,7 +5747,7 @@ DBG_ARRAYS_TIME_STEP(nstep)
  
          ! Stop the run if timlim is set and reached. One more step will be taken
          ! to ensure a final restart is written.
@@ -30302,7 +31164,7 @@ index 5193314..d75c46c 100644
  #       ifdef MPI
            ! In parallel this check is only done on the master node and then
            ! broadcast everywhere else if necessary.
-@@ -5345,164 +5741,21 @@ DBG_ARRAYS_TIME_STEP(nstep)
+@@ -5345,164 +5775,21 @@ DBG_ARRAYS_TIME_STEP(nstep)
  ! PLUMED
          if (plumed .ne. 0 .and. plumed_stopflag .ne. 0) exit
        end do ! Major cycle back to new step unless we have reached our limit:
@@ -30318,28 +31180,18 @@ index 5193314..d75c46c 100644
 -      end if
 -
 -    end do ! REMD loop (mdloop)
- 
+-
 -    ! Print averages, but not for REMD:
- 
+-
 -    if (master .and. local_remd_method .eq. 0) then
 -#else
 -    if (master) then
 -#endif
-+    return
- 
+-
 -    tspan = nvalid
-+    540 format(/5x, ' A V E R A G E S   O V E R ', i7, ' S T E P S', /)
-+    541 format(/5x,' DV/DL, AVERAGES OVER ',i7,' STEPS',/)
-+    542 format('|',79('='))
-+    550 format(/5x, ' R M S  F L U C T U A T I O N S', /)
-+    580 format('STATISTICS OF EFFECTIVE BORN RADII OVER ',i7,' STEPS')
-+    590 format('ATOMNUM     MAX RAD     MIN RAD     AVE RAD     FLUCT')
-+    600 format(i4, 2x, 4f12.4)
-+    601 format(/,'| TI region ', i2, /)
- 
+-
 -    if (nvalid .gt. 0) then
-+  end subroutine advance_md_interval
- 
+-
 -      do m = 1, si_cnt
 -        sit(m) = sit(m)/tspan
 -        sit2(m) = sit2(m)/tspan - sit(m) * sit(m)
@@ -30450,7 +31302,7 @@ index 5193314..d75c46c 100644
 -    if (ntp .ne. 0 .and. barostat .eq. 2) call mcbar_summary
 -
 -  end if ! master
--
+ 
 -  if (ti_mode .ne. 0) call ti_cleanup
 -
 -  if (igamd.gt.0 .and. ibblig.gt.0) close(gamdlig)
@@ -30458,14 +31310,24 @@ index 5193314..d75c46c 100644
 -     if (allocated(lcrd0)) deallocate(lcrd0)
 -     if (allocated(lcrd1)) deallocate(lcrd1)
 -  end if
--
+ 
 -  call update_time(runmd_time)
--
++    return
+ 
 -! PLUMED
 -  if (plumed .ne. 0) call plumed_f_gfinalize()
--
++    540 format(/5x, ' A V E R A G E S   O V E R ', i7, ' S T E P S', /)
++    541 format(/5x,' DV/DL, AVERAGES OVER ',i7,' STEPS',/)
++    542 format('|',79('='))
++    550 format(/5x, ' R M S  F L U C T U A T I O N S', /)
++    580 format('STATISTICS OF EFFECTIVE BORN RADII OVER ',i7,' STEPS')
++    590 format('ATOMNUM     MAX RAD     MIN RAD     AVE RAD     FLUCT')
++    600 format(i4, 2x, 4f12.4)
++    601 format(/,'| TI region ', i2, /)
+ 
 -  return
--
++  end subroutine advance_md_interval
+ 
 -  540 format(/5x, ' A V E R A G E S   O V E R ', i7, ' S T E P S', /)
 -  541 format(/5x,' DV/DL, AVERAGES OVER ',i7,' STEPS',/)
 -  542 format('|',79('='))
@@ -30553,153 +31415,3 @@ index 6a4391b..eff904f 100644
    previous_time_ms   = current_time_ms
  
    return
-
-diff --git a/src/pmemd/src/cuda/kForcesUpdate.cu b/src/pmemd/src/cuda/kForcesUpdate.cu
---- a/src/pmemd/src/cuda/kForcesUpdate.cu
-+++ b/src/pmemd/src/cuda/kForcesUpdate.cu
-@@ -22,4 +22,36 @@
- #include "simulationConst.h"
- CSIM_STO simulationConst cSim;
- 
-+// AREX-only positional-restraint stiffness update.  The main MD kernels,
-+// work-unit layout, and dynamically scaled reference coordinates are unchanged.
-+__global__ void kArexSetConstraintStiffness_kernel(
-+    const int n, const PMEDouble k,
-+    PMEDouble2* const master,
-+    const unsigned int* const packed_index,
-+    PMEDouble2* const packed)
-+{
-+  const unsigned int i = blockIdx.x * blockDim.x + threadIdx.x;
-+  if (i >= static_cast<unsigned int>(n)) return;
-+
-+  // A field-only store cannot overwrite an NPT/recentering-adjusted reference.
-+  master[i].x = k;
-+  packed[packed_index[i]].x = k;
-+}
-+
-+// This entry point is intentionally implemented in a .cu translation unit;
-+// the original gpu.cpp is a host C++ translation unit.
-+extern "C" cudaError_t gpu_arex_set_constraint_stiffness_cuda(
-+    int n, PMEDouble k, PMEDouble2* master,
-+    const unsigned int* packed_index, PMEDouble2* packed)
-+{
-+  if (n <= 0 || master == NULL || packed_index == NULL || packed == NULL)
-+    return cudaErrorInvalidValue;
-+
-+  const int threads = 256;
-+  const int blocks = (n + threads - 1) / threads;
-+  kArexSetConstraintStiffness_kernel<<<blocks, threads>>>(
-+      n, k, master, packed_index, packed);
-+  return cudaGetLastError();
-+}
-+
- #if !defined(__HIPCC_RDC__)
-diff --git a/src/pmemd/src/cuda/gpu.cpp b/src/pmemd/src/cuda/gpu.cpp
---- a/src/pmemd/src/cuda/gpu.cpp
-+++ b/src/pmemd/src/cuda/gpu.cpp
-@@ -5697,6 +5697,13 @@
- //   2: restraint GPU buffer is not initialized
- //   3: simulation/buffer restraint-count mismatch
- //---------------------------------------------------------------------------------------------
-+// GPU-only stiffness update, implemented in kForcesUpdate.cu.  The CUDA
-+// barostat owns the current device reference coordinates: never overwrite them
-+// with the potentially stale host shadow during an AREX stiffness update.
-+extern "C" cudaError_t gpu_arex_set_constraint_stiffness_cuda(
-+    int n, PMEDouble k, PMEDouble2* master,
-+    const unsigned int* packed_index, PMEDouble2* packed);
-+
- extern "C" void gpu_constraints_update_weights_(int* natc, double* atm_weight,
-                                                 int* ierr)
- {
-@@ -5730,13 +5737,39 @@
-     return;
-   }
- 
--  for (int i = 0; i < constraints; i++) {
-+  // Both representations must exist.  The packed representation is what
-+  // kBWU_cnst.h actually uses to compute positional-restraint forces.
-+  if (gpu->pbBondWorkUnitUINT == NULL ||
-+      gpu->pbBondWorkUnitDBL2 == NULL ||
-+      gpu->sim.pBwuCnstUpdateIdx == NULL ||
-+      gpu->sim.pBwuCnst == NULL) {
-+    *ierr = 2;
-+    return;
-+  }
-+
-+  // The AREX scheduler guarantees uniform weights for this call.
-+  const PMEDouble k = static_cast<PMEDouble>(atm_weight[0]);
-+
-+  // One launch per *force change*, never on a normal MD timestep.
-+  // Alter only .x (stiffness) in both GPU representations, preserving all
-+  // device-adjusted reference coordinates (.y and pConstraint2).
-+  cudaError_t status = gpu_arex_set_constraint_stiffness_cuda(
-+      constraints, k,
-+      gpu->pbConstraint1->_pDevData,
-+      gpu->sim.pBwuCnstUpdateIdx,
-+      gpu->sim.pBwuCnst);
-+  RTERROR(status, "AREX restraint stiffness kernel launch failed");
-+
-+  // Preserve completed-on-return behavior of the old synchronous Upload().
-+  // This is at the infrequent schedule boundary, NOT in the MD hot path.
-+  status = cudaStreamSynchronize(0);
-+  RTERROR(status, "AREX restraint stiffness kernel execution failed");
-+
-+  // bondRemap.cpp repacks from this master host shadow.  Update the host
-+  // stiffness but NEVER upload its stale reference-coordinate component.
-+  for (int i = 0; i < constraints; ++i) {
-     gpu->pbConstraint1->_pSysData[i].x = atm_weight[i];
-   }
--
--  // Upload both components of pbConstraint1. The reference-coordinate y
--  // components remain unchanged in the existing host shadow.
--  gpu->pbConstraint1->Upload();
- }
- 
- //---------------------------------------------------------------------------------------------
-@@ -11272,6 +11305,13 @@
-       gpuCopyConstants();
-     }
-     // Recalculate COM of everything to ensure correct virial.
-     kCalculateCOM(gpu);
-+
-+    // AREX restores a replica's box without doing a pressure-scale move.
-+    // Rebuild device master and packed positional-restraint reference
-+    // coordinates for the restored cell, just as gpu_pressure_scale_ does.
-+    if (gpu->sim.constraints > 0) {
-+      kPressureScaleConstraintCoordinates(gpu);
-+    }
-   }
- }
-
-diff --git a/src/pmemd/src/cuda/kCalculateLocalForces.cu b/src/pmemd/src/cuda/kCalculateLocalForces.cu
---- a/src/pmemd/src/cuda/kCalculateLocalForces.cu
-+++ b/src/pmemd/src/cuda/kCalculateLocalForces.cu
-@@ -132,10 +132,11 @@
- __global__ void
- __LAUNCH_BOUNDS__(BOND_WORK_UNIT_THREADS_PER_BLOCK, BOND_WORK_UNIT_BLOCKS_MULTIPLIER)
- kExecBondWorkUnitsNrgNL_kernel(int NMRnstep)
- #include "kBWU.h"
- #undef LOCAL_ENERGY
-
- //---------------------------------------------------------------------------------------------
-+#define LOCAL_ENERGY
- #define PHMD
- __global__ void
- __launch_bounds__(BOND_WORK_UNIT_THREADS_PER_BLOCK, BOND_WORK_UNIT_BLOCKS_MULTIPLIER)
-
-
-diff --git a/src/pmemd/src/cuda/gpu.cpp b/src/pmemd/src/cuda/gpu.cpp
---- a/src/pmemd/src/cuda/gpu.cpp
-+++ b/src/pmemd/src/cuda/gpu.cpp
-@@ -198,4 +198,8 @@
--  // Activate zero-copy
--  cudaSetDeviceFlags(cudaDeviceMapHost);
-+  // Avoid CUDA context creation before MPI rank-based device selection.
-+  // NVIDIA documents that cudaSetDeviceFlags() may initialize a default
-+  // device when none is current; this can conflict with EXCLUSIVE_PROCESS.
-+  // cudaDeviceMapHost is implicit for CUDA Runtime-created contexts,
-+  // so setting it explicitly is unnecessary here.
-+  // https://docs.nvidia.com/cuda/archive/12.6.1/cuda-runtime-api/group__CUDART__DEVICE.html
- 
-   // If the device id is -1 this means it was left at the default so we
-
