@@ -16,6 +16,7 @@ Exchange in Amber*](https://doi.org/10.64898/2026.11.11.766022).
 | `phmdin` | `&phmdin` | Titration dynamics, residue selection, and output. |
 | `phmdparm` | `&phmdparm` | Titration parameters for residue types. |
 | CpHMD restart | `&phmdrestrt` | Titration coordinates and velocities. |
+| AREX checkpoint | — | Exchange state and slot restart inventory (`arex.chk`). |
 
 Pass the inputs with `-i`, `-phmdin`, and `-phmdparm`. The lambda output file
 is selected with `-phmdout`. CpHMD restart input/output uses the associated
@@ -126,6 +127,129 @@ With seven pH values, the aggregate simulated time across all slots is
 `7 * 52 = 364 ps`, equivalent to `7 * 26000 = 182000` MD steps.
 This sum is **not wall-clock execution time**: elapsed runtime depends on
 hardware, worker count, and exchange overhead.
+
+### AREX checkpoints and continuation
+
+AREX saves a checkpoint (typically `arex.chk`) that allows an interrupted or
+completed campaign to continue. The checkpoint records exchange state, but it
+is **not** a replacement for the per-pH MD and CpHMD restart files.
+
+#### Continuing an AREX run
+
+Add the checkpoint option to the usual AREX launch command:
+
+```bash
+mpirun -np <ranks> pmemd.cuda.MPI ... -arexrst old_run/arex.chk
+```
+
+The `&cntrl` input must still enable `arex = 1` and use
+`arex_type = 'phrex'`. Use the same system topology and
+`arex_segment_steps` for a continuation. The checkpoint reader looks for the
+referenced MD and CpHMD restart files **relative to the checkpoint's
+directory**, so they can reside in a previous run directory. The
+checkpoint identifies the required slot restarts automatically;
+trajectory and lambda files are not restart inputs.
+
+With an **unchanged pH ladder**, continuation restores the slot/replica
+assignments, exchange state and random-number state, completed segment counts,
+simulation times, and CpHMD state. Output can append to existing slot files
+when append mode is selected, or start a new output part otherwise.
+
+#### Automatic output parts: `cont0001`, `cont0002`, ...
+
+By default, each continuation started with `-arexrst` produces a **new set of
+output files** rather than appending to the previous run's trajectories.
+The continuation part is numbered automatically:
+
+```text
+Initial AREX run          original output files (no continuation tag)
+First -arexrst run        new output part: cont0001
+Second -arexrst run       new output part: cont0002
+Further continuations    cont0003, cont0004, ...
+```
+
+The tag identifies **which continuation produced the files**, while the
+pH label identifies the fixed condition slot. No manual part numbering or
+renaming is needed. The checkpoint records the continuation-part counter,
+so the next restart can advance it. Each new part starts its own trajectory
+frame numbering, while cumulative simulation steps and times are preserved.
+
+An explicit append-mode continuation instead reuses the existing slot
+output files; it does not start a new part. The `contNNNN` output-part tags
+are **not** periodic checkpoint numbers such as `arex.chk.1`.
+
+#### Changing the pH ladder between runs
+
+The pH values **and the number of pH slots** can be changed when continuing
+from a checkpoint. For example:
+
+```fortran
+! Previous run
+arex_ladder = 4.0, 4.5, 5.0, 5.5,
+
+! Continuation run
+arex_ladder = 4.0, 4.5, 4.75, 5.0, 5.5, 6.0,
+```
+
+An unchanged pH value is matched to its previous slot. A new pH value is
+seeded from the **nearest previous pH slot** (using that slot's saved walker
+state); a source walker may seed multiple new slots. AREX records this
+mapping and the walker lineage in its migration history. New or modified pH
+slots begin their own output histories; unchanged slots can retain output
+progress when append mode is used.
+
+#### File layout
+
+For example, with output basenames `arex.mdrst`, `arex.phmdrst`, `arex.nc`,
+and `arex.lambda`, a two-slot run may contain:
+
+```text
+arex.chk                     # Main checkpoint metadata
+arex.ph4_0.mdrst             # pH 4.0 MD restart
+arex.ph4_0.phmdrst           # pH 4.0 CpHMD restart
+arex.ph4_0.nc                # pH 4.0 coordinates (if enabled)
+arex.ph4_0.lmb               # pH 4.0 binary lambdas (if enabled)
+arex.ph4_5.mdrst             # pH 4.5 MD restart
+arex.ph4_5.phmdrst           # pH 4.5 CpHMD restart
+...
+arex.chk.1                   # Numbered periodic checkpoint
+arex.ph4_0.mdrst.1           # Corresponding MD restart snapshot
+arex.ph4_0.phmdrst.1         # Corresponding CpHMD snapshot
+...
+```
+
+In successive non-append continuations, the program also creates separate
+per-pH outputs carrying the automatically assigned `cont0001`, `cont0002`,
+and later part tags. For example, `*cont0001*ph4_0*.nc` and
+`*cont0002*ph4_0*.nc` denote coordinate-trajectory files from different
+continuations at pH 4.0 (shown as patterns, not literal filenames).
+
+The base names follow the command-line file options; AREX inserts the pH
+label before each extension. The `.lmb` extension assumes binary lambda
+output. The checkpoint is a human-readable `AREX_RST` file (current format
+version 9) containing the ladder, slot ownership and walker history, segment
+and warmup progress, scheduler RNG state, per-slot restart filenames and
+output positions, and CpHMD payload state (including CUDA RNG state where
+applicable).
+
+#### Periodic checkpoints and backup cleanup
+
+`arex_chkfrq = 0` writes only a final checkpoint; a positive value requests
+periodic checkpoints at the specified interval of completed AREX segments.
+Periodic backups use **matching numbered sets**: `arex.chk.N` references
+slot restart snapshots with the same `.N` suffix. Workers first write
+the MD and CpHMD restart snapshots; the scheduler
+checks that they exist before publishing the checkpoint metadata. An
+incomplete new backup therefore leaves the previous completed numbered
+set available.
+
+After a newer numbered set is published, AREX provides cleanup of the
+**previous numbered set** (the checkpoint and its corresponding per-slot
+restart snapshots). These operations do not delete the current trajectories
+or ordinary slot restart files. To resume from a numbered backup, specify
+that checkpoint (for example, `-arexrst arex.chk.1`) and keep its matching
+`.1` restart snapshots together. Do not mix files from different checkpoint
+numbers.
 
 ### AREX positional-restraint schedule
 
